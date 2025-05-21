@@ -172,3 +172,9 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# personal API GPT-4 password
+.env
+__pycache__/
+*.pyc
+logs/

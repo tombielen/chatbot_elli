@@ -124,27 +124,30 @@ with st.form("chat_form", clear_on_submit=True):
         user_input = user_input.strip()
         st.session_state.messages.append({"role": "user", "content": user_input})
 
-        if st.session_state.step == "intro":
+        # Save user input in a temporary variable to avoid double processing
+        step = st.session_state.step
+
+        if step == "intro":
             st.session_state.name = user_input
             elli_intro = f"Hi {st.session_state.name}, I’m Elli. 🌱 I’m here to gently check in with you. How have things been for you lately?"
             st.session_state.messages.append({"role": "bot", "content": elli_intro})
             st.session_state.step = "mood"
             st.rerun()
 
-        elif st.session_state.step == "mood":
-            mood_input = user_input.strip()
-            if safety_check(mood_input):
+        elif step == "mood":
+            if safety_check(user_input):
                 st.session_state.messages.append({"role": "bot", "content": "It sounds like you're going through something really tough. Please consider reaching out to a professional or crisis service. You're not alone. 💛"})
                 st.stop()
             with st.spinner("Elli is thinking..."):
-                response = respond_to_feelings(mood_input, st.session_state.name)
+                response = respond_to_feelings(user_input, st.session_state.name)
                 time.sleep(1.5)
             st.session_state.messages.append({"role": "bot", "content": response})
             st.session_state.step = "phq"
             st.session_state.phq_index = 0
             st.session_state.messages.append({"role": "bot", "content": "Let’s reflect on some feelings together. Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]})
+            st.rerun()
 
-        elif st.session_state.step == "phq":
+        elif step == "phq":
             try:
                 score = int(user_input)
                 if score not in [0,1,2,3]: raise ValueError
@@ -159,8 +162,9 @@ with st.form("chat_form", clear_on_submit=True):
                     st.session_state.step = "gad"
                     st.session_state.gad_index = 0
                     st.session_state.messages.append({"role": "bot", "content": "Thank you. Now let’s look at anxiety. Over the last 2 weeks: " + GAD_7_QUESTIONS[0]})
+            st.rerun()
 
-        elif st.session_state.step == "gad":
+        elif step == "gad":
             try:
                 score = int(user_input)
                 if score not in [0,1,2,3]: raise ValueError
@@ -181,8 +185,9 @@ with st.form("chat_form", clear_on_submit=True):
                     st.session_state.messages.append({"role": "bot", "content": summary})
                     st.session_state.step = "feedback"
                     st.session_state.messages.append({"role": "bot", "content": "To finish, how much did you feel you could trust Elli? (1–5)"})
+            st.rerun()
 
-        elif st.session_state.step == "feedback":
+        elif step == "feedback":
             if st.session_state.trust == 0:
                 try:
                     trust_score = int(user_input)
@@ -191,6 +196,8 @@ with st.form("chat_form", clear_on_submit=True):
                     st.session_state.messages.append({"role": "bot", "content": "Thank you. How comfortable did you feel interacting with Elli? (1–5)"})
                 except ValueError:
                     st.session_state.messages.append({"role": "bot", "content": "Please enter a number from 1 to 5."})
+                st.rerun()
+
             elif st.session_state.comfort == 0:
                 try:
                     comfort_score = int(user_input)
@@ -199,6 +206,8 @@ with st.form("chat_form", clear_on_submit=True):
                     st.session_state.messages.append({"role": "bot", "content": "Thanks. Finally, do you have any thoughts or feedback about this experience?"})
                 except ValueError:
                     st.session_state.messages.append({"role": "bot", "content": "Please enter a number from 1 to 5."})
+                st.rerun()
+
             elif st.session_state.feedback == "":
                 st.session_state.feedback = user_input
                 data = {
@@ -214,3 +223,4 @@ with st.form("chat_form", clear_on_submit=True):
                 }
                 save_to_csv(data)
                 st.session_state.messages.append({"role": "bot", "content": f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"})
+                st.rerun()

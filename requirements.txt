@@ -16,3 +16,9 @@ typing-inspection==0.4.0
 typing_extensions==4.13.2
 streamlit
 openai
+python-dotenv
+streamlit-chat
+streamlit-ace
+streamlit-embeds
+streamlit-extras
+streamlit-plotly-events

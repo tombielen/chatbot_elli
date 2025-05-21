@@ -80,8 +80,30 @@ def save_to_csv(data, filename="data/user_responses.csv"):
 
 # --- Render message history ---
 for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+    if msg["role"] == "bot":
+        with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
+            st.markdown(msg["content"], unsafe_allow_html=True)
+    else:
+        first_letter = st.session_state.name[0].upper() if st.session_state.get("name") else "U"
+        avatar_html = f"""
+        <div style='
+            font-size: 16px;
+            background: #d3f3e6;
+            color: #1a1a1a;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        '>{first_letter}</div>
+        """
+        with st.chat_message("user", avatar=None):
+            st.markdown(avatar_html, unsafe_allow_html=True)
+            st.markdown(msg["content"], unsafe_allow_html=True)
+
+
+
 
 
 # --- Chat Input ---

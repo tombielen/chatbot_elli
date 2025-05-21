@@ -80,8 +80,9 @@ def save_to_csv(data, filename="data/user_responses.csv"):
 
 # --- Render message history ---
 for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
+    with st.chat_message(msg["role"], avatar="E" if msg["role"] == "bot" else None):
         st.markdown(msg["content"])
+
 
 # --- Chat Input ---
 user_input = st.chat_input("Your message...")

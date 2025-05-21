@@ -98,9 +98,9 @@ for msg in st.session_state.messages:
             border-radius: 50%;
         '>{first_letter}</div>
         """
-        with st.chat_message("user", avatar=None):
-            st.markdown(avatar_html, unsafe_allow_html=True)
+        with st.chat_message("user", avatar=""):
             st.markdown(msg["content"], unsafe_allow_html=True)
+
 
 
 

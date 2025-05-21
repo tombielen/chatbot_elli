@@ -1,5 +1,3 @@
-# main.py
-
 import time
 import csv
 import os
@@ -54,7 +52,7 @@ def ask_likert(question, scale=(1, 5)):
             print("Please enter a number.")
 
 def ask_questionnaire(questions, label, scale=(0, 3)):
-    print(f"\nStarting the {label} questionnaire.")
+    print(f"\nThanks for your answers! You have been a crucial help :) Let's now get started with the {label} questionnaire, I will understand your symptoms better.")
     scores = []
     for i, q in enumerate(questions, 1):
         print(f"\n{i}. Over the last two weeks, how often have you been bothered by: {q}")
@@ -101,6 +99,12 @@ def main():
     print(f"\nNice to meet you, {name}. This isn’t therapy, but I hope it feels like a warm and thoughtful space.")
     time.sleep(1)
     mood = input("Before we dive in, how have things been for you lately? Just a sentence or two: ")
+
+    from utils.chatbot import respond_to_feelings
+
+    response_to_mood = respond_to_feelings(mood, name)
+    print(f"\n{response_to_mood}")
+
 
     if safety_check(mood):
         print("\nIt sounds like you're going through something really tough. Please consider reaching out to a professional or crisis service. You're not alone. 💛")

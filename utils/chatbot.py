@@ -1,8 +1,15 @@
 import os
 import sys
 from datetime import datetime
-from dotenv import load_dotenv
-import openai
+from dotenv import load_dotenv 
+from openai import OpenAI
+
+load_dotenv() 
+print("Current working directory:", os.getcwd())
+print("API KEY from .env:", os.getenv("OPENAI_API_KEY"))
+
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) 
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -11,12 +18,9 @@ from gpt_prompts import (
     GAD7_SUMMARY_PROMPT,
     FINAL_SUMMARY_PROMPT,
     SAFETY_CHECK_PROMPT,
-    SYSTEM_INSTRUCTION
+    SYSTEM_INSTRUCTION,
+    MOOD_RESPONSE_PROMPT
 )
-
-
-load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
 LOG_FILE = "chat_log.txt"
 
@@ -26,17 +30,16 @@ def log_to_file(content):
         f.write(f"{timestamp} {content}\n")
 
 
+
 def get_chat_response(prompt, messages=None, model="gpt-4"):
     chat_messages = [{"role": "system", "content": prompt}]
     if messages:
         chat_messages.extend(messages)
 
-    response = openai.ChatCompletion.create(
-        model=model,
-        messages=chat_messages,
-        temperature=0.7
-    )
-    reply = response.choices[0].message["content"].strip()
+    response = client.chat.completions.create(model=model,
+    messages=chat_messages,
+    temperature=0.7)
+    reply = response.choices[0].message.content.strip()
     log_to_file(f"Prompt: {prompt[:50]}... | Reply: {reply}")
     return reply
 
@@ -74,3 +77,7 @@ def safety_check(user_input):
         SAFETY_CHECK_PROMPT.format(user_input=user_input)
     )
     return result.strip().upper() == "CRISIS"
+
+def respond_to_feelings(user_input, name):
+    prompt = MOOD_RESPONSE_PROMPT.format(user_input=user_input, name=name)
+    return get_chat_response(prompt)

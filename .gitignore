@@ -178,3 +178,7 @@ cython_debug/
 __pycache__/
 *.pyc
 logs/
+
+#CSV files including users data
+user_responses.CSV
+user_responses.csv

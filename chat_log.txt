@@ -1,0 +1,22 @@
+[2025-05-21 10:06:41] Prompt: 
+You are checking for signs of a crisis or self-ha... | Reply: OK
+[2025-05-21 10:07:30] Prompt: 
+You are Elli, a mental health screening chatbot s... | Reply: I really appreciate the time you've taken to share your feelings with me. Based on our conversation, it seems like you're experiencing a touch of sadness more often than not, which is sometimes referred to as mild depression. On the other hand, your feelings of anxiety appear to be quite minimal. Remember, it's completely normal to have ups and downs, and many people navigate similar emotional landscapes. If these feelings persist or start to affect your daily life, it might be helpful to share your experiences with a mental health professional who can provide guidance tailored to your needs. In the meantime, remember that even small steps can make a big difference, such as taking a little time each day for self-care or doing something you enjoy. You are not alone in this journey, and there are always avenues available to support your wellbeing.
+[2025-05-21 10:24:58] Prompt: 
+You are Elli, a kind, emotionally intelligent ass... | Reply: Hi Tom,
+
+It's great to hear that you've been feeling better lately! Even with this positive change, it's still beneficial to continue checking in on your mental wellbeing. It's a good way to understand ourselves better, and maintain the positive progress. Would you like to take a moment to do a mental wellbeing check-in now? It's a gentle, personal way to reflect on your emotions and thoughts. Remember, it's all about supporting you in feeling your best.
+[2025-05-21 10:24:58] Prompt: 
+You are checking for signs of a crisis or self-ha... | Reply: OK
+[2025-05-21 10:33:16] Prompt: 
+You are Elli, a kind, emotionally intelligent ass... | Reply: Hi Tom,
+
+It's wonderful to hear that you're feeling great and stress-free! Moments like these are truly enjoyable, aren't they? Even when we're feeling on top of the world, it's still beneficial to take a moment to check in with ourselves. It's a good habit to cultivate, and it can really help us maintain our wellbeing. So, even though you're feeling super great, would you like to continue with a mental wellbeing check-in? It's a valuable way to keep connected with yourself. Remember, taking care of your mind is just as important as taking care of your body.
+[2025-05-21 10:33:17] Prompt: 
+You are checking for signs of a crisis or self-ha... | Reply: OK
+[2025-05-21 10:38:52] Prompt: 
+You are Elli, a kind, emotionally intelligent ass... | Reply: That's wonderful to hear, Tom! It's always uplifting when you're feeling much better. Even when feeling fantastic, it can still be beneficial to do a quick mental wellbeing check-in. It fosters self-awareness and serves as a personal tool for maintaining this positive state.
+[2025-05-21 10:38:53] Prompt: 
+You are checking for signs of a crisis or self-ha... | Reply: OK
+[2025-05-21 10:41:56] Prompt: 
+You are Elli, a mental health screening chatbot s... | Reply: It seems like you're feeling pretty calm and steady right now, which is great to hear. Your scores reflect minimal depression and anxiety, which is an experience shared by many. Remember, it's perfectly okay to have ups and downs in life - you're not alone. If you ever feel out of sorts or just need someone to talk to, don't hesitate to seek professional help. They're there to provide support and guidance. Moreover, remember that maintaining a good mental health status is a journey, not a sprint. It's all about taking small, manageable steps towards wellbeing. Keep looking after yourself – your mind and body will thank you for it.

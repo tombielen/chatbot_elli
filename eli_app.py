@@ -104,16 +104,26 @@ if user_input:
     step = st.session_state.step
 
     if step == "intro":
-        from utils.chatbot import is_valid_name
-        if is_valid_name(user_input):
-            st.session_state.name = user_input
-            bot_reply = f"Hi {st.session_state.name}, I’m Elli. 🌱 I’m here to gently check in with you..."
-            st.session_state.step = "mood"
-        else:
-            bot_reply = "Thanks for sharing. Could you please give me just a name or nickname to use when we chat?"
-        st.session_state.messages.append({"role": "bot", "content": bot_reply})
-        with st.chat_message("bot"):
-            st.markdown(bot_reply)
+            from utils.chatbot import extract_name_from_input
+
+            if safety_check(user_input):
+                st.session_state.messages.append({
+                    "role": "bot",
+                    "content": "It sounds like you're going through something really difficult. You're not alone. Please consider reaching out to a professional or crisis support. 💛"
+                })
+                st.stop()
+
+            name = extract_name_from_input(user_input)
+
+            if name:
+                st.session_state.name = name
+                elli_intro = f"Hi {name}, I’m Elli. 🌱 I’m here to gently check in with you. How are you feeling today? (2-3 sentences)"
+                st.session_state.step = "mood"
+            else:
+                elli_intro = "Thanks for sharing. Could you please give me just your name or nickname so I can know how to address you?"
+
+            st.session_state.messages.append({"role": "bot", "content": elli_intro})
+            st.rerun()
 
     elif step == "mood":
         with st.spinner("Elli is thinking..."):

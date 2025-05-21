@@ -33,11 +33,21 @@ A user was asked for their name or nickname and replied with:
 Is this likely a name/nickname? Respond only with "YES" or "NO".
 """
 
-def is_valid_name(user_input):
-    prompt = NAME_VALIDATION_PROMPT.format(user_input=user_input)
-    response = get_chat_response(prompt)
-    return response.strip().upper() == "YES"
+def extract_name_from_input(user_input):
+    prompt = f"""
+    You are a helpful assistant. Extract a human name from the following message.
+    If no name is clearly mentioned, reply only with "None".
 
+    Message: "{user_input}"
+    Name:
+    """
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.2
+    )
+    name = response.choices[0].message.content.strip()
+    return name if name.lower() != "none" else None
 
 def log_to_file(content):
     timestamp = datetime.now().strftime("[%Y-%m-%d %H:%M:%S]")

@@ -125,13 +125,30 @@ with st.form("chat_form", clear_on_submit=True):
     if submitted and user_input:
         user_input = user_input.strip()
         st.session_state.messages.append({"role": "user", "content": user_input})
+        # 🚨 SAFETY CHECK (skip for number-only PHQ/GAD steps)
+        if st.session_state.step not in ["phq", "gad"]:
+            if safety_check(user_input):
+                st.session_state.messages.append({
+                    "role": "bot",
+                    "content": "It sounds like you're going through something really difficult. You're not alone. Please consider reaching out to a professional or crisis support. 💛"
+                })
+                st.stop()
 
+    # Save user input in a temporary variable to avoid double processing
+        step = st.session_state.step
         # Save user input in a temporary variable to avoid double processing
         step = st.session_state.step
 
         if step == "intro":
-            st.session_state.name = user_input
-            elli_intro = f"Hi {st.session_state.name}, I’m Elli. 🌱 I’m here to gently check in with you. How have things been for you lately?"
+            from utils.chatbot import is_valid_name
+
+            if is_valid_name(user_input):
+                st.session_state.name = user_input
+                elli_intro = f"Hi {st.session_state.name}, I’m Elli. 🌱 I’m here to gently check in with you..."
+                st.session_state.step = "mood"
+            else:
+                elli_intro = "Thanks for sharing. Could you please give me just a name or nickname to use when we chat?"
+
             st.session_state.messages.append({"role": "bot", "content": elli_intro})
             st.session_state.step = "mood"
             st.rerun()

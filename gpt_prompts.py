@@ -16,6 +16,8 @@ Responses: {phq_scores}
 Give a short, clear summary without over-diagnosing. If score is high, suggest speaking to a mental health professional.
 """
 
+
+
 GAD7_SUMMARY_PROMPT = """
 You are a supportive assistant helping summarize GAD-7 scores.
 Based on the following total score and item responses, briefly explain the potential level of anxiety and encourage positive action.

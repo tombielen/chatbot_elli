@@ -21,7 +21,23 @@ from gpt_prompts import (
     MOOD_RESPONSE_PROMPT
 )
 
+
+
+
 LOG_FILE = "chat_log.txt"
+
+NAME_VALIDATION_PROMPT = """
+A user was asked for their name or nickname and replied with:
+"{user_input}"
+
+Is this likely a name/nickname? Respond only with "YES" or "NO".
+"""
+
+def is_valid_name(user_input):
+    prompt = NAME_VALIDATION_PROMPT.format(user_input=user_input)
+    response = get_chat_response(prompt)
+    return response.strip().upper() == "YES"
+
 
 def log_to_file(content):
     timestamp = datetime.now().strftime("[%Y-%m-%d %H:%M:%S]")

@@ -1,12 +1,32 @@
 import streamlit as st
 import time
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import datetime
 import csv
 import os
 from utils.chatbot import summarize_results, safety_check, respond_to_feelings
 
+@st.cache_resource
+def get_gsheet_client():
+    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+    creds_dict = st.secrets["gcp_service_account"]  # or "gspread" if that's your key
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+    return gspread.authorize(creds)
+
+def save_to_google_sheet(data_dict, sheet_name="Chatbot_Study_Data"):
+    client = get_gsheet_client()
+    sheet = client.open(sheet_name).sheet1
+    row = [str(datetime.datetime.now())] + list(data_dict.values())
+    sheet.append_row(row, value_input_option="RAW")
+
+
 st.set_page_config(page_title="Elli - Mental Health Assistant", page_icon="🌱")
 
 st.title("🌱 Elli – Your Mental Health Companion")
+
+
+
 
 # --- Init session state ---
 if "messages" not in st.session_state:
@@ -98,8 +118,9 @@ for msg in st.session_state.messages:
             border-radius: 50%;
         '>{first_letter}</div>
         """
-        with st.chat_message("user", avatar=""):
+        with st.chat_message("user", avatar="assets/user_avatar.png"):
             st.markdown(msg["content"], unsafe_allow_html=True)
+
 
 
 
@@ -271,7 +292,10 @@ if user_input:
                 "initial_mood": st.session_state.messages[2]["content"] if len(st.session_state.messages) > 2 else "",
                 "full_chat": " | ".join([f"{m['role']}: {m['content']}" for m in st.session_state.get("messages", [])]),
             }
+
             save_to_csv(data)
+            save_to_google_sheet(data)
+
             closing = f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"
             st.session_state.messages.append({"role": "bot", "content": closing})
             with st.chat_message("bot"):

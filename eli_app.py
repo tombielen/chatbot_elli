@@ -3,8 +3,7 @@ import time
 import csv
 import os
 from utils.chatbot import summarize_results, safety_check
-from gpt_prompts import SYSTEM_INSTRUCTION  
-
+from streamlit_chat import message  # pip install streamlit-chat
 
 PHQ_9_QUESTIONS = [
     "Little interest or pleasure in doing things?",
@@ -59,153 +58,163 @@ def save_to_csv(data, filename="data/user_responses.csv"):
             writer.writeheader()
         writer.writerow(data)
 
-
-st.set_page_config(page_title="Elli - Mental Health Assistant", page_icon="🌱")
+st.set_page_config(page_title="Elli - Mental Health Companion", page_icon="🌱")
 st.title("🌱 Elli – Your Mental Health Companion")
 
 
-if "intro_done" not in st.session_state:
-    with st.form("intro_form"):
-        st.markdown("This isn’t therapy, but it’s a warm, thoughtful space.")
-        name = st.text_input("What’s your name or nickname you'd like me to use?", max_chars=30)
-        age = st.text_input("Age")
-        gender = st.text_input("Gender (optional)")
-        therapy = st.selectbox("Have you done therapy before?", ["Yes", "No"])
-        mood = st.text_area("How have things been for you lately? Just a sentence or two.")
-        submitted = st.form_submit_button("Start check-in")
-    
-    if submitted:
-        if not name:
-            name = "friend"
-        st.session_state.demographics = {
-            "name": name,
-            "age": age,
-            "gender": gender,
-            "therapy": therapy,
-            "mood": mood
-        }
-        
-        if safety_check(mood):
-            st.error("It sounds like you're going through something really tough. Please consider reaching out to a professional or crisis service. You're not alone. 💛")
-            st.stop()
-        
-        st.session_state.intro_done = True
-        st.session_state.conversation = []
-        st.session_state.conversation.append({
-            "role": "assistant",
-            "content": f"Nice to meet you, {name} 💬"
-        })
-        st.session_state.phase = "phq" 
-        st.session_state.phq_index = 0
-        st.session_state.phq_scores = []
-        st.session_state.gad_index = 0
-        st.session_state.gad_scores = []
-        st.session_state.final_feedback = {}  
-        
-        st.session_state.conversation.append({
-            "role": "assistant",
-            "content": ("Let's start our check-in. For each question, please reply with a number from 0 to 3 "
-                        "(0: Not at all, 1: Several days, 2: More than half the days, 3: Nearly every day).\n\n"
-                        f"PHQ Question 1: {PHQ_9_QUESTIONS[0]}")
-        })
-        st.experimental_rerun()
-    else:
-        st.stop()
-
-
-from streamlit_chat import message
-
-for i, msg in enumerate(st.session_state.conversation):
-    if msg["role"] == "assistant":
-        message(msg["content"], key=f"assistant_{i}")
-    else:
-        message(msg["content"], is_user=True, key=f"user_{i}")
+if "phase" not in st.session_state:
+    st.session_state.phase = "intro"
+    st.session_state.intro_step = 1  
+    st.session_state.demographics = {}
+    st.session_state.phq_index = 0
+    st.session_state.phq_scores = []
+    st.session_state.gad_index = 0
+    st.session_state.gad_scores = []
+    st.session_state.final_feedback = {}
+    st.session_state.chat_history = []
+    st.session_state.chat_history.append({
+        "role": "assistant",
+        "content": "Hi, I'm Elli, your mental health companion. What's your name?"
+    })
 
 with st.form("chat_form", clear_on_submit=True):
-    user_message = st.text_input("Your message:", key="user_message")
-    chat_submit = st.form_submit_button("Send")
+    user_message = st.text_input("Your message:")
+    submitted = st.form_submit_button("Send")
 
-if chat_submit and user_message:
+if submitted and user_message:
+    st.session_state.chat_history.append({
+        "role": "user",
+        "content": user_message
+    })
 
-    if st.session_state.phase == "phq":
+    if st.session_state.phase == "intro":
+        if st.session_state.intro_step == 1:
+            st.session_state.demographics["name"] = user_message.strip()
+            response = f"Nice to meet you, {st.session_state.demographics['name']}. How have you been feeling lately?"
+            st.session_state.chat_history.append({
+                "role": "assistant",
+                "content": response
+            })
+            st.session_state.intro_step = 2
+
+        elif st.session_state.intro_step == 2:
+            st.session_state.demographics["mood"] = user_message.strip()
+            if safety_check(user_message):
+                st.session_state.chat_history.append({
+                    "role": "assistant",
+                    "content": "It sounds like you're going through something really tough. Please consider reaching out to a professional or crisis service. You're not alone. 💛"
+                })
+                st.session_state.phase = "end"
+            else:
+                response = "Thanks for sharing. Can you tell me your age?"
+                st.session_state.chat_history.append({
+                    "role": "assistant",
+                    "content": response
+                })
+                st.session_state.intro_step = 3
+
+        elif st.session_state.intro_step == 3:
+            st.session_state.demographics["age"] = user_message.strip()
+            response = "And what is your gender? (You can leave this blank if you prefer.)"
+            st.session_state.chat_history.append({
+                "role": "assistant",
+                "content": response
+            })
+            st.session_state.intro_step = 4
+
+        elif st.session_state.intro_step == 4:
+            st.session_state.demographics["gender"] = user_message.strip()
+            response = "Have you done therapy before? (Yes/No)"
+            st.session_state.chat_history.append({
+                "role": "assistant",
+                "content": response
+            })
+            st.session_state.intro_step = 5
+
+        elif st.session_state.intro_step == 5:
+            st.session_state.demographics["therapy"] = user_message.strip()
+            st.session_state.chat_history.append({
+                "role": "assistant",
+                "content": "Great, thanks for sharing your info. Let's now check in on how you've been feeling with a few structured questions."
+            })
+            st.session_state.phase = "phq"
+            st.session_state.intro_step = None
+            q = PHQ_9_QUESTIONS[0]
+            st.session_state.chat_history.append({
+                "role": "assistant",
+                "content": f"PHQ Question 1: {q} (Please reply with a number from 0 to 3)"
+            })
+
+    elif st.session_state.phase == "phq":
         try:
-            score = int(user_message.strip())
-            if score not in [0, 1, 2, 3]:
+            answer = int(user_message.strip())
+            if answer not in [0, 1, 2, 3]:
                 raise ValueError
         except ValueError:
-            st.session_state.conversation.append({
+            st.session_state.chat_history.append({
                 "role": "assistant",
                 "content": "Invalid input. Please reply with a number between 0 and 3."
             })
-            st.experimental_rerun()
-        
-        st.session_state.conversation.append({"role": "user", "content": str(score)})
-        st.session_state.phq_scores.append(score)
-        st.session_state.phq_index += 1
-        
-        if st.session_state.phq_index < len(PHQ_9_QUESTIONS):
-            next_q = PHQ_9_QUESTIONS[st.session_state.phq_index]
-            st.session_state.conversation.append({
-                "role": "assistant",
-                "content": f"PHQ Question {st.session_state.phq_index+1}: {next_q}"
-            })
         else:
-            st.session_state.phase = "gad"
-            next_q = GAD_7_QUESTIONS[0]
-            st.session_state.conversation.append({
-                "role": "assistant",
-                "content": ("Great, let's move to the next set of questions.\n"
-                            "For each question, please reply with a number between 0 and 3.\n\n"
-                            f"GAD Question 1: {next_q}")
-            })
-        st.experimental_rerun()
+            st.session_state.phq_scores.append(answer)
+            st.session_state.phq_index += 1
+            if st.session_state.phq_index < len(PHQ_9_QUESTIONS):
+                q = PHQ_9_QUESTIONS[st.session_state.phq_index]
+                st.session_state.chat_history.append({
+                    "role": "assistant",
+                    "content": f"PHQ Question {st.session_state.phq_index+1}: {q} (Please reply with a number from 0 to 3)"
+                })
+            else:
+                st.session_state.phase = "gad"
+                st.session_state.gad_index = 0
+                q = GAD_7_QUESTIONS[st.session_state.gad_index]
+                st.session_state.chat_history.append({
+                    "role": "assistant",
+                    "content": ("Great, now let's move on to the next set of questions.\n" +
+                                f"GAD Question 1: {q} (Please reply with a number from 0 to 3)")
+                })
 
     elif st.session_state.phase == "gad":
         try:
-            score = int(user_message.strip())
-            if score not in [0, 1, 2, 3]:
+            answer = int(user_message.strip())
+            if answer not in [0, 1, 2, 3]:
                 raise ValueError
         except ValueError:
-            st.session_state.conversation.append({
+            st.session_state.chat_history.append({
                 "role": "assistant",
                 "content": "Invalid input. Please reply with a number between 0 and 3."
             })
-            st.experimental_rerun()
-        
-        st.session_state.conversation.append({"role": "user", "content": str(score)})
-        st.session_state.gad_scores.append(score)
-        st.session_state.gad_index += 1
-        
-        if st.session_state.gad_index < len(GAD_7_QUESTIONS):
-            next_q = GAD_7_QUESTIONS[st.session_state.gad_index]
-            st.session_state.conversation.append({
-                "role": "assistant",
-                "content": f"GAD Question {st.session_state.gad_index+1}: {next_q}"
-            })
         else:
-            phq_total = sum(st.session_state.phq_scores)
-            gad_total = sum(st.session_state.gad_scores)
-            phq_interp = interpret(phq_total, "phq")
-            gad_interp = interpret(gad_total, "gad")
-            st.session_state.conversation.append({
-                "role": "assistant",
-                "content": "Thanks for completing the questions! Generating your personalized summary..."
-            })
-            with st.spinner("Elli is thinking..."):
-                time.sleep(2)
-                summary = summarize_results(phq_total, phq_interp, gad_total, gad_interp)
-            st.session_state.conversation.append({
-                "role": "assistant",
-                "content": f"### 🌼 Your Personalized Summary\n\n{summary}"
-            })
-            st.session_state.phase = "final"
-            st.session_state.conversation.append({
-                "role": "assistant",
-                "content": ("Before we wrap up, please rate how much you trusted our conversation with Elli on a scale from 1 to 5 "
-                            "(1 = very low, 5 = very high).")
-            })
-        st.experimental_rerun()
-
+            st.session_state.gad_scores.append(answer)
+            st.session_state.gad_index += 1
+            if st.session_state.gad_index < len(GAD_7_QUESTIONS):
+                q = GAD_7_QUESTIONS[st.session_state.gad_index]
+                st.session_state.chat_history.append({
+                    "role": "assistant",
+                    "content": f"GAD Question {st.session_state.gad_index+1}: {q} (Please reply with a number from 0 to 3)"
+                })
+            else:
+                phq_total = sum(st.session_state.phq_scores)
+                gad_total = sum(st.session_state.gad_scores)
+                phq_interp = interpret(phq_total, "phq")
+                gad_interp = interpret(gad_total, "gad")
+                st.session_state.chat_history.append({
+                    "role": "assistant",
+                    "content": "Thanks for answering those questions! Let me generate your personalized summary..."
+                })
+                with st.spinner("Elli is thinking..."):
+                    time.sleep(2)
+                    summary = summarize_results(phq_total, phq_interp, gad_total, gad_interp)
+                st.session_state.chat_history.append({
+                    "role": "assistant",
+                    "content": f"### 🌼 Your Personalized Summary\n\n{summary}"
+                })
+                st.session_state.phase = "final"
+                st.session_state.chat_history.append({
+                    "role": "assistant",
+                    "content": "Before we wrap up, please rate how much you trusted our conversation with Elli on a scale from 1 (low) to 5 (high)."
+                })
+                
     elif st.session_state.phase == "final":
         if "trust" not in st.session_state.final_feedback:
             try:
@@ -213,40 +222,34 @@ if chat_submit and user_message:
                 if trust_val < 1 or trust_val > 5:
                     raise ValueError
             except ValueError:
-                st.session_state.conversation.append({
+                st.session_state.chat_history.append({
                     "role": "assistant",
                     "content": "Please enter a valid number between 1 and 5 for trust."
                 })
-                st.experimental_rerun()
-            st.session_state.conversation.append({"role": "user", "content": str(trust_val)})
-            st.session_state.final_feedback["trust"] = trust_val
-            st.session_state.conversation.append({
-                "role": "assistant",
-                "content": "How comfortable did you feel interacting with Elli? (Enter a number between 1 and 5)"
-            })
-            st.experimental_rerun()
+            else:
+                st.session_state.final_feedback["trust"] = trust_val
+                st.session_state.chat_history.append({
+                    "role": "assistant",
+                    "content": "How comfortable did you feel interacting with Elli? (Please reply with a number between 1 and 5)"
+                })
         elif "comfort" not in st.session_state.final_feedback:
             try:
                 comfort_val = int(user_message.strip())
                 if comfort_val < 1 or comfort_val > 5:
                     raise ValueError
             except ValueError:
-                st.session_state.conversation.append({
+                st.session_state.chat_history.append({
                     "role": "assistant",
                     "content": "Please enter a valid number between 1 and 5 for comfort."
                 })
-                st.experimental_rerun()
-            st.session_state.conversation.append({"role": "user", "content": str(comfort_val)})
-            st.session_state.final_feedback["comfort"] = comfort_val
-            st.session_state.conversation.append({
-                "role": "assistant",
-                "content": "Any additional feedback you'd like to share about this experience? Type your thoughts below."
-            })
-            st.experimental_rerun()
+            else:
+                st.session_state.final_feedback["comfort"] = comfort_val
+                st.session_state.chat_history.append({
+                    "role": "assistant",
+                    "content": "Any additional feedback you'd like to share about this experience?"
+                })
         else:
-            st.session_state.conversation.append({"role": "user", "content": user_message})
-            st.session_state.final_feedback["reflection"] = user_message
-
+            st.session_state.final_feedback["reflection"] = user_message.strip()
             demog = st.session_state.demographics
             data = {
                 "name": demog.get("name", ""),
@@ -263,11 +266,14 @@ if chat_submit and user_message:
                 "user_reflection": st.session_state.final_feedback.get("reflection")
             }
             save_to_csv(data)
-            st.session_state.conversation.append({
+            st.session_state.chat_history.append({
                 "role": "assistant",
                 "content": f"Thanks so much for checking in today, {demog.get('name', 'friend')}. Wishing you care and calm. 🌻"
             })
             st.session_state.phase = "end"
-            st.experimental_rerun()
-    
 
+for i, chat in enumerate(st.session_state.chat_history):
+    if chat["role"] == "assistant":
+        message(chat["content"], key=f"assistant_{i}")
+    else:
+        message(chat["content"], key=f"user_{i}", is_user=True)

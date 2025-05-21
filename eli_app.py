@@ -107,10 +107,12 @@ def save_to_csv(data, filename="data/user_responses.csv"):
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     file_exists = os.path.isfile(filename)
     with open(filename, mode="a", newline="", encoding="utf-8") as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=data.keys())
+        fieldnames = list(data.keys())
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         if not file_exists:
             writer.writeheader()
         writer.writerow(data)
+
 
 for msg in st.session_state.messages:
     role_class = "user" if msg["role"] == "user" else "bot"
@@ -211,16 +213,25 @@ with st.form("chat_form", clear_on_submit=True):
             elif st.session_state.feedback == "":
                 st.session_state.feedback = user_input
                 data = {
-                    "name": st.session_state.name,
-                    "initial_mood": st.session_state.messages[2]["content"],
-                    "phq_total": sum(st.session_state.phq_answers),
-                    "phq_interp": interpret(sum(st.session_state.phq_answers), "phq"),
-                    "gad_total": sum(st.session_state.gad_answers),
-                    "gad_interp": interpret(sum(st.session_state.gad_answers), "gad"),
-                    "trust": st.session_state.trust,
-                    "comfort": st.session_state.comfort,
-                    "user_reflection": st.session_state.feedback
+                    "name": st.session_state.get("name", ""),
+                    "phq_answers": st.session_state.get("phq_answers", []),
+                    "phq_total": sum(st.session_state.get("phq_answers", [])),
+                    "phq_interp": interpret(sum(st.session_state.get("phq_answers", [])), "phq"),
+                    "gad_answers": st.session_state.get("gad_answers", []),
+                    "gad_total": sum(st.session_state.get("gad_answers", [])),
+                    "gad_interp": interpret(sum(st.session_state.get("gad_answers", [])), "gad"),
+                    "trust": st.session_state.get("trust", ""),
+                    "comfort": st.session_state.get("comfort", ""),
+                    "user_reflection": st.session_state.get("feedback", ""),
+                    "initial_mood": (
+                        st.session_state.messages[2]["content"]
+                        if len(st.session_state.messages) > 2 else ""
+                    ),
+                    "full_chat": " | ".join([
+                        f"{msg['role']}: {msg['content']}" for msg in st.session_state.get("messages", [])
+                    ]),
                 }
                 save_to_csv(data)
+
                 st.session_state.messages.append({"role": "bot", "content": f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"})
                 st.rerun()

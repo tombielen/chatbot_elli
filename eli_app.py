@@ -5,44 +5,10 @@ import os
 from utils.chatbot import summarize_results, safety_check, respond_to_feelings
 
 st.set_page_config(page_title="Elli - Mental Health Assistant", page_icon="🌱")
-st.markdown("""
-    <style>
-        .message-bubble {
-            background-color: #f1f1f1;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            max-width: 80%;
-        }
-        .user-message {
-            background-color: #dcf8c6;
-            align-self: flex-end;
-        }
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-        }
-        .message-row {
-            display: flex;
-            margin-bottom: 8px;
-        }
-        .message-row.user {
-            justify-content: flex-end;
-        }
-        .message-row.bot {
-            justify-content: flex-start;
-        }
-        .bottom-bar input {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-    </style>
-""", unsafe_allow_html=True)
 
 st.title("🌱 Elli – Your Mental Health Companion")
 
+# --- Init session state ---
 if "messages" not in st.session_state:
     st.session_state.messages = [{
         "role": "bot",
@@ -57,7 +23,6 @@ if "messages" not in st.session_state:
     st.session_state.trust = 0
     st.session_state.comfort = 0
     st.session_state.feedback = ""
-
 
 PHQ_9_QUESTIONS = [
     "Little interest or pleasure in doing things?",
@@ -113,142 +78,162 @@ def save_to_csv(data, filename="data/user_responses.csv"):
             writer.writeheader()
         writer.writerow(data)
 
-
+# --- Render message history ---
 for msg in st.session_state.messages:
-    role_class = "user" if msg["role"] == "user" else "bot"
-    st.markdown(f'<div class="message-row {role_class}"><div class="message-bubble {"user-message" if role_class=="user" else ""}">{msg["content"]}</div></div>', unsafe_allow_html=True)
+    with st.chat_message(msg["role"]):
+        st.markdown(msg["content"])
 
-with st.form("chat_form", clear_on_submit=True):
-    user_input = st.text_input("Your message:", key="input")
-    submitted = st.form_submit_button("Send")
+# --- Chat Input ---
+user_input = st.chat_input("Your message...")
 
-    if submitted and user_input:
-        user_input = user_input.strip()
-        st.session_state.messages.append({"role": "user", "content": user_input})
-        # 🚨 SAFETY CHECK (skip for number-only PHQ/GAD steps)
-        if st.session_state.step not in ["phq", "gad"]:
-            if safety_check(user_input):
-                st.session_state.messages.append({
-                    "role": "bot",
-                    "content": "It sounds like you're going through something really difficult. You're not alone. Please consider reaching out to a professional or crisis support. 💛"
-                })
-                st.stop()
+if user_input:
+    user_input = user_input.strip()
+    st.session_state.messages.append({"role": "user", "content": user_input})
+    with st.chat_message("user"):
+        st.markdown(user_input)
 
-    # Save user input in a temporary variable to avoid double processing
-        step = st.session_state.step
-        # Save user input in a temporary variable to avoid double processing
-        step = st.session_state.step
+    # SAFETY CHECK
+    if st.session_state.step not in ["phq", "gad"]:
+        if safety_check(user_input):
+            bot_reply = "It sounds like you're going through something really difficult. You're not alone. Please consider reaching out to a professional or crisis support. 💛"
+            st.session_state.messages.append({"role": "bot", "content": bot_reply})
+            with st.chat_message("bot"):
+                st.markdown(bot_reply)
+            st.stop()
 
-        if step == "intro":
-            from utils.chatbot import is_valid_name
+    step = st.session_state.step
 
-            if is_valid_name(user_input):
-                st.session_state.name = user_input
-                elli_intro = f"Hi {st.session_state.name}, I’m Elli. 🌱 I’m here to gently check in with you..."
-                st.session_state.step = "mood"
-            else:
-                elli_intro = "Thanks for sharing. Could you please give me just a name or nickname to use when we chat?"
-
-            st.session_state.messages.append({"role": "bot", "content": elli_intro})
+    if step == "intro":
+        from utils.chatbot import is_valid_name
+        if is_valid_name(user_input):
+            st.session_state.name = user_input
+            bot_reply = f"Hi {st.session_state.name}, I’m Elli. 🌱 I’m here to gently check in with you..."
             st.session_state.step = "mood"
-            st.rerun()
+        else:
+            bot_reply = "Thanks for sharing. Could you please give me just a name or nickname to use when we chat?"
+        st.session_state.messages.append({"role": "bot", "content": bot_reply})
+        with st.chat_message("bot"):
+            st.markdown(bot_reply)
 
-        elif step == "mood":
-            if safety_check(user_input):
-                st.session_state.messages.append({"role": "bot", "content": "It sounds like you're going through something really tough. Please consider reaching out to a professional or crisis service. You're not alone. 💛"})
-                st.stop()
-            with st.spinner("Elli is thinking..."):
-                response = respond_to_feelings(user_input, st.session_state.name)
-                time.sleep(1.5)
-            st.session_state.messages.append({"role": "bot", "content": response})
-            st.session_state.step = "phq"
-            st.session_state.phq_index = 0
-            st.session_state.messages.append({"role": "bot", "content": "Let’s reflect on some feelings together. Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]})
-            st.rerun()
+    elif step == "mood":
+        with st.spinner("Elli is thinking..."):
+            response = respond_to_feelings(user_input, st.session_state.name)
+            time.sleep(1.5)
+        st.session_state.messages.append({"role": "bot", "content": response})
+        st.session_state.step = "phq"
+        st.session_state.phq_index = 0
+        next_question = "Let’s reflect on some feelings together. Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]
+        st.session_state.messages.append({"role": "bot", "content": next_question})
+        with st.chat_message("bot"):
+            st.markdown(response)
+            st.markdown(next_question)
 
-        elif step == "phq":
-            try:
-                score = int(user_input)
-                if score not in [0,1,2,3]: raise ValueError
-            except ValueError:
-                st.session_state.messages.append({"role": "bot", "content": "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day)."})
+    elif step == "phq":
+        try:
+            score = int(user_input)
+            if score not in [0, 1, 2, 3]:
+                raise ValueError
+        except ValueError:
+            error_msg = "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day)."
+            st.session_state.messages.append({"role": "bot", "content": error_msg})
+            with st.chat_message("bot"):
+                st.markdown(error_msg)
+        else:
+            st.session_state.phq_answers.append(score)
+            st.session_state.phq_index += 1
+            if st.session_state.phq_index < len(PHQ_9_QUESTIONS):
+                next_q = f"{st.session_state.phq_index + 1}. {PHQ_9_QUESTIONS[st.session_state.phq_index]}"
+                st.session_state.messages.append({"role": "bot", "content": next_q})
+                with st.chat_message("bot"):
+                    st.markdown(next_q)
             else:
-                st.session_state.phq_answers.append(score)
-                st.session_state.phq_index += 1
-                if st.session_state.phq_index < len(PHQ_9_QUESTIONS):
-                    st.session_state.messages.append({"role": "bot", "content": f"{st.session_state.phq_index + 1}. {PHQ_9_QUESTIONS[st.session_state.phq_index]}"})
-                else:
-                    st.session_state.step = "gad"
-                    st.session_state.gad_index = 0
-                    st.session_state.messages.append({"role": "bot", "content": "Thank you. Now let’s look at anxiety. Over the last 2 weeks: " + GAD_7_QUESTIONS[0]})
-            st.rerun()
+                st.session_state.step = "gad"
+                st.session_state.gad_index = 0
+                gad_intro = "Thank you. Now let’s look at anxiety. Over the last 2 weeks: " + GAD_7_QUESTIONS[0]
+                st.session_state.messages.append({"role": "bot", "content": gad_intro})
+                with st.chat_message("bot"):
+                    st.markdown(gad_intro)
 
-        elif step == "gad":
-            try:
-                score = int(user_input)
-                if score not in [0,1,2,3]: raise ValueError
-            except ValueError:
-                st.session_state.messages.append({"role": "bot", "content": "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day)."})
+    elif step == "gad":
+        try:
+            score = int(user_input)
+            if score not in [0, 1, 2, 3]:
+                raise ValueError
+        except ValueError:
+            error_msg = "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day)."
+            st.session_state.messages.append({"role": "bot", "content": error_msg})
+            with st.chat_message("bot"):
+                st.markdown(error_msg)
+        else:
+            st.session_state.gad_answers.append(score)
+            st.session_state.gad_index += 1
+            if st.session_state.gad_index < len(GAD_7_QUESTIONS):
+                next_q = f"{st.session_state.gad_index + 1}. {GAD_7_QUESTIONS[st.session_state.gad_index]}"
+                st.session_state.messages.append({"role": "bot", "content": next_q})
+                with st.chat_message("bot"):
+                    st.markdown(next_q)
             else:
-                st.session_state.gad_answers.append(score)
-                st.session_state.gad_index += 1
-                if st.session_state.gad_index < len(GAD_7_QUESTIONS):
-                    st.session_state.messages.append({"role": "bot", "content": f"{st.session_state.gad_index + 1}. {GAD_7_QUESTIONS[st.session_state.gad_index]}"})
-                else:
-                    phq_total = sum(st.session_state.phq_answers)
-                    gad_total = sum(st.session_state.gad_answers)
-                    phq_interp = interpret(phq_total, "phq")
-                    gad_interp = interpret(gad_total, "gad")
-                    summary = summarize_results(phq_total, phq_interp, gad_total, gad_interp)
-                    st.session_state.messages.append({"role": "bot", "content": "Here’s a gentle summary of what you’ve shared:"})
-                    st.session_state.messages.append({"role": "bot", "content": summary})
-                    st.session_state.step = "feedback"
-                    st.session_state.messages.append({"role": "bot", "content": "To finish, how much did you feel you could trust Elli? (1–5)"})
-            st.rerun()
+                phq_total = sum(st.session_state.phq_answers)
+                gad_total = sum(st.session_state.gad_answers)
+                phq_interp = interpret(phq_total, "phq")
+                gad_interp = interpret(gad_total, "gad")
+                summary = summarize_results(phq_total, phq_interp, gad_total, gad_interp)
+                st.session_state.step = "feedback"
+                follow_up = [
+                    "Here’s a gentle summary of what you’ve shared:",
+                    summary,
+                    "To finish, how much did you feel you could trust Elli? (1–5)"
+                ]
+                for msg in follow_up:
+                    st.session_state.messages.append({"role": "bot", "content": msg})
+                    with st.chat_message("bot"):
+                        st.markdown(msg)
 
-        elif step == "feedback":
-            if st.session_state.trust == 0:
-                try:
-                    trust_score = int(user_input)
-                    if trust_score not in [1,2,3,4,5]: raise ValueError
-                    st.session_state.trust = trust_score
-                    st.session_state.messages.append({"role": "bot", "content": "Thank you. How comfortable did you feel interacting with Elli? (1–5)"})
-                except ValueError:
-                    st.session_state.messages.append({"role": "bot", "content": "Please enter a number from 1 to 5."})
-                st.rerun()
+    elif step == "feedback":
+        if st.session_state.trust == 0:
+            try:
+                trust_score = int(user_input)
+                if trust_score not in [1, 2, 3, 4, 5]:
+                    raise ValueError
+                st.session_state.trust = trust_score
+                bot_msg = "Thank you. How comfortable did you feel interacting with Elli? (1–5)"
+            except ValueError:
+                bot_msg = "Please enter a number from 1 to 5."
+            st.session_state.messages.append({"role": "bot", "content": bot_msg})
+            with st.chat_message("bot"):
+                st.markdown(bot_msg)
 
-            elif st.session_state.comfort == 0:
-                try:
-                    comfort_score = int(user_input)
-                    if comfort_score not in [1,2,3,4,5]: raise ValueError
-                    st.session_state.comfort = comfort_score
-                    st.session_state.messages.append({"role": "bot", "content": "Thanks. Finally, do you have any thoughts or feedback about this experience?"})
-                except ValueError:
-                    st.session_state.messages.append({"role": "bot", "content": "Please enter a number from 1 to 5."})
-                st.rerun()
+        elif st.session_state.comfort == 0:
+            try:
+                comfort_score = int(user_input)
+                if comfort_score not in [1, 2, 3, 4, 5]:
+                    raise ValueError
+                st.session_state.comfort = comfort_score
+                bot_msg = "Thanks. Finally, do you have any thoughts or feedback about this experience?"
+            except ValueError:
+                bot_msg = "Please enter a number from 1 to 5."
+            st.session_state.messages.append({"role": "bot", "content": bot_msg})
+            with st.chat_message("bot"):
+                st.markdown(bot_msg)
 
-            elif st.session_state.feedback == "":
-                st.session_state.feedback = user_input
-                data = {
-                    "name": st.session_state.get("name", ""),
-                    "phq_answers": st.session_state.get("phq_answers", []),
-                    "phq_total": sum(st.session_state.get("phq_answers", [])),
-                    "phq_interp": interpret(sum(st.session_state.get("phq_answers", [])), "phq"),
-                    "gad_answers": st.session_state.get("gad_answers", []),
-                    "gad_total": sum(st.session_state.get("gad_answers", [])),
-                    "gad_interp": interpret(sum(st.session_state.get("gad_answers", [])), "gad"),
-                    "trust": st.session_state.get("trust", ""),
-                    "comfort": st.session_state.get("comfort", ""),
-                    "user_reflection": st.session_state.get("feedback", ""),
-                    "initial_mood": (
-                        st.session_state.messages[2]["content"]
-                        if len(st.session_state.messages) > 2 else ""
-                    ),
-                    "full_chat": " | ".join([
-                        f"{msg['role']}: {msg['content']}" for msg in st.session_state.get("messages", [])
-                    ]),
-                }
-                save_to_csv(data)
-
-                st.session_state.messages.append({"role": "bot", "content": f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"})
-                st.rerun()
+        elif st.session_state.feedback == "":
+            st.session_state.feedback = user_input
+            data = {
+                "name": st.session_state.get("name", ""),
+                "phq_answers": st.session_state.get("phq_answers", []),
+                "phq_total": sum(st.session_state.get("phq_answers", [])),
+                "phq_interp": interpret(sum(st.session_state.get("phq_answers", [])), "phq"),
+                "gad_answers": st.session_state.get("gad_answers", []),
+                "gad_total": sum(st.session_state.get("gad_answers", [])),
+                "gad_interp": interpret(sum(st.session_state.get("gad_answers", [])), "gad"),
+                "trust": st.session_state.get("trust", ""),
+                "comfort": st.session_state.get("comfort", ""),
+                "user_reflection": st.session_state.get("feedback", ""),
+                "initial_mood": st.session_state.messages[2]["content"] if len(st.session_state.messages) > 2 else "",
+                "full_chat": " | ".join([f"{m['role']}: {m['content']}" for m in st.session_state.get("messages", [])]),
+            }
+            save_to_csv(data)
+            closing = f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"
+            st.session_state.messages.append({"role": "bot", "content": closing})
+            with st.chat_message("bot"):
+                st.markdown(closing)

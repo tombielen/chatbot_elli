@@ -120,96 +120,95 @@ with st.form("chat_form", clear_on_submit=True):
     user_input = st.text_input("Your message:", key="input")
     submitted = st.form_submit_button("Send")
 
-if submitted and user_input:
-    st.session_state.messages.append({"role": "user", "content": user_input})
+    if submitted and user_input:
+        st.session_state.messages.append({"role": "user", "content": user_input})
 
-    if st.session_state.step == "intro":
-        st.session_state.name = user_input.strip()
-        elli_intro = f"Hi {st.session_state.name}, I’m Elli. 🌱 I’m here to gently check in with you. How have things been for you lately?"
-        st.session_state.messages.append({"role": "bot", "content": elli_intro})
-        st.session_state.step = "mood"
+        if st.session_state.step == "intro":
+            st.session_state.name = user_input.strip()
+            elli_intro = f"Hi {st.session_state.name}, I’m Elli. 🌱 I’m here to gently check in with you. How have things been for you lately?"
+            st.session_state.messages.append({"role": "bot", "content": elli_intro})
+            st.session_state.step = "mood"
 
-    elif st.session_state.step == "mood":
-        mood_input = user_input.strip()
-        if safety_check(mood_input):
-            st.session_state.messages.append({"role": "bot", "content": "It sounds like you're going through something really tough. Please consider reaching out to a professional or crisis service. You're not alone. 💛"})
-            st.stop()
-        with st.spinner("Elli is thinking..."):
-            response = respond_to_feelings(mood_input, st.session_state.name)
-            time.sleep(1.5)
-        st.session_state.messages.append({"role": "bot", "content": response})
-        st.session_state.step = "phq"
-        st.session_state.phq_index = 0
-        st.session_state.messages.append({"role": "bot", "content": "Let’s reflect on some feelings together. Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]})
+        elif st.session_state.step == "mood":
+            mood_input = user_input.strip()
+            if safety_check(mood_input):
+                st.session_state.messages.append({"role": "bot", "content": "It sounds like you're going through something really tough. Please consider reaching out to a professional or crisis service. You're not alone. 💛"})
+                st.stop()
+            with st.spinner("Elli is thinking..."):
+                response = respond_to_feelings(mood_input, st.session_state.name)
+                time.sleep(1.5)
+            st.session_state.messages.append({"role": "bot", "content": response})
+            st.session_state.step = "phq"
+            st.session_state.phq_index = 0
+            st.session_state.messages.append({"role": "bot", "content": "Let’s reflect on some feelings together. Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]})
 
-    elif st.session_state.step == "phq":
-        try:
-            score = int(user_input)
-            if score not in [0,1,2,3]: raise ValueError
-        except ValueError:
-            st.session_state.messages.append({"role": "bot", "content": "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day)."})
-        else:
-            st.session_state.phq_answers.append(score)
-            st.session_state.phq_index += 1
-            if st.session_state.phq_index < len(PHQ_9_QUESTIONS):
-                st.session_state.messages.append({"role": "bot", "content": f"{st.session_state.phq_index + 1}. {PHQ_9_QUESTIONS[st.session_state.phq_index]}"})
-            else:
-                st.session_state.step = "gad"
-                st.session_state.gad_index = 0
-                st.session_state.messages.append({"role": "bot", "content": "Thank you. Now let’s look at anxiety. Over the last 2 weeks: " + GAD_7_QUESTIONS[0]})
-
-    elif st.session_state.step == "gad":
-        try:
-            score = int(user_input)
-            if score not in [0,1,2,3]: raise ValueError
-        except ValueError:
-            st.session_state.messages.append({"role": "bot", "content": "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day)."})
-        else:
-            st.session_state.gad_answers.append(score)
-            st.session_state.gad_index += 1
-            if st.session_state.gad_index < len(GAD_7_QUESTIONS):
-                st.session_state.messages.append({"role": "bot", "content": f"{st.session_state.gad_index + 1}. {GAD_7_QUESTIONS[st.session_state.gad_index]}"})
-            else:
-                phq_total = sum(st.session_state.phq_answers)
-                gad_total = sum(st.session_state.gad_answers)
-                phq_interp = interpret(phq_total, "phq")
-                gad_interp = interpret(gad_total, "gad")
-                summary = summarize_results(phq_total, phq_interp, gad_total, gad_interp)
-                st.session_state.messages.append({"role": "bot", "content": "Here’s a gentle summary of what you’ve shared:"})
-                st.session_state.messages.append({"role": "bot", "content": summary})
-                st.session_state.step = "feedback"
-                st.session_state.messages.append({"role": "bot", "content": "To finish, how much did you feel you could trust Elli? (1–5)"})
-
-    elif st.session_state.step == "feedback":
-        if st.session_state.trust == 0:
+        elif st.session_state.step == "phq":
             try:
-                trust_score = int(user_input)
-                if trust_score not in [1,2,3,4,5]: raise ValueError
-                st.session_state.trust = trust_score
-                st.session_state.messages.append({"role": "bot", "content": "Thank you. How comfortable did you feel interacting with Elli? (1–5)"})
+                score = int(user_input)
+                if score not in [0,1,2,3]: raise ValueError
             except ValueError:
-                st.session_state.messages.append({"role": "bot", "content": "Please enter a number from 1 to 5."})
-        elif st.session_state.comfort == 0:
-            try:
-                comfort_score = int(user_input)
-                if comfort_score not in [1,2,3,4,5]: raise ValueError
-                st.session_state.comfort = comfort_score
-                st.session_state.messages.append({"role": "bot", "content": "Thanks. Finally, do you have any thoughts or feedback about this experience?"})
-            except ValueError:
-                st.session_state.messages.append({"role": "bot", "content": "Please enter a number from 1 to 5."})
-        elif st.session_state.feedback == "":
-            st.session_state.feedback = user_input
-            data = {
-                "name": st.session_state.name,
-                "initial_mood": st.session_state.messages[2]["content"],
-                "phq_total": sum(st.session_state.phq_answers),
-                "phq_interp": interpret(sum(st.session_state.phq_answers), "phq"),
-                "gad_total": sum(st.session_state.gad_answers),
-                "gad_interp": interpret(sum(st.session_state.gad_answers), "gad"),
-                "trust": st.session_state.trust,
-                "comfort": st.session_state.comfort,
-                "user_reflection": st.session_state.feedback
-            }
-            save_to_csv(data)
-            st.session_state.messages.append({"role": "bot", "content": f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"})
+                st.session_state.messages.append({"role": "bot", "content": "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day)."})
+            else:
+                st.session_state.phq_answers.append(score)
+                st.session_state.phq_index += 1
+                if st.session_state.phq_index < len(PHQ_9_QUESTIONS):
+                    st.session_state.messages.append({"role": "bot", "content": f"{st.session_state.phq_index + 1}. {PHQ_9_QUESTIONS[st.session_state.phq_index]}"})
+                else:
+                    st.session_state.step = "gad"
+                    st.session_state.gad_index = 0
+                    st.session_state.messages.append({"role": "bot", "content": "Thank you. Now let’s look at anxiety. Over the last 2 weeks: " + GAD_7_QUESTIONS[0]})
 
+        elif st.session_state.step == "gad":
+            try:
+                score = int(user_input)
+                if score not in [0,1,2,3]: raise ValueError
+            except ValueError:
+                st.session_state.messages.append({"role": "bot", "content": "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day)."})
+            else:
+                st.session_state.gad_answers.append(score)
+                st.session_state.gad_index += 1
+                if st.session_state.gad_index < len(GAD_7_QUESTIONS):
+                    st.session_state.messages.append({"role": "bot", "content": f"{st.session_state.gad_index + 1}. {GAD_7_QUESTIONS[st.session_state.gad_index]}"})
+                else:
+                    phq_total = sum(st.session_state.phq_answers)
+                    gad_total = sum(st.session_state.gad_answers)
+                    phq_interp = interpret(phq_total, "phq")
+                    gad_interp = interpret(gad_total, "gad")
+                    summary = summarize_results(phq_total, phq_interp, gad_total, gad_interp)
+                    st.session_state.messages.append({"role": "bot", "content": "Here’s a gentle summary of what you’ve shared:"})
+                    st.session_state.messages.append({"role": "bot", "content": summary})
+                    st.session_state.step = "feedback"
+                    st.session_state.messages.append({"role": "bot", "content": "To finish, how much did you feel you could trust Elli? (1–5)"})
+
+        elif st.session_state.step == "feedback":
+            if st.session_state.trust == 0:
+                try:
+                    trust_score = int(user_input)
+                    if trust_score not in [1,2,3,4,5]: raise ValueError
+                    st.session_state.trust = trust_score
+                    st.session_state.messages.append({"role": "bot", "content": "Thank you. How comfortable did you feel interacting with Elli? (1–5)"})
+                except ValueError:
+                    st.session_state.messages.append({"role": "bot", "content": "Please enter a number from 1 to 5."})
+            elif st.session_state.comfort == 0:
+                try:
+                    comfort_score = int(user_input)
+                    if comfort_score not in [1,2,3,4,5]: raise ValueError
+                    st.session_state.comfort = comfort_score
+                    st.session_state.messages.append({"role": "bot", "content": "Thanks. Finally, do you have any thoughts or feedback about this experience?"})
+                except ValueError:
+                    st.session_state.messages.append({"role": "bot", "content": "Please enter a number from 1 to 5."})
+            elif st.session_state.feedback == "":
+                st.session_state.feedback = user_input
+                data = {
+                    "name": st.session_state.name,
+                    "initial_mood": st.session_state.messages[2]["content"],
+                    "phq_total": sum(st.session_state.phq_answers),
+                    "phq_interp": interpret(sum(st.session_state.phq_answers), "phq"),
+                    "gad_total": sum(st.session_state.gad_answers),
+                    "gad_interp": interpret(sum(st.session_state.gad_answers), "gad"),
+                    "trust": st.session_state.trust,
+                    "comfort": st.session_state.comfort,
+                    "user_reflection": st.session_state.feedback
+                }
+                save_to_csv(data)
+                st.session_state.messages.append({"role": "bot", "content": f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"})

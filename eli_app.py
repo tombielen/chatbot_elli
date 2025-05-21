@@ -44,7 +44,10 @@ st.markdown("""
 st.title("🌱 Elli – Your Mental Health Companion")
 
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = [{
+        "role": "bot",
+        "content": "Hi, I’m Elli. 🌱 What’s your name or nickname?"
+    }]
     st.session_state.step = "intro"
     st.session_state.name = ""
     st.session_state.phq_answers = []
@@ -54,6 +57,7 @@ if "messages" not in st.session_state:
     st.session_state.trust = 0
     st.session_state.comfort = 0
     st.session_state.feedback = ""
+
 
 PHQ_9_QUESTIONS = [
     "Little interest or pleasure in doing things?",
@@ -209,6 +213,3 @@ if submitted and user_input:
             save_to_csv(data)
             st.session_state.messages.append({"role": "bot", "content": f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"})
 
-# Trigger Elli's first message automatically on first load
-if st.session_state.step == "intro" and len(st.session_state.messages) == 0:
-    st.session_state.messages.append({"role": "bot", "content": "Hi, I’m Elli. 🌱 What’s your name or nickname?"})

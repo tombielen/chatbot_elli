@@ -60,75 +60,101 @@ def save_to_csv(data, filename="data/user_responses.csv"):
             writer.writeheader()
         writer.writerow(data)
 
-with st.form("intro_form"):
-    st.markdown("This isn’t therapy, but it’s a warm, thoughtful space.")
-    name = st.text_input("What’s your name or nickname you'd like me to use?", max_chars=30)
-    age = st.text_input("Age")
-    gender = st.text_input("Gender (optional)")
-    therapy = st.selectbox("Have you done therapy before?", ["Yes", "No"])
-    mood = st.text_area("How have things been for you lately? Just a sentence or two.")
-    submitted = st.form_submit_button("Begin Conversation")
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-if submitted:
-    if not name:
-        name = "friend"
-    st.write(f"Nice to meet you, {name} 💬")
+user_input = st.chat_input("Write a message to Elli...")
 
-    if safety_check(mood):
-        st.error("It sounds like you're going through something really tough. Please consider reaching out to a professional or crisis service. You're not alone. 💛")
-        st.stop()
+if user_input:
+    st.session_state.messages.append({"role": "user", "content": user_input})
 
-    with st.spinner("Elli is thinking about what you shared..."):
-        feeling_response = respond_to_feelings(mood, name)
-        time.sleep(2)
-        st.write(feeling_response)
+    if "name" not in st.session_state:
+        st.session_state.name = user_input.strip() or "friend"
+        with st.chat_message("assistant"):
+            with st.spinner("Elli is thinking..."):
+                time.sleep(2)
+                st.write(f"Nice to meet you, {st.session_state.name}. 🌱 Before we chat further, may I ask how you’ve been feeling lately?")
+    elif "mood" not in st.session_state:
+        st.session_state.mood = user_input
+        if safety_check(user_input):
+            with st.chat_message("assistant"):
+                st.error("It sounds like you're going through something really tough. Please consider reaching out to a professional or crisis service. You're not alone. 💛")
+            st.stop()
 
-    st.markdown("---")
-    st.write("### Let’s reflect on some feelings together...")
+        with st.chat_message("assistant"):
+            with st.spinner("Elli is thinking..."):
+                response = respond_to_feelings(st.session_state.mood, st.session_state.name)
+                time.sleep(2)
+                st.write(response)
+                st.write("I'd like to ask you a few short questions to better understand how you're feeling. These are quick and used by mental health professionals.")
 
-    phq_scores = []
-    for i, q in enumerate(PHQ_9_QUESTIONS):
-        score = st.radio(f"{i+1}. Over the last 2 weeks: {q}", [0, 1, 2, 3], format_func=lambda x: ["Not at all", "Several days", "More than half the days", "Nearly every day"][x], key=f"phq_{i}")
-        phq_scores.append(score)
+    elif "phq_scores" not in st.session_state:
+        st.session_state.phq_scores = []
+        st.session_state.question_index = 0
 
-    gad_scores = []
-    for i, q in enumerate(GAD_7_QUESTIONS):
-        score = st.radio(f"{i+1}. Over the last 2 weeks: {q}", [0, 1, 2, 3], format_func=lambda x: ["Not at all", "Several days", "More than half the days", "Nearly every day"][x], key=f"gad_{i}")
-        gad_scores.append(score)
+    elif "question_index" in st.session_state and st.session_state.question_index < len(PHQ_9_QUESTIONS):
+        q = PHQ_9_QUESTIONS[st.session_state.question_index]
+        options = ["Not at all", "Several days", "More than half the days", "Nearly every day"]
+        choice = st.radio(f"{q}", options, key=f"phq_{st.session_state.question_index}")
+        if choice:
+            st.session_state.phq_scores.append(options.index(choice))
+            st.session_state.question_index += 1
+            st.experimental_rerun()
 
-    phq_total = sum(phq_scores)
-    gad_total = sum(gad_scores)
-    phq_interp = interpret(phq_total, "phq")
-    gad_interp = interpret(gad_total, "gad")
+    elif "gad_scores" not in st.session_state:
+        st.session_state.gad_scores = []
+        st.session_state.gad_index = 0
 
-    st.success("Thanks for sharing that. Elli is now preparing your personalized summary...")
-    with st.spinner("Elli is writing your summary..."):
-        summary = summarize_results(phq_total, phq_interp, gad_total, gad_interp)
-        time.sleep(2)
-        st.write("### 🌼 Your Personalized Summary")
-        st.write(summary)
+    elif "gad_index" in st.session_state and st.session_state.gad_index < len(GAD_7_QUESTIONS):
+        q = GAD_7_QUESTIONS[st.session_state.gad_index]
+        options = ["Not at all", "Several days", "More than half the days", "Nearly every day"]
+        choice = st.radio(f"{q}", options, key=f"gad_{st.session_state.gad_index}")
+        if choice:
+            st.session_state.gad_scores.append(options.index(choice))
+            st.session_state.gad_index += 1
+            st.experimental_rerun()
 
-    st.markdown("---")
-    st.write("#### Final Thoughts")
-    trust = st.slider("I felt like I could trust Elli.", 1, 5)
-    comfort = st.slider("I felt comfortable interacting with Elli.", 1, 5)
-    reflection = st.text_area("Any feedback you'd like to share about this experience?")
+    elif "summary_shown" not in st.session_state:
+        phq_total = sum(st.session_state.phq_scores)
+        gad_total = sum(st.session_state.gad_scores)
+        phq_interp = interpret(phq_total, "phq")
+        gad_interp = interpret(gad_total, "gad")
 
-    data = {
-        "name": name,
-        "age": age,
-        "gender": gender,
-        "therapy_history": therapy,
-        "initial_mood": mood,
-        "phq_total": phq_total,
-        "phq_interp": phq_interp,
-        "gad_total": gad_total,
-        "gad_interp": gad_interp,
-        "trust": trust,
-        "comfort": comfort,
-        "user_reflection": reflection
-    }
+        with st.chat_message("assistant"):
+            with st.spinner("Elli is thinking..."):
+                summary = summarize_results(phq_total, phq_interp, gad_total, gad_interp)
+                time.sleep(2)
+                st.write("Here’s your personalized emotional summary:")
+                st.write(summary)
 
-    save_to_csv(data)
-    st.balloons()
-    st.success(f"Thanks so much for checking in today, {name}. Wishing you care and calm. 🌻")
+        st.session_state.summary_shown = True
+
+    elif "reflection_done" not in st.session_state:
+        trust = st.slider("I felt like I could trust Elli.", 1, 5)
+        comfort = st.slider("I felt comfortable interacting with Elli.", 1, 5)
+        reflection = st.text_area("Any feedback you'd like to share about this experience?")
+
+        data = {
+            "name": st.session_state.name,
+            "age": "",  
+            "gender": "",
+            "therapy_history": "",
+            "initial_mood": st.session_state.mood,
+            "phq_total": sum(st.session_state.phq_scores),
+            "phq_interp": interpret(sum(st.session_state.phq_scores), "phq"),
+            "gad_total": sum(st.session_state.gad_scores),
+            "gad_interp": interpret(sum(st.session_state.gad_scores), "gad"),
+            "trust": trust,
+            "comfort": comfort,
+            "user_reflection": reflection
+        }
+
+        save_to_csv(data)
+        st.balloons()
+        with st.chat_message("assistant"):
+            st.success(f"Thanks for checking in today, {st.session_state.name}. 🌻 Take gentle care.")
+        st.session_state.reflection_done = True
+
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.markdown(msg["content"])

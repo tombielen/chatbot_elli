@@ -121,13 +121,15 @@ with st.form("chat_form", clear_on_submit=True):
     submitted = st.form_submit_button("Send")
 
     if submitted and user_input:
+        user_input = user_input.strip()
         st.session_state.messages.append({"role": "user", "content": user_input})
 
         if st.session_state.step == "intro":
-            st.session_state.name = user_input.strip()
+            st.session_state.name = user_input
             elli_intro = f"Hi {st.session_state.name}, I’m Elli. 🌱 I’m here to gently check in with you. How have things been for you lately?"
             st.session_state.messages.append({"role": "bot", "content": elli_intro})
             st.session_state.step = "mood"
+            st.rerun()
 
         elif st.session_state.step == "mood":
             mood_input = user_input.strip()

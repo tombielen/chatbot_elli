@@ -133,10 +133,11 @@ if user_input:
         st.session_state.step = "phq"
         st.session_state.phq_index = 0
         next_question = (
-            "Let’s reflect on some feelings together.<br><br>"
-            "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day).<br><br>"
+            "Let’s reflect on some feelings together.\n\n"
+            "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day).\n\n"
             "Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]
         )
+
 
         st.session_state.messages.append({"role": "bot", "content": next_question})
         with st.chat_message("bot"):

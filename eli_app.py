@@ -251,18 +251,16 @@ if user_input:
             st.session_state.phq_index += 1
             if st.session_state.phq_index < len(PHQ_9_QUESTIONS):
                 next_q = f"{st.session_state.phq_index + 1}. {PHQ_9_QUESTIONS[st.session_state.phq_index]}"
-                st.session_state.messages.append({"role": "bot", "content": next_q})
-                import time
-                time.sleep(0.1)
-                for msg in st.session_state.messages:
-                    render_chat_message(msg)
+                if not any(msg["content"] == next_q for msg in st.session_state.messages):  # Avoid duplicate questions
+                    st.session_state.messages.append({"role": "bot", "content": next_q})
                 with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                     st.markdown(next_q)
             else:
                 st.session_state.step = "gad"
                 st.session_state.gad_index = 0
                 gad_intro = "Thank you. Now let’s look at anxiety. Over the last 2 weeks: " + GAD_7_QUESTIONS[0]
-                st.session_state.messages.append({"role": "bot", "content": gad_intro})
+                if not any(msg["content"] == gad_intro for msg in st.session_state.messages):  # Avoid duplicate intro
+                    st.session_state.messages.append({"role": "bot", "content": gad_intro})
                 with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                     st.markdown(gad_intro)
 
@@ -281,11 +279,8 @@ if user_input:
             st.session_state.gad_index += 1
             if st.session_state.gad_index < len(GAD_7_QUESTIONS):
                 next_q = f"{st.session_state.gad_index + 1}. {GAD_7_QUESTIONS[st.session_state.gad_index]}"
-                st.session_state.messages.append({"role": "bot", "content": next_q})
-                import time
-                time.sleep(0.1)
-                for msg in st.session_state.messages:
-                    render_chat_message(msg)
+                if not any(msg["content"] == next_q for msg in st.session_state.messages):  # Avoid duplicate questions
+                    st.session_state.messages.append({"role": "bot", "content": next_q})
                 with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                     st.markdown(next_q)
             else:
@@ -308,12 +303,8 @@ if user_input:
                     "To finish, how much did you feel you could trust Elli? (1–5)"
                 ]
                 for msg in follow_up:
-                    st.session_state.messages.append({"role": "bot", "content": msg})
-                    import time
-                    time.sleep(0.1)
-                    for msg in st.session_state.messages:
-                        render_chat_message(msg)
-                    render_chat_message({"role": "bot", "content": msg})
+                    if not any(existing_msg["content"] == msg for existing_msg in st.session_state.messages):  # Avoid duplicates
+                        st.session_state.messages.append({"role": "bot", "content": msg})
                     with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                         st.markdown(msg)
 

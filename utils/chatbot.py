@@ -146,9 +146,14 @@ def extract_gender(user_input):
 
 def extract_history(user_input):
     prompt = f"""
-    Does this message indicate any prior mental health support or history?
-    "{user_input}"
-    Reply with "has history", "no history", or "none".
+    Based on the user's message, do they indicate previous mental health support or challenges?
+
+    Message: "{user_input}"
+
+    Reply ONLY with:
+    - "has history"
+    - "no history"
+    - "none"
     """
     response = client.chat.completions.create(
         model="gpt-4",

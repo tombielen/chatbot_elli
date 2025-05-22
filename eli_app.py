@@ -338,25 +338,32 @@ if user_input:
                 st.markdown(bot_msg)
 
         elif st.session_state.feedback == "":
-            st.session_state.feedback = user_input
-            data = {
-                "name": st.session_state.get("name", ""),
-                "phq_answers": st.session_state.get("phq_answers", []),
-                "phq_total": sum(st.session_state.get("phq_answers", [])),
-                "phq_interp": interpret(sum(st.session_state.get("phq_answers", [])), "phq"),
-                "gad_answers": st.session_state.get("gad_answers", []),
-                "gad_total": sum(st.session_state.get("gad_answers", [])),
-                "gad_interp": interpret(sum(st.session_state.get("gad_answers", [])), "gad"),
-                "trust": st.session_state.get("trust", ""),
-                "comfort": st.session_state.get("comfort", ""),
-                "user_reflection": st.session_state.get("feedback", ""),
-                "initial_mood": st.session_state.messages[2]["content"] if len(st.session_state.messages) > 2 else "",
-                "full_chat": " | ".join([f"{m['role']}: {m['content']}" for m in st.session_state.get("messages", [])]),
-            }
+            try:
+                st.session_state.feedback = user_input
+                data = {
+                    "name": st.session_state.get("name", ""),
+                    "phq_answers": st.session_state.get("phq_answers", []),
+                    "phq_total": sum(st.session_state.get("phq_answers", [])),
+                    "phq_interp": interpret(sum(st.session_state.get("phq_answers", [])), "phq"),
+                    "gad_answers": st.session_state.get("gad_answers", []),
+                    "gad_total": sum(st.session_state.get("gad_answers", [])),
+                    "gad_interp": interpret(sum(st.session_state.get("gad_answers", [])), "gad"),
+                    "trust": st.session_state.get("trust", ""),
+                    "comfort": st.session_state.get("comfort", ""),
+                    "user_reflection": st.session_state.get("feedback", ""),
+                    "initial_mood": st.session_state.messages[2]["content"] if len(st.session_state.messages) > 2 else "",
+                    "full_chat": " | ".join([f"{m['role']}: {m['content']}" for m in st.session_state.get("messages", [])]),
+                }
 
-            append_to_google_sheet(data)
+                append_to_google_sheet(data)
 
-            closing = f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"
-            st.session_state.messages.append({"role": "bot", "content": closing})
-            with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
-                st.markdown(closing)
+                closing = f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"
+                st.session_state.messages.append({"role": "bot", "content": closing})
+                with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
+                    st.markdown(closing)
+            except Exception as e:
+                bot_msg = "An error occurred while processing your feedback. Please try again later."
+                st.session_state.messages.append({"role": "bot", "content": bot_msg})
+                with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
+                    st.markdown(bot_msg)
+                st.error(f"Error: {e}")

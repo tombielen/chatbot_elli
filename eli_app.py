@@ -37,16 +37,13 @@ st.set_page_config(page_title="Elli - Mental Health Assistant", page_icon="🌱"
 
 st.title("🌱 Elli – Your Mental Health Companion")
 
-
-
-
 # --- Init session state ---
 if "messages" not in st.session_state:
     st.session_state.messages = [{
         "role": "bot",
         "content": "Hi, I’m Elli. 🌱 What’s your name or nickname?"
     }]
-    st.session_state.step = "demographics"  # sets the first phase
+    st.session_state.step = "intro"  # Start with the intro step
     st.session_state.name = ""
     st.session_state.phq_answers = []
     st.session_state.gad_answers = []
@@ -55,7 +52,6 @@ if "messages" not in st.session_state:
     st.session_state.trust = 0
     st.session_state.comfort = 0
     st.session_state.feedback = ""
-    
     st.session_state.age = ""
     st.session_state.gender = ""
     st.session_state.psych_history = ""
@@ -173,19 +169,12 @@ if user_input:
     if step == "intro":
         from utils.chatbot import extract_name_from_input
 
-        if safety_check(user_input):
-            st.session_state.messages.append({
-                "role": "bot",
-                "content": "It sounds like you're going through something really difficult. You're not alone. Please consider reaching out to a professional or crisis support. 💛"
-            })
-            st.stop()
-
         name = extract_name_from_input(user_input)
 
         if name:
             st.session_state.name = name
             elli_intro = f"Hi {name}, I’m Elli. 🌱 I’m here to gently check in with you. How are you feeling today? (2-3 sentences)"
-            st.session_state.step = "mood"
+            st.session_state.step = "mood"  # Move to the mood step
         else:
             elli_intro = "Thanks for sharing. Could you please give me just your name or nickname so I can know how to address you?"
 

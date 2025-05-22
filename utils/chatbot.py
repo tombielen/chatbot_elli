@@ -114,7 +114,11 @@ def respond_to_feelings(user_input, name):
     return get_chat_response(prompt)
 
 def extract_demographic_value(user_input):
-    prompt = DEMOGRAPHIC_EXTRACTION_PROMPT.format(user_input=user_input)
+    prompt = f"""
+    You are a helpful assistant. Extract demographic information (e.g., age, gender, or mental health history) from the following message:
+    "{user_input}"
+    If no clear demographic information is found, respond with "None".
+    """
     response = client.chat.completions.create(
         model="gpt-4",
         messages=[{"role": "user", "content": prompt}],

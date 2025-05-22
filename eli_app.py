@@ -5,7 +5,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import datetime
 import csv
 import os
-from utils.chatbot import summarize_results, safety_check, respond_to_feelings
+from utils.chatbot import summarize_results, safety_check, respond_to_feelings, extract_demographic_value
 
 @st.cache_resource
 def get_gsheet_client():
@@ -214,15 +214,20 @@ if user_input:
             st.rerun()
 
         elif stage == "ask_gender":
-            extracted_gender = extract_demographic_value(user_input)
-            if extracted_gender:
-                st.session_state.gender = extracted_gender
-                st.session_state.demographic_stage = "ask_psych_history"
-                question = "Got it. Have you had any past experiences with mental health support or challenges?"
-                st.session_state.messages.append({"role": "bot", "content": question})
-            else:
-                error_msg = "I couldn't understand your gender. Could you please clarify?"
+            try:
+                extracted_gender = extract_demographic_value(user_input)
+                if extracted_gender:
+                    st.session_state.gender = extracted_gender
+                    st.session_state.demographic_stage = "ask_psych_history"
+                    question = "Got it. Have you had any past experiences with mental health support or challenges?"
+                    st.session_state.messages.append({"role": "bot", "content": question})
+                else:
+                    error_msg = "I couldn't understand your gender. Could you please clarify?"
+                    st.session_state.messages.append({"role": "bot", "content": error_msg})
+            except Exception as e:
+                error_msg = "An error occurred while processing your response. Please try again."
                 st.session_state.messages.append({"role": "bot", "content": error_msg})
+                st.error(f"Error: {e}")
             st.rerun()
 
         elif stage == "ask_psych_history":

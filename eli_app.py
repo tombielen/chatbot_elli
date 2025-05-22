@@ -142,9 +142,10 @@ user_input = st.chat_input("Your message...")
 
 if user_input:
     user_input = user_input.strip()
-    st.session_state.messages.append({"role": "user", "content": user_input})
-    with st.chat_message("user"):
-        st.markdown(user_input)
+    user_msg = {"role": "user", "content": user_input}
+    st.session_state.messages.append(user_msg)
+    render_chat_message(user_msg)
+
     mid_session_log("UserInput", user_input)
     # SAFETY CHECK
     if st.session_state.step not in ["phq", "gad"]:
@@ -189,6 +190,7 @@ if user_input:
     elif step == "mood":
         with st.spinner("Elli is thinking..."):
             response = respond_to_feelings(user_input, st.session_state.name)
+            st.session_state.initial_mood = user_input  
             time.sleep(1.5)
         st.session_state.messages.append({"role": "bot", "content": response})
         st.session_state.step = "phq"
@@ -259,8 +261,9 @@ if user_input:
                     phq_interp,
                     gad_total,
                     gad_interp,
-                    mood_text=initial_mood
+                    mood_text=st.session_state.initial_mood
                 )
+
                 st.session_state.step = "feedback"
                 follow_up = [
                     "Here’s a gentle summary of what you’ve shared:",
@@ -269,6 +272,7 @@ if user_input:
                 ]
                 for msg in follow_up:
                     st.session_state.messages.append({"role": "bot", "content": msg})
+                    render_chat_message({"role": "bot", "content": msg})
                     with st.chat_message("bot"):
                         st.markdown(msg)
 

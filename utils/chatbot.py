@@ -127,28 +127,18 @@ def extract_demographic_value(user_input):
     If the message indicates gender, respond with "male", "female", or "other".
     If the message indicates no prior mental health support or challenges, respond with "no history".
     If the message indicates prior mental health support or challenges, respond with "has history".
-    If the message indicates gender, respond with "male", "female", or "other".
     If the message is unclear or doesn't provide relevant information, respond with "none".
     Examples:
     - "No, I haven't had any support before" → "no history"
     - "Male" → "male"
     - "Female" → "female"
-    - "Girl" → "female"
-    - "Boy" → "male"
-    - "Woman" → "female"
-    - "Man" → "male"
-    - "Men" → "male"
-    - "Women" → "female"
     - "I am a male" → "male"
-    - "Female" → "female"
     - "I identify as other" → "other"
     - "Yes, I have seen a therapist" → "has history"
     - "Not yet" → "no history"
     - "Never had any issues" → "no history"
     - "I have been to counseling" → "has history"
     - "I am 25 years old" → "25"
-    - "20" → "20"
-    - "I am eigteen" → "18"
     """
     response = client.chat.completions.create(
         model="gpt-4",
@@ -156,6 +146,10 @@ def extract_demographic_value(user_input):
         temperature=0.2
     )
     value = response.choices[0].message.content.strip().lower()
+
+    # Debugging: Log the raw response
+    print(f"DEBUG: Raw GPT-4 response: {value}")
+
     if value.isdigit():
         return int(value)  # Return the age as an integer
     if value in ["male", "female", "other", "no history", "has history"]:

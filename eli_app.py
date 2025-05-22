@@ -391,7 +391,6 @@ if user_input:
                 st.session_state.feedback = user_input
                 data = {
                     "name": st.session_state.get("name", ""),
-                    "age": extract_age(user_input)
                     "phq_answers": st.session_state.get("phq_answers", []),
                     "phq_total": sum(st.session_state.get("phq_answers", [])),
                     "phq_interp": interpret(sum(st.session_state.get("phq_answers", [])), "phq"),

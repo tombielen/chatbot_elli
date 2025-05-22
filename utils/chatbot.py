@@ -117,12 +117,16 @@ def extract_demographic_value(user_input):
     prompt = f"""
     You are a helpful assistant. Extract demographic information (e.g., age, gender, or mental health history) from the following message:
     "{user_input}"
-    If no clear demographic information is found, respond with "None".
+    If the message indicates no prior mental health support or challenges, respond with "No history".
+    If the message indicates prior mental health support or challenges, respond with "Has history".
+    If no clear information is found, respond with "None".
     """
     response = client.chat.completions.create(
         model="gpt-4",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.2
     )
-    value = response.choices[0].message.content.strip()
-    return value if value.lower() not in ["none", ""] else None
+    value = response.choices[0].message.content.strip().lower()
+    if value in ["no history", "has history"]:
+        return value
+    return None

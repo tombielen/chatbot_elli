@@ -231,21 +231,37 @@ if user_input:
             st.rerun()
 
         elif stage == "ask_psych_history":
-            extracted_psych_history = extract_demographic_value(user_input)
-            if extracted_psych_history:
-                st.session_state.psych_history = extracted_psych_history
-                st.session_state.step = "phq"
-                st.session_state.phq_index = 0
+            try:
+                extracted_psych_history = extract_demographic_value(user_input)
+                if extracted_psych_history == "no history":
+                    st.session_state.psych_history = "No prior mental health support or challenges"
+                    st.session_state.step = "phq"
+                    st.session_state.phq_index = 0
 
-                next_question = (
-                    "Thanks for sharing. Let’s reflect on some feelings together.\n\n"
-                    "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day).\n\n"
-                    "Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]
-                )
-                st.session_state.messages.append({"role": "bot", "content": next_question})
-            else:
-                error_msg = "I couldn't understand your response. Could you please clarify?"
+                    next_question = (
+                        "Thanks for sharing. Let’s reflect on some feelings together.\n\n"
+                        "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day).\n\n"
+                        "Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]
+                    )
+                    st.session_state.messages.append({"role": "bot", "content": next_question})
+                elif extracted_psych_history == "has history":
+                    st.session_state.psych_history = "Has prior mental health support or challenges"
+                    st.session_state.step = "phq"
+                    st.session_state.phq_index = 0
+
+                    next_question = (
+                        "Thanks for sharing. Let’s reflect on some feelings together.\n\n"
+                        "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day).\n\n"
+                        "Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]
+                    )
+                    st.session_state.messages.append({"role": "bot", "content": next_question})
+                else:
+                    error_msg = "I couldn't understand your response. Could you please clarify?"
+                    st.session_state.messages.append({"role": "bot", "content": error_msg})
+            except Exception as e:
+                error_msg = "An error occurred while processing your response. Please try again."
                 st.session_state.messages.append({"role": "bot", "content": error_msg})
+                st.error(f"Error: {e}")
             st.rerun()
 
     elif step == "phq":

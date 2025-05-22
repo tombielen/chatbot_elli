@@ -46,7 +46,7 @@ if "messages" not in st.session_state:
         "role": "bot",
         "content": "Hi, I’m Elli. 🌱 What’s your name or nickname?"
     }]
-    st.session_state.step = "intro"
+    st.session_state.step = "demographics"  # sets the first phase
     st.session_state.name = ""
     st.session_state.phq_answers = []
     st.session_state.gad_answers = []
@@ -55,6 +55,11 @@ if "messages" not in st.session_state:
     st.session_state.trust = 0
     st.session_state.comfort = 0
     st.session_state.feedback = ""
+    
+    st.session_state.age = ""
+    st.session_state.gender = ""
+    st.session_state.psych_history = ""
+    st.session_state.demographic_stage = "ask_age"
 
 PHQ_9_QUESTIONS = [
     "Little interest or pleasure in doing things?",
@@ -159,7 +164,7 @@ if user_input:
             "- **International**: [Find a helpline near you](https://findahelpline.com)\n\n"
             "You matter. 💛"
             st.session_state.messages.append({"role": "bot", "content": bot_reply})
-            with st.chat_message("bot"):
+            with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                 st.markdown(bot_reply)
             st.stop()
 
@@ -190,22 +195,51 @@ if user_input:
     elif step == "mood":
         with st.spinner("Elli is thinking..."):
             response = respond_to_feelings(user_input, st.session_state.name)
-            st.session_state.initial_mood = user_input  
+            st.session_state.initial_mood = user_input
             time.sleep(1.5)
         st.session_state.messages.append({"role": "bot", "content": response})
-        st.session_state.step = "phq"
-        st.session_state.phq_index = 0
-        next_question = (
-            "Let’s reflect on some feelings together.\n\n"
-            "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day).\n\n"
-            "Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]
-        )
+    
+        # Move to demographic questions instead of skipping them
+        st.session_state.step = "demographics"
+        st.session_state.demographic_stage = "ask_age"
+    
+        # Ask the first demographic question
+        first_demo_q = "Before we continue, could you share your age?"
+        st.session_state.messages.append({"role": "bot", "content": first_demo_q})
+        st.rerun()
+    
+    elif step == "demographics":
+        stage = st.session_state.demographic_stage
+
+        if stage == "ask_age":
+            st.session_state.age = user_input
+            st.session_state.demographic_stage = "ask_gender"
+            question = "Thank you. What gender do you identify with?"
+            st.session_state.messages.append({"role": "bot", "content": question})
+            st.rerun()
+
+        elif stage == "ask_gender":
+            st.session_state.gender = user_input
+            st.session_state.demographic_stage = "ask_psych_history"
+            question = "Got it. Have you had any past experiences with mental health support or challenges?"
+            st.session_state.messages.append({"role": "bot", "content": question})
+            st.rerun()
+
+        elif stage == "ask_psych_history":
+            st.session_state.psych_history = user_input
+            st.session_state.step = "phq"
+            st.session_state.phq_index = 0
+
+            next_question = (
+                "Thanks for sharing. Let’s reflect on some feelings together.\n\n"
+                "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day).\n\n"
+                "Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]
+            )
+
+            st.session_state.messages.append({"role": "bot", "content": next_question})
+            st.rerun()
 
 
-        st.session_state.messages.append({"role": "bot", "content": next_question})
-        with st.chat_message("bot"):
-            st.markdown(response)
-            st.markdown(next_question)
 
     elif step == "phq":
         try:
@@ -215,7 +249,7 @@ if user_input:
         except ValueError:
             error_msg = "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day)."
             st.session_state.messages.append({"role": "bot", "content": error_msg})
-            with st.chat_message("bot"):
+            with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                 st.markdown(error_msg)
         else:
             st.session_state.phq_answers.append(score)
@@ -223,14 +257,14 @@ if user_input:
             if st.session_state.phq_index < len(PHQ_9_QUESTIONS):
                 next_q = f"{st.session_state.phq_index + 1}. {PHQ_9_QUESTIONS[st.session_state.phq_index]}"
                 st.session_state.messages.append({"role": "bot", "content": next_q})
-                with st.chat_message("bot"):
+                with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                     st.markdown(next_q)
             else:
                 st.session_state.step = "gad"
                 st.session_state.gad_index = 0
                 gad_intro = "Thank you. Now let’s look at anxiety. Over the last 2 weeks: " + GAD_7_QUESTIONS[0]
                 st.session_state.messages.append({"role": "bot", "content": gad_intro})
-                with st.chat_message("bot"):
+                with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                     st.markdown(gad_intro)
 
     elif step == "gad":
@@ -241,7 +275,7 @@ if user_input:
         except ValueError:
             error_msg = "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day)."
             st.session_state.messages.append({"role": "bot", "content": error_msg})
-            with st.chat_message("bot"):
+            with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                 st.markdown(error_msg)
         else:
             st.session_state.gad_answers.append(score)
@@ -249,7 +283,7 @@ if user_input:
             if st.session_state.gad_index < len(GAD_7_QUESTIONS):
                 next_q = f"{st.session_state.gad_index + 1}. {GAD_7_QUESTIONS[st.session_state.gad_index]}"
                 st.session_state.messages.append({"role": "bot", "content": next_q})
-                with st.chat_message("bot"):
+                with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                     st.markdown(next_q)
             else:
                 phq_total = sum(st.session_state.phq_answers)
@@ -273,7 +307,7 @@ if user_input:
                 for msg in follow_up:
                     st.session_state.messages.append({"role": "bot", "content": msg})
                     render_chat_message({"role": "bot", "content": msg})
-                    with st.chat_message("bot"):
+                    with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                         st.markdown(msg)
 
     elif step == "feedback":
@@ -287,7 +321,7 @@ if user_input:
             except ValueError:
                 bot_msg = "Please enter a number from 1 to 5."
             st.session_state.messages.append({"role": "bot", "content": bot_msg})
-            with st.chat_message("bot"):
+            with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                 st.markdown(bot_msg)
 
         elif st.session_state.comfort == 0:
@@ -300,7 +334,7 @@ if user_input:
             except ValueError:
                 bot_msg = "Please enter a number from 1 to 5."
             st.session_state.messages.append({"role": "bot", "content": bot_msg})
-            with st.chat_message("bot"):
+            with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                 st.markdown(bot_msg)
 
         elif st.session_state.feedback == "":
@@ -320,9 +354,9 @@ if user_input:
                 "full_chat": " | ".join([f"{m['role']}: {m['content']}" for m in st.session_state.get("messages", [])]),
             }
 
-            save_to_google_sheet(data)
+            append_to_google_sheet(data)
 
             closing = f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"
             st.session_state.messages.append({"role": "bot", "content": closing})
-            with st.chat_message("bot"):
+            with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                 st.markdown(closing)

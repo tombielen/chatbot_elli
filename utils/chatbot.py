@@ -18,7 +18,8 @@ from gpt_prompts import (
     FINAL_SUMMARY_PROMPT,
     SAFETY_CHECK_PROMPT,
     SYSTEM_INSTRUCTION,
-    MOOD_RESPONSE_PROMPT
+    MOOD_RESPONSE_PROMPT,
+    DEMOGRAPHIC_EXTRACTION_PROMPT
 )
 
 
@@ -111,3 +112,8 @@ def safety_check(user_input):
 def respond_to_feelings(user_input, name):
     prompt = MOOD_RESPONSE_PROMPT.format(user_input=user_input, name=name)
     return get_chat_response(prompt)
+
+def extract_demographic_value(user_input):
+    prompt = DEMOGRAPHIC_EXTRACTION_PROMPT.format(user_input=user_input)
+    response = get_chat_response(prompt)
+    return response.strip()

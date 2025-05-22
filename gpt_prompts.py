@@ -16,7 +16,20 @@ Responses: {phq_scores}
 Give a short, clear summary without over-diagnosing. If score is high, suggest speaking to a mental health professional.
 """
 
+DEMOGRAPHIC_EXTRACTION_PROMPT = """
+You are Elli, a supportive assistant gathering demographic information in a friendly chat format.
+You will receive a user message and try to extract **only one** of the following based on the current stage: age, gender, or prior psychological care.
 
+Use these rules:
+- For age: return a number like "24" (only if it sounds like an actual age)
+- For gender: return "male", "female", "non-binary", "prefer not to say", or a short user-defined label
+- For psychological care: respond with "yes", "no", or a brief answer like "yes, in the past" or "no, never"
+
+User message:
+\"\"\"{user_input}\"\"\"
+
+Only return the cleaned value. Do not add explanations, prefixes, or extra formatting.
+"""
 
 GAD7_SUMMARY_PROMPT = """
 You are a supportive assistant helping summarize GAD-7 scores.

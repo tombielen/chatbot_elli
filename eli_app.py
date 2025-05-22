@@ -257,6 +257,10 @@ if user_input:
             if st.session_state.phq_index < len(PHQ_9_QUESTIONS):
                 next_q = f"{st.session_state.phq_index + 1}. {PHQ_9_QUESTIONS[st.session_state.phq_index]}"
                 st.session_state.messages.append({"role": "bot", "content": next_q})
+                import time
+                time.sleep(0.1)
+                for msg in st.session_state.messages:
+                    render_chat_message(msg)
                 with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                     st.markdown(next_q)
             else:
@@ -283,6 +287,10 @@ if user_input:
             if st.session_state.gad_index < len(GAD_7_QUESTIONS):
                 next_q = f"{st.session_state.gad_index + 1}. {GAD_7_QUESTIONS[st.session_state.gad_index]}"
                 st.session_state.messages.append({"role": "bot", "content": next_q})
+                import time
+                time.sleep(0.1)
+                for msg in st.session_state.messages:
+                    render_chat_message(msg)
                 with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                     st.markdown(next_q)
             else:
@@ -306,6 +314,10 @@ if user_input:
                 ]
                 for msg in follow_up:
                     st.session_state.messages.append({"role": "bot", "content": msg})
+                    import time
+                    time.sleep(0.1)
+                    for msg in st.session_state.messages:
+                        render_chat_message(msg)
                     render_chat_message({"role": "bot", "content": msg})
                     with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                         st.markdown(msg)
@@ -321,8 +333,18 @@ if user_input:
             except ValueError:
                 bot_msg = "Please enter a number from 1 to 5."
             st.session_state.messages.append({"role": "bot", "content": bot_msg})
-            with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
-                st.markdown(bot_msg)
+            import time
+            time.sleep(0.1)
+            for msg in st.session_state.messages:
+                render_chat_message(msg)
+
+            # Allow Streamlit to update
+            import time
+            time.sleep(0.1)
+
+            # Re-render the entire message history
+            for msg in st.session_state.messages:
+                render_chat_message(msg)
 
         elif st.session_state.comfort == 0:
             try:
@@ -334,6 +356,10 @@ if user_input:
             except ValueError:
                 bot_msg = "Please enter a number from 1 to 5."
             st.session_state.messages.append({"role": "bot", "content": bot_msg})
+            import time
+            time.sleep(0.1)
+            for msg in st.session_state.messages:
+                render_chat_message(msg)
             with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                 st.markdown(bot_msg)
 
@@ -359,6 +385,10 @@ if user_input:
 
                 closing = f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"
                 st.session_state.messages.append({"role": "bot", "content": closing})
+                import time
+                time.sleep(0.1)
+                for msg in st.session_state.messages:
+                    render_chat_message(msg)
                 with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                     st.markdown(closing)
             except Exception as e:

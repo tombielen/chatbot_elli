@@ -83,14 +83,25 @@ def summarize_gad7(gad_scores):
     response = get_chat_response(prompt)
     return total, response
 
-def summarize_results(phq_total, phq_level, gad_total, gad_level):
-    prompt = FINAL_SUMMARY_PROMPT.format(
+def summarize_results(phq_total, phq_level, gad_total, gad_level, mood_text=""):
+    prompt = (
+        "The user completed a PHQ-9 and GAD-7 mental health screening.\n\n"
+        "Mood Reflection:\n"
+        f"{mood_text.strip()}\n\n"
+        "PHQ-9 score: {phq_total} ({phq_level})\n"
+        "GAD-7 score: {gad_total} ({gad_level})\n\n"
+        "Please write a warm, supportive, and human-sounding summary (2–3 sentences) that:\n"
+        "- Acknowledges their mood reflection\n"
+        "- Gently names the depression and anxiety levels\n"
+        "- Encourages care without sounding clinical or alarmist"
+    ).format(
         phq_total=phq_total,
-        phq_interpretation=phq_level,
+        phq_level=phq_level,
         gad_total=gad_total,
-        gad_interpretation=gad_level
+        gad_level=gad_level
     )
     return get_chat_response(prompt)
+
 
 def safety_check(user_input):
     prompt = SAFETY_CHECK_PROMPT.format(user_input=user_input)

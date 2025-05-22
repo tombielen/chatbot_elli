@@ -14,12 +14,24 @@ def get_gsheet_client():
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     return gspread.authorize(creds)
 
-def save_to_google_sheet(data_dict, sheet_name="Chatbot_Study_Data"):
-    client = get_gsheet_client()
-    sheet = client.open(sheet_name).sheet1
-    row = [str(datetime.datetime.now())] + list(data_dict.values())
-    sheet.append_row(row, value_input_option="RAW")
+def append_to_google_sheet(data_dict, sheet_name="Chatbot_Study_Data"):
+    try:
+        client = get_gsheet_client()
+        sheet = client.open(sheet_name).sheet1
+        row = [str(datetime.datetime.now())] + list(data_dict.values())
+        sheet.append_row(row, value_input_option="RAW")
+    except Exception as e:
+        st.error(f"Error saving to Google Sheet: {e}")
 
+
+def mid_session_log(key, value, sheet_name="Chatbot_Study_Log"):
+    try:
+        client = get_gsheet_client()
+        sheet = client.open(sheet_name).sheet1
+        row = [str(datetime.datetime.now()), key, value]
+        sheet.append_row(row, value_input_option="RAW")
+    except Exception as e:
+        print(f"Mid-session logging failed: {e}")
 
 st.set_page_config(page_title="Elli - Mental Health Assistant", page_icon="🌱")
 
@@ -121,12 +133,6 @@ for msg in st.session_state.messages:
         with st.chat_message("user", avatar="assets/user_avatar.png"):
             st.markdown(msg["content"], unsafe_allow_html=True)
 
-
-
-
-
-
-
 # --- Chat Input ---
 user_input = st.chat_input("Your message...")
 
@@ -135,11 +141,18 @@ if user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
         st.markdown(user_input)
-
+    mid_session_log("UserInput", user_input)
     # SAFETY CHECK
     if st.session_state.step not in ["phq", "gad"]:
         if safety_check(user_input):
-            bot_reply = "It sounds like you're going through something really difficult. You're not alone. Please consider reaching out to a professional or crisis support. 💛"
+            bot_reply = "⚠️ It sounds like you're going through something really difficult. You're not alone.\n\n"
+            "Elli isn't a crisis service, but there are people who care and can help. Please consider reaching out to a professional or one of these mental health support lines:\n\n"
+            "- **US**: Call or text 988 (Suicide & Crisis Lifeline)\n"
+            "- **UK**: Call Samaritans at 116 123\n"
+            "- **Canada**: Call 1-833-456-4566 (Talk Suicide Canada)\n"
+            "- **India**: Call 9152987821 (iCall)\n"
+            "- **International**: [Find a helpline near you](https://findahelpline.com)\n\n"
+            "You matter. 💛"
             st.session_state.messages.append({"role": "bot", "content": bot_reply})
             with st.chat_message("bot"):
                 st.markdown(bot_reply)
@@ -237,7 +250,13 @@ if user_input:
                 gad_total = sum(st.session_state.gad_answers)
                 phq_interp = interpret(phq_total, "phq")
                 gad_interp = interpret(gad_total, "gad")
-                summary = summarize_results(phq_total, phq_interp, gad_total, gad_interp)
+                summary = summarize_results(
+                    phq_total,
+                    phq_interp,
+                    gad_total,
+                    gad_interp,
+                    mood_text=initial_mood
+                )
                 st.session_state.step = "feedback"
                 follow_up = [
                     "Here’s a gentle summary of what you’ve shared:",
@@ -293,7 +312,6 @@ if user_input:
                 "full_chat": " | ".join([f"{m['role']}: {m['content']}" for m in st.session_state.get("messages", [])]),
             }
 
-            save_to_csv(data)
             save_to_google_sheet(data)
 
             closing = f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"

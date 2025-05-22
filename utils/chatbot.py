@@ -114,20 +114,29 @@ def respond_to_feelings(user_input, name):
     return get_chat_response(prompt)
 
 def extract_demographic_value(user_input):
+    # Handle numeric input directly for age
+    if user_input.isdigit():
+        return int(user_input)  # Return the age as an integer
+
+    # Use GPT-4 for other demographic extractions
     prompt = f"""
     You are a helpful assistant. Extract demographic information (e.g., age, gender, or mental health history) from the following message:
     "{user_input}"
 
+    If the message indicates an age, respond with the age as a number.
+    If the message indicates gender, respond with "male", "female", or "other".
     If the message indicates no prior mental health support or challenges, respond with "no history".
     If the message indicates prior mental health support or challenges, respond with "has history".
-    If the message is unclear or doesn't provide relevant information, respond with "none".
-
+    If no clear information is found, respond with "none".
     Examples:
     - "No, I haven't had any support before" → "no history"
     - "Yes, I have seen a therapist" → "has history"
     - "Not yet" → "no history"
     - "Never had any issues" → "no history"
     - "I have been to counseling" → "has history"
+    - "I am 25 years old" → "25"
+    - "20" → "20"
+    - "I am eigteen" → "18"
     """
     response = client.chat.completions.create(
         model="gpt-4",
@@ -135,6 +144,8 @@ def extract_demographic_value(user_input):
         temperature=0.2
     )
     value = response.choices[0].message.content.strip().lower()
-    if value in ["no history", "has history"]:
+    if value.isdigit():
+        return int(value)  # Return the age as an integer
+    if value in ["male", "female", "other", "no history", "has history"]:
         return value
     return None

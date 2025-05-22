@@ -203,7 +203,7 @@ if user_input:
         if stage == "ask_age":
             from utils.chatbot import extract_demographic_value  # Ensure this function is implemented in chatbot.py
             extracted_age = extract_demographic_value(user_input)
-            if extracted_age:
+            if isinstance(extracted_age, int) and extracted_age > 0:  # Ensure the age is a positive integer
                 st.session_state.age = extracted_age
                 st.session_state.demographic_stage = "ask_gender"
                 question = "Thank you. What gender do you identify with?"

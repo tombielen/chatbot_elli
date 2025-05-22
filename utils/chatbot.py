@@ -127,9 +127,21 @@ def extract_demographic_value(user_input):
     If the message indicates gender, respond with "male", "female", or "other".
     If the message indicates no prior mental health support or challenges, respond with "no history".
     If the message indicates prior mental health support or challenges, respond with "has history".
-    If no clear information is found, respond with "none".
+    If the message indicates gender, respond with "male", "female", or "other".
+    If the message is unclear or doesn't provide relevant information, respond with "none".
     Examples:
     - "No, I haven't had any support before" → "no history"
+    - "Male" → "male"
+    - "Female" → "female"
+    - "Girl" → "female"
+    - "Boy" → "male"
+    - "Woman" → "female"
+    - "Man" → "male"
+    - "Men" → "male"
+    - "Women" → "female"
+    - "I am a male" → "male"
+    - "Female" → "female"
+    - "I identify as other" → "other"
     - "Yes, I have seen a therapist" → "has history"
     - "Not yet" → "no history"
     - "Never had any issues" → "no history"

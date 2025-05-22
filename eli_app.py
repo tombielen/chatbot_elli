@@ -5,7 +5,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import datetime
 import csv
 import os
-from utils.chatbot import summarize_results, safety_check, respond_to_feelings, extract_demographic_value
+from utils.chatbot import summarize_results, safety_check, respond_to_feelings, extract_age, extract_history, extract_gender
 
 @st.cache_resource
 def get_gsheet_client():
@@ -201,8 +201,8 @@ if user_input:
         stage = st.session_state.demographic_stage
 
         if stage == "ask_age":
-            from utils.chatbot import extract_demographic_value  # Ensure this function is implemented in chatbot.py
-            extracted_age = extract_demographic_value(user_input)
+            from utils.chatbot import extract_age
+            extracted_age = extract_age(user_input)
             if isinstance(extracted_age, int) and extracted_age > 0:  # Ensure the age is a positive integer
                 st.session_state.age = extracted_age
                 st.session_state.demographic_stage = "ask_gender"
@@ -215,7 +215,7 @@ if user_input:
 
         elif stage == "ask_gender":
             try:
-                extracted_gender = extract_demographic_value(user_input)
+                extracted_gender = extract_gender(user_input)
                 if extracted_gender:
                     st.session_state.gender = extracted_gender
                     st.session_state.demographic_stage = "ask_psych_history"
@@ -232,7 +232,7 @@ if user_input:
 
         elif stage == "ask_psych_history":
             try:
-                extracted_psych_history = extract_demographic_value(user_input)
+                extracted_psych_history = extract_history(user_input)
                 if extracted_psych_history == "no history":
                     st.session_state.psych_history = "No prior mental health support or challenges"
                     st.session_state.step = "phq"
@@ -391,6 +391,7 @@ if user_input:
                 st.session_state.feedback = user_input
                 data = {
                     "name": st.session_state.get("name", ""),
+                    "age": extract_age(user_input)
                     "phq_answers": st.session_state.get("phq_answers", []),
                     "phq_total": sum(st.session_state.get("phq_answers", [])),
                     "phq_interp": interpret(sum(st.session_state.get("phq_answers", [])), "phq"),

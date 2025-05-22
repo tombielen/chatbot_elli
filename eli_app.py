@@ -110,8 +110,7 @@ def save_to_csv(data, filename="data/user_responses.csv"):
             writer.writeheader()
         writer.writerow(data)
 
-# --- Render message history ---
-for msg in st.session_state.messages:
+def render_chat_message(msg):
     if msg["role"] == "bot":
         with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
             st.markdown(msg["content"], unsafe_allow_html=True)
@@ -132,6 +131,11 @@ for msg in st.session_state.messages:
         """
         with st.chat_message("user", avatar="assets/user_avatar.png"):
             st.markdown(msg["content"], unsafe_allow_html=True)
+
+# --- Render message history ---
+for msg in st.session_state.messages:
+    render_chat_message(msg)
+
 
 # --- Chat Input ---
 user_input = st.chat_input("Your message...")

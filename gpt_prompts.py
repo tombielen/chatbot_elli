@@ -23,7 +23,6 @@ You will receive a user message and try to extract **only one** of the following
 Use these rules:
 - For age: return a number like "24" (only if it sounds like an actual age)
 - For gender: return "male", "female", "non-binary", "prefer not to say", or a short user-defined label
-- For psychological care: respond with "yes", "no", or a brief answer like "yes, in the past" or "no, never"
 
 User message:
 \"\"\"{user_input}\"\"\"

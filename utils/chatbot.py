@@ -144,23 +144,3 @@ def extract_gender(user_input):
         return value
     return None
 
-def extract_history(user_input):
-    prompt = f"""
-    Based on the user's message, do they indicate previous mental health support or challenges?
-
-    Message: "{user_input}"
-
-    Reply ONLY with:
-    - "has history"
-    - "no history"
-    - "none"
-    """
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.2
-    )
-    value = response.choices[0].message.content.strip().lower()
-    if value in ["has history", "no history"]:
-        return value
-    return None

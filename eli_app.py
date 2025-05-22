@@ -5,7 +5,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import datetime
 import csv
 import os
-from utils.chatbot import summarize_results, safety_check, respond_to_feelings, extract_age, extract_history, extract_gender
+from utils.chatbot import summarize_results, safety_check, respond_to_feelings, extract_age, extract_gender
 
 @st.cache_resource
 def get_gsheet_client():
@@ -218,45 +218,17 @@ if user_input:
                 extracted_gender = extract_gender(user_input)
                 if extracted_gender:
                     st.session_state.gender = extracted_gender
-                    st.session_state.demographic_stage = "ask_psych_history"
-                    question = "Got it. Have you had any past experiences with mental health support or challenges?"
-                    st.session_state.messages.append({"role": "bot", "content": question})
+                    st.session_state.step = "phq"  # Move directly to PHQ-9 step
+                    st.session_state.phq_index = 0
+
+                    next_question = (
+                        "Thanks for sharing. Let’s reflect on some feelings together.\n\n"
+                        "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day).\n\n"
+                        "Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]
+                    )
+                    st.session_state.messages.append({"role": "bot", "content": next_question})
                 else:
                     error_msg = "I couldn't understand your gender. Could you please clarify?"
-                    st.session_state.messages.append({"role": "bot", "content": error_msg})
-            except Exception as e:
-                error_msg = "An error occurred while processing your response. Please try again."
-                st.session_state.messages.append({"role": "bot", "content": error_msg})
-                st.error(f"Error: {e}")
-            st.rerun()
-
-        elif stage == "ask_psych_history":
-            try:
-                extracted_psych_history = extract_history(user_input)
-                if extracted_psych_history == "no history":
-                    st.session_state.psych_history = "No prior mental health support or challenges"
-                    st.session_state.step = "phq"
-                    st.session_state.phq_index = 0
-
-                    next_question = (
-                        "Thanks for sharing. Let’s reflect on some feelings together.\n\n"
-                        "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day).\n\n"
-                        "Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]
-                    )
-                    st.session_state.messages.append({"role": "bot", "content": next_question})
-                elif extracted_psych_history == "has history":
-                    st.session_state.psych_history = "Has prior mental health support or challenges"
-                    st.session_state.step = "phq"
-                    st.session_state.phq_index = 0
-
-                    next_question = (
-                        "Thanks for sharing. Let’s reflect on some feelings together.\n\n"
-                        "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day).\n\n"
-                        "Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]
-                    )
-                    st.session_state.messages.append({"role": "bot", "content": next_question})
-                else:
-                    error_msg = "I couldn't understand your response. Could you please clarify?"
                     st.session_state.messages.append({"role": "bot", "content": error_msg})
             except Exception as e:
                 error_msg = "An error occurred while processing your response. Please try again."

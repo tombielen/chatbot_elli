@@ -115,5 +115,10 @@ def respond_to_feelings(user_input, name):
 
 def extract_demographic_value(user_input):
     prompt = DEMOGRAPHIC_EXTRACTION_PROMPT.format(user_input=user_input)
-    response = get_chat_response(prompt)
-    return response.strip()
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.2
+    )
+    value = response.choices[0].message.content.strip()
+    return value if value.lower() not in ["none", ""] else None

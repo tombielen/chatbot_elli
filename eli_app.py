@@ -171,26 +171,26 @@ if user_input:
     step = st.session_state.step
 
     if step == "intro":
-            from utils.chatbot import extract_name_from_input
+        from utils.chatbot import extract_name_from_input
 
-            if safety_check(user_input):
-                st.session_state.messages.append({
-                    "role": "bot",
-                    "content": "It sounds like you're going through something really difficult. You're not alone. Please consider reaching out to a professional or crisis support. 💛"
-                })
-                st.stop()
+        if safety_check(user_input):
+            st.session_state.messages.append({
+                "role": "bot",
+                "content": "It sounds like you're going through something really difficult. You're not alone. Please consider reaching out to a professional or crisis support. 💛"
+            })
+            st.stop()
 
-            name = extract_name_from_input(user_input)
+        name = extract_name_from_input(user_input)
 
-            if name:
-                st.session_state.name = name
-                elli_intro = f"Hi {name}, I’m Elli. 🌱 I’m here to gently check in with you. How are you feeling today? (2-3 sentences)"
-                st.session_state.step = "mood"
-            else:
-                elli_intro = "Thanks for sharing. Could you please give me just your name or nickname so I can know how to address you?"
+        if name:
+            st.session_state.name = name
+            elli_intro = f"Hi {name}, I’m Elli. 🌱 I’m here to gently check in with you. How are you feeling today? (2-3 sentences)"
+            st.session_state.step = "mood"
+        else:
+            elli_intro = "Thanks for sharing. Could you please give me just your name or nickname so I can know how to address you?"
 
-            st.session_state.messages.append({"role": "bot", "content": elli_intro})
-            st.rerun()
+        st.session_state.messages.append({"role": "bot", "content": elli_intro})
+        st.rerun()
 
     elif step == "mood":
         with st.spinner("Elli is thinking..."):
@@ -212,34 +212,47 @@ if user_input:
         stage = st.session_state.demographic_stage
 
         if stage == "ask_age":
-            st.session_state.age = user_input
-            st.session_state.demographic_stage = "ask_gender"
-            question = "Thank you. What gender do you identify with?"
-            st.session_state.messages.append({"role": "bot", "content": question})
+            from utils.chatbot import extract_demographic_value  # Ensure this function is implemented in chatbot.py
+            extracted_age = extract_demographic_value(user_input)
+            if extracted_age:
+                st.session_state.age = extracted_age
+                st.session_state.demographic_stage = "ask_gender"
+                question = "Thank you. What gender do you identify with?"
+                st.session_state.messages.append({"role": "bot", "content": question})
+            else:
+                error_msg = "I couldn't understand your age. Could you please clarify?"
+                st.session_state.messages.append({"role": "bot", "content": error_msg})
             st.rerun()
 
         elif stage == "ask_gender":
-            st.session_state.gender = user_input
-            st.session_state.demographic_stage = "ask_psych_history"
-            question = "Got it. Have you had any past experiences with mental health support or challenges?"
-            st.session_state.messages.append({"role": "bot", "content": question})
+            extracted_gender = extract_demographic_value(user_input)
+            if extracted_gender:
+                st.session_state.gender = extracted_gender
+                st.session_state.demographic_stage = "ask_psych_history"
+                question = "Got it. Have you had any past experiences with mental health support or challenges?"
+                st.session_state.messages.append({"role": "bot", "content": question})
+            else:
+                error_msg = "I couldn't understand your gender. Could you please clarify?"
+                st.session_state.messages.append({"role": "bot", "content": error_msg})
             st.rerun()
 
         elif stage == "ask_psych_history":
-            st.session_state.psych_history = user_input
-            st.session_state.step = "phq"
-            st.session_state.phq_index = 0
+            extracted_psych_history = extract_demographic_value(user_input)
+            if extracted_psych_history:
+                st.session_state.psych_history = extracted_psych_history
+                st.session_state.step = "phq"
+                st.session_state.phq_index = 0
 
-            next_question = (
-                "Thanks for sharing. Let’s reflect on some feelings together.\n\n"
-                "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day).\n\n"
-                "Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]
-            )
-
-            st.session_state.messages.append({"role": "bot", "content": next_question})
+                next_question = (
+                    "Thanks for sharing. Let’s reflect on some feelings together.\n\n"
+                    "Please respond with a number: 0 (Not at all), 1 (Several days), 2 (More than half the days), or 3 (Nearly every day).\n\n"
+                    "Over the last 2 weeks: " + PHQ_9_QUESTIONS[0]
+                )
+                st.session_state.messages.append({"role": "bot", "content": next_question})
+            else:
+                error_msg = "I couldn't understand your response. Could you please clarify?"
+                st.session_state.messages.append({"role": "bot", "content": error_msg})
             st.rerun()
-
-
 
     elif step == "phq":
         try:

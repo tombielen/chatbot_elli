@@ -117,9 +117,17 @@ def extract_demographic_value(user_input):
     prompt = f"""
     You are a helpful assistant. Extract demographic information (e.g., age, gender, or mental health history) from the following message:
     "{user_input}"
-    If the message indicates no prior mental health support or challenges, respond with "No history".
-    If the message indicates prior mental health support or challenges, respond with "Has history".
-    If no clear information is found, respond with "None".
+
+    If the message indicates no prior mental health support or challenges, respond with "no history".
+    If the message indicates prior mental health support or challenges, respond with "has history".
+    If the message is unclear or doesn't provide relevant information, respond with "none".
+
+    Examples:
+    - "No, I haven't had any support before" → "no history"
+    - "Yes, I have seen a therapist" → "has history"
+    - "Not yet" → "no history"
+    - "Never had any issues" → "no history"
+    - "I have been to counseling" → "has history"
     """
     response = client.chat.completions.create(
         model="gpt-4",

@@ -3,7 +3,6 @@ import time
 from google.oauth2.service_account import Credentials
 import gspread
 import datetime
-import csv
 import os
 from utils.chatbot import summarize_results, safety_check, respond_to_feelings, extract_age, extract_gender
 
@@ -212,7 +211,6 @@ if user_input:
     elif step == "demographics":
         stage = st.session_state.demographic_stage
         if stage == "ask_age":
-            from utils.chatbot import extract_age
             extracted_age = extract_age(user_input)
             if isinstance(extracted_age, int) and extracted_age > 0:
                 st.session_state.age = extracted_age

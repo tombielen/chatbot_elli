@@ -80,6 +80,14 @@ if "messages" not in st.session_state:
     st.session_state.psych_history = ""
     st.session_state.demographic_stage = "ask_age"
 
+# Feedback phase flags
+if "feedback_trust_asked" not in st.session_state:
+    st.session_state.feedback_trust_asked = False
+if "feedback_comfort_asked" not in st.session_state:
+    st.session_state.feedback_comfort_asked = False
+if "feedback_final_asked" not in st.session_state:
+    st.session_state.feedback_final_asked = False
+
 PHQ_9_QUESTIONS = [
     "Little interest or pleasure in doing things?",
     "Feeling down, depressed, or hopeless?",
@@ -151,7 +159,11 @@ for msg in st.session_state.messages:
     render_chat_message(msg)
 
 # --- Chat Input ---
-user_input = st.chat_input("Your message...")
+# Only show input if not finished
+if st.session_state.get("step") != "done":
+    user_input = st.chat_input("Your message...")
+else:
+    user_input = None
 
 if user_input:
     user_input = user_input.strip()
@@ -315,8 +327,7 @@ if user_input:
                 st.session_state.step = "feedback"
                 follow_up = [
                     "Here’s a gentle summary of what you’ve shared:",
-                    summary,
-                    "To finish, how much did you feel you could trust Elli? (1–5)"
+                    summary
                 ]
                 for msg in follow_up:
                     if not any(existing_msg["content"] == msg for existing_msg in st.session_state.messages):
@@ -324,39 +335,56 @@ if user_input:
                         log_message_to_sheet("bot", msg)
                     with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                         st.markdown(msg)
+                # Reset feedback flags for new feedback phase
+                st.session_state.feedback_trust_asked = False
+                st.session_state.feedback_comfort_asked = False
+                st.session_state.feedback_final_asked = False
 
     elif step == "feedback":
-        if st.session_state.trust == 0:
+        # Ask for trust score
+        if not st.session_state.feedback_trust_asked:
+            bot_msg = "To finish, how much did you feel you could trust Elli? (1–5)"
+            st.session_state.messages.append({"role": "bot", "content": bot_msg})
+            log_message_to_sheet("bot", bot_msg)
+            st.session_state.feedback_trust_asked = True
+            st.stop()
+        elif st.session_state.trust == 0:
             try:
                 trust_score = int(user_input)
                 if trust_score not in [1, 2, 3, 4, 5]:
                     raise ValueError
                 st.session_state.trust = trust_score
-                bot_msg = "Thank you. How comfortable did you feel interacting with Elli? (1–5)"
             except ValueError:
                 bot_msg = "Please enter a number from 1 to 5."
+                st.session_state.messages.append({"role": "bot", "content": bot_msg})
+                log_message_to_sheet("bot", bot_msg)
+                st.stop()
+        # Ask for comfort score
+        if st.session_state.trust != 0 and not st.session_state.feedback_comfort_asked:
+            bot_msg = "Thank you. How comfortable did you feel interacting with Elli? (1–5)"
             st.session_state.messages.append({"role": "bot", "content": bot_msg})
             log_message_to_sheet("bot", bot_msg)
-            time.sleep(0.1)
-            for msg in st.session_state.messages:
-                render_chat_message(msg)
-        elif st.session_state.comfort == 0:
+            st.session_state.feedback_comfort_asked = True
+            st.stop()
+        elif st.session_state.comfort == 0 and st.session_state.feedback_comfort_asked:
             try:
                 comfort_score = int(user_input)
                 if comfort_score not in [1, 2, 3, 4, 5]:
                     raise ValueError
                 st.session_state.comfort = comfort_score
-                bot_msg = "Thanks. Finally, do you have any thoughts or feedback about this experience?"
             except ValueError:
                 bot_msg = "Please enter a number from 1 to 5."
+                st.session_state.messages.append({"role": "bot", "content": bot_msg})
+                log_message_to_sheet("bot", bot_msg)
+                st.stop()
+        # Ask for final feedback
+        if st.session_state.comfort != 0 and not st.session_state.feedback_final_asked:
+            bot_msg = "Thanks. Finally, do you have any thoughts or feedback about this experience?"
             st.session_state.messages.append({"role": "bot", "content": bot_msg})
             log_message_to_sheet("bot", bot_msg)
-            time.sleep(0.1)
-            for msg in st.session_state.messages:
-                render_chat_message(msg)
-            with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
-                st.markdown(bot_msg)
-        elif st.session_state.feedback == "":
+            st.session_state.feedback_final_asked = True
+            st.stop()
+        elif st.session_state.feedback == "" and st.session_state.feedback_final_asked:
             try:
                 st.session_state.feedback = user_input
                 data = {
@@ -376,15 +404,10 @@ if user_input:
                 closing = f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"
                 st.session_state.messages.append({"role": "bot", "content": closing})
                 log_message_to_sheet("bot", closing)
-                time.sleep(0.1)
-                for msg in st.session_state.messages:
-                    render_chat_message(msg)
-                with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
-                    st.markdown(closing)
+                st.session_state.step = "done"
+                st.stop()
             except Exception as e:
                 bot_msg = "An error occurred while processing your feedback. Please try again later."
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
-                with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
-                    st.markdown(bot_msg)
                 st.error(f"Error: {e}")

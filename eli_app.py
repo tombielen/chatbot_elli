@@ -1,7 +1,7 @@
 import streamlit as st
 import time
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+from oauth2client.service_account import Credentials
 import datetime
 import csv
 import os
@@ -9,24 +9,45 @@ from utils.chatbot import summarize_results, safety_check, respond_to_feelings, 
 
 @st.cache_resource
 def get_gsheet_client():
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds_dict = st.secrets["gcp_service_account"]  # or "gspread" if that's your key
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+    scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+    creds = Credentials.from_service_account_info(
+        st.secrets["google_sheets"],
+        scopes=scope,
+    )
     return gspread.authorize(creds)
 
-def append_to_google_sheet(data_dict, sheet_name="Chatbot_Study_Data"):
+def append_to_google_sheet(data):
     try:
         client = get_gsheet_client()
-        sheet = client.open(sheet_name).sheet1
-        row = [str(datetime.datetime.now())] + list(data_dict.values())
-        sheet.append_row(row, value_input_option="RAW")
+        sheet = client.open_by_key(st.secrets["1VqxrbFj0A4cnv5A3jWRjAJQbMIKRYg0jKCORejGhiiA"]).sheet1
+
+        row = [
+            data.get("name", ""),
+            data.get("gender", ""),
+            data.get("age", ""),
+            data.get("initial_feeling", ""),
+            data.get("phq_total", ""),
+            data.get("gad_total", ""),
+            data.get("elli_interp", ""),
+            data.get("trust", ""),
+            data.get("comfort", ""),
+            data.get("initial_mood", ""),
+            data.get("user_reflection", ""),
+        ]
+        sheet.append_row(row, value_input_option="USER_ENTERED")
+        print("✅ Successfully appended row to Google Sheet.")
     except Exception as e:
-        st.error(f"Error saving to Google Sheet: {e}")
+        print("❌ Google Sheets append failed:", e)
+        raise e
+
+
+
 
 
 def mid_session_log(key, value, sheet_name="Chatbot_Study_Log"):
     try:
         client = get_gsheet_client()
+        sheet_id = st.secrets["1VqxrbFj0A4cnv5A3jWRjAJQbMIKRYg0jKCORejGhiiA"]
         sheet = client.open(sheet_name).sheet1
         row = [str(datetime.datetime.now()), key, value]
         sheet.append_row(row, value_input_option="RAW")
@@ -354,18 +375,18 @@ if user_input:
                 st.session_state.feedback = user_input
                 data = {
                     "name": st.session_state.get("name", ""),
-                    "phq_answers": st.session_state.get("phq_answers", []),
+                    "gender": st.session_state.get("gender", ""),
+                    "age": st.session_state.get("age", ""),
+                    "initial_feeling": st.session_state.get("initial_feeling", ""),
                     "phq_total": sum(st.session_state.get("phq_answers", [])),
-                    "phq_interp": interpret(sum(st.session_state.get("phq_answers", [])), "phq"),
-                    "gad_answers": st.session_state.get("gad_answers", []),
                     "gad_total": sum(st.session_state.get("gad_answers", [])),
-                    "gad_interp": interpret(sum(st.session_state.get("gad_answers", [])), "gad"),
+                    "elli_interp": st.session_state.get("elli_interp", ""),  
                     "trust": st.session_state.get("trust", ""),
                     "comfort": st.session_state.get("comfort", ""),
-                    "user_reflection": st.session_state.get("feedback", ""),
                     "initial_mood": st.session_state.messages[2]["content"] if len(st.session_state.messages) > 2 else "",
-                    "full_chat": " | ".join([f"{m['role']}: {m['content']}" for m in st.session_state.get("messages", [])]),
+                    "user_reflection": st.session_state.get("feedback", ""),
                 }
+
 
                 append_to_google_sheet(data)
 

@@ -1,6 +1,6 @@
 import streamlit as st
 import time
-from oauth2client.service_account import Credentials
+from google.oauth2.service_account import Credentials
 import gspread
 import datetime
 import csv
@@ -9,8 +9,12 @@ from utils.chatbot import summarize_results, safety_check, respond_to_feelings, 
 
 @st.cache_resource
 def get_gsheet_client():
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets",
-             "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+    scope = [
+        "https://spreadsheets.google.com/feeds",
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive.file",
+        "https://www.googleapis.com/auth/drive"
+    ]
     creds = Credentials.from_service_account_info(st.secrets["google_sheets"], scopes=scope)
     client = gspread.authorize(creds)
     return client

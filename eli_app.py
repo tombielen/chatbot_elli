@@ -3,7 +3,6 @@ import time
 from google.oauth2.service_account import Credentials
 import gspread
 import datetime
-import os
 from utils.chatbot import summarize_results, safety_check, respond_to_feelings, extract_age, extract_gender
 
 @st.cache_resource
@@ -138,19 +137,6 @@ def render_chat_message(msg):
             st.markdown(msg["content"], unsafe_allow_html=True)
     else:
         first_letter = st.session_state.name[0].upper() if st.session_state.get("name") else "U"
-        avatar_html = f"""
-        <div style='
-            font-size: 16px;
-            background: #d3f3e6;
-            color: #1a1a1a;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        '>{first_letter}</div>
-        """
         with st.chat_message("user", avatar="assets/user_avatar.png"):
             st.markdown(msg["content"], unsafe_allow_html=True)
 
@@ -159,7 +145,6 @@ for msg in st.session_state.messages:
     render_chat_message(msg)
 
 # --- Chat Input ---
-# Only show input if not finished
 if st.session_state.get("step") != "done":
     user_input = st.chat_input("Your message...")
 else:
@@ -172,7 +157,6 @@ if user_input:
     render_chat_message(user_msg)
     log_message_to_sheet("user", user_input)
 
-    # SAFETY CHECK
     if st.session_state.step not in ["phq", "gad"]:
         if safety_check(user_input):
             bot_reply = (
@@ -335,13 +319,11 @@ if user_input:
                         log_message_to_sheet("bot", msg)
                     with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                         st.markdown(msg)
-                # Reset feedback flags for new feedback phase
                 st.session_state.feedback_trust_asked = False
                 st.session_state.feedback_comfort_asked = False
                 st.session_state.feedback_final_asked = False
 
     elif step == "feedback":
-        # Ask for trust score
         if not st.session_state.feedback_trust_asked:
             bot_msg = "To finish, how much did you feel you could trust Elli? (1–5)"
             st.session_state.messages.append({"role": "bot", "content": bot_msg})
@@ -359,7 +341,6 @@ if user_input:
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.stop()
-        # Ask for comfort score
         if st.session_state.trust != 0 and not st.session_state.feedback_comfort_asked:
             bot_msg = "Thank you. How comfortable did you feel interacting with Elli? (1–5)"
             st.session_state.messages.append({"role": "bot", "content": bot_msg})
@@ -377,7 +358,6 @@ if user_input:
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.stop()
-        # Ask for final feedback
         if st.session_state.comfort != 0 and not st.session_state.feedback_final_asked:
             bot_msg = "Thanks. Finally, do you have any thoughts or feedback about this experience?"
             st.session_state.messages.append({"role": "bot", "content": bot_msg})

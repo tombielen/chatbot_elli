@@ -14,6 +14,28 @@ Welcome to this mental health screening form. Please answer the following questi
 
 scale = ["Not at all (0)", "Several days (1)", "More than half the days (2)", "Nearly every day (3)"]
 
+def interpret_phq(score):
+    if score <= 4:
+        return "Minimal depression"
+    elif score <= 9:
+        return "Mild depression"
+    elif score <= 14:
+        return "Moderate depression"
+    elif score <= 19:
+        return "Moderately severe depression"
+    else:
+        return "Severe depression"
+
+def interpret_gad(score):
+    if score <= 4:
+        return "Minimal anxiety"
+    elif score <= 9:
+        return "Mild anxiety"
+    elif score <= 14:
+        return "Moderate anxiety"
+    else:
+        return "Severe anxiety"
+
 st.header("PHQ-9 Depression Screening")
 phq9_items = [
     "Little interest or pleasure in doing things",
@@ -51,44 +73,50 @@ for idx, question in enumerate(gad7_items):
 st.header("Demographic Information")
 age = st.number_input("Your age:", min_value=18, max_value=100, value=25, step=1)
 gender = st.selectbox("Your gender:", ["Prefer not to say", "Male", "Female", "Other"])
-# mental_health_history = st.selectbox("Have you received mental health care in the past?", ["Prefer not to say", "Yes", "No"])
+mental_health_history = st.selectbox("Have you received mental health care in the past?", ["Prefer not to say", "Yes", "No"])
 
-if st.button("Submit"):
-    timestamp = datetime.utcnow().isoformat()
+if st.button("Submit Questionnaire"):
     total_phq9 = sum(phq9_scores)
     total_gad7 = sum(gad7_scores)
+    phq_interp = interpret_phq(total_phq9)
+    gad_interp = interpret_gad(total_gad7)
 
-    st.success("Form submitted successfully!")
-    st.markdown(f"**PHQ-9 Total Score:** {total_phq9}")
-    st.markdown(f"**GAD-7 Total Score:** {total_gad7}")
+    st.success("✅ Your responses have been recorded.")
+    st.markdown(f"**PHQ-9 Total Score:** {total_phq9} ({phq_interp})")
+    st.markdown(f"**GAD-7 Total Score:** {total_gad7} ({gad_interp})")
     st.markdown("Please note that this feedback is automatic and does not constitute a diagnosis.")
 
-    row = [
-        "",  
-        gender,
-        age,
-        "", 
-        total_phq9,
-        total_gad7,
-        "",  
-        "",  
-        "",  
-        "",  
-        "",  
-        "static"  
-    ]
+    st.header("Your Experience")
+    trust = st.radio("How much did you trust the questionnaire process?", [1, 2, 3, 4, 5], index=2)
+    comfort = st.radio("How comfortable did you feel while answering?", [1, 2, 3, 4, 5], index=2)
+    feedback = st.text_area("Do you have any feedback about your experience?", "")
 
-    try:
-        scope = ["https://www.googleapis.com/auth/spreadsheets"]
-        creds = Credentials.from_service_account_info(
-        st.secrets["google_sheets"],  # ✅ this matches your Elli config
-        scopes=scope,
-        )
-        client = gspread.authorize(creds)
-        sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"])
-        worksheet = sheet.sheet1  
+    if st.button("Submit Experience Feedback"):
+        row = [
+            "",  
+            gender,
+            age,
+            "", 
+            total_phq9,
+            total_gad7,
+            f"{phq_interp}; {gad_interp}",
+            trust,
+            comfort,
+            "",  
+            feedback,
+            "static"
+        ]
 
-        worksheet.append_row(row, value_input_option="USER_ENTERED")
-        st.success("✅ Your responses have been recorded.")
-    except Exception as e:
-        st.error(f"❌ Data submission failed: {e}")
+        try:
+            scope = ["https://www.googleapis.com/auth/spreadsheets"]
+            creds = Credentials.from_service_account_info(
+                st.secrets["google_sheets"],
+                scopes=scope,
+            )
+            client = gspread.authorize(creds)
+            sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"])
+            worksheet = sheet.sheet1
+            worksheet.append_row(row, value_input_option="USER_ENTERED")
+            st.success("✅ Your responses and feedback have been logged. Thank you for participating!")
+        except Exception as e:
+            st.error(f"❌ Data submission failed: {e}")

@@ -118,6 +118,7 @@ total_questions = len(phq9_items) + len(gad7_items) + len(demographic_questions)
 
 # --- Step-by-step logic ---
 if not st.session_state.main_done:
+    current = st.session_state.step
     # PHQ-9
     if current < len(phq9_items):
         q = phq9_items[current]

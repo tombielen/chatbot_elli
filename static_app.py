@@ -156,7 +156,6 @@ if not st.session_state.main_done:
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "demographic", "question": dq["label"], "answer": answer, "elapsed": elapsed})
             log_step_to_sheet(dq["label"], answer, "demographic", elapsed)
-            st.session_state[dq["key"]] = answer
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
             st.session_state.needs_rerun = True

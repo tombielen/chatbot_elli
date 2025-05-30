@@ -49,6 +49,7 @@ def append_to_google_sheet(data):
             data.get("comfort", ""),
             data.get("initial_mood", ""),
             data.get("user_reflection", ""),
+            "chatbot"
         ]
         sheet.append_row(row, value_input_option="USER_ENTERED")
         print("✅ Successfully appended summary row to Google Sheet.")

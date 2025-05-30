@@ -86,4 +86,9 @@ if st.button("Submit"):
         )
         client = gspread.authorize(creds)
         sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"])
-        worksheet = sheet.sheet1  
+        worksheet = sheet.sheet1  # or use sheet.worksheet("static_form") if using a second tab
+
+        worksheet.append_row(row, value_input_option="USER_ENTERED")
+        st.success("✅ Your responses have been recorded.")
+    except Exception as e:
+        st.error(f"❌ Data submission failed: {e}")

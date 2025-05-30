@@ -81,12 +81,12 @@ if st.button("Submit"):
     try:
         scope = ["https://www.googleapis.com/auth/spreadsheets"]
         creds = Credentials.from_service_account_info(
-            st.secrets["gcp_service_account"],
-            scopes=scope,
+        st.secrets["google_sheets"],  # ✅ this matches your Elli config
+        scopes=scope,
         )
         client = gspread.authorize(creds)
         sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"])
-        worksheet = sheet.sheet1  # or use sheet.worksheet("static_form") if using a second tab
+        worksheet = sheet.sheet1  
 
         worksheet.append_row(row, value_input_option="USER_ENTERED")
         st.success("✅ Your responses have been recorded.")

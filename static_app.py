@@ -3,6 +3,10 @@ from datetime import datetime
 from google.oauth2.service_account import Credentials
 import gspread
 
+if st.session_state.get("needs_rerun"):
+    st.session_state.needs_rerun = False
+    st.experimental_rerun()
+
 st.set_page_config(page_title="Mental Health Screening (Static Form)", page_icon="📝", layout="centered")
 
 st.title("📝 Mental Health Screening (Neutral Interface)")
@@ -127,7 +131,7 @@ if not st.session_state.main_done:
             log_step_to_sheet(q, answer, "phq9", elapsed)
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.session_state.needs_rerun = True
             st.stop()
     # GAD-7
     elif current < len(phq9_items) + len(gad7_items):
@@ -140,7 +144,7 @@ if not st.session_state.main_done:
             log_step_to_sheet(q, answer, "gad7", elapsed)
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.session_state.needs_rerun = True
             st.stop()
     # Demographics
     elif current < len(phq9_items) + len(gad7_items) + len(demographic_questions):
@@ -157,11 +161,11 @@ if not st.session_state.main_done:
             st.session_state[dq["key"]] = answer
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.session_state.needs_rerun = True
     else:
         st.session_state.main_done = True
         st.session_state.start_time = datetime.now().timestamp()
-        st.experimental_rerun()
+        st.session_state.needs_rerun = True
         st.stop()
 
 # --- After main questions, show summary and feedback ---
@@ -193,7 +197,7 @@ if st.session_state.main_done and not st.session_state.feedback_done:
             log_step_to_sheet(fq["label"], answer, "feedback", elapsed)
             st.session_state[fq["key"]] = answer
             st.session_state.start_time = datetime.now().timestamp()
-            st.experimental_rerun()
+            st.session_state.needs_rerun = True
     else:
         try:
             scope = ["https://www.googleapis.com/auth/spreadsheets"]

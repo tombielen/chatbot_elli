@@ -3,9 +3,10 @@ from datetime import datetime
 from google.oauth2.service_account import Credentials
 import gspread
 
-if st.session_state.get("needs_rerun"):
+if "needs_rerun" in st.session_state and st.session_state.needs_rerun:
     st.session_state.needs_rerun = False
     st.experimental_rerun()
+
 
 st.set_page_config(page_title="Mental Health Screening (Static Form)", page_icon="📝", layout="centered")
 

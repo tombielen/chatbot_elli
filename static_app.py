@@ -160,6 +160,7 @@ if not st.session_state.main_done:
         st.session_state.main_done = True
         st.session_state.start_time = datetime.now().timestamp()
         st.experimental_rerun()
+        st.stop()
 
 # --- After main questions, show summary and feedback ---
 if st.session_state.main_done and not st.session_state.feedback_done:

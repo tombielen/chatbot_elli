@@ -5,6 +5,14 @@ import gspread
 
 st.set_page_config(page_title="Mental Health Screening (Static Form)", page_icon="📝", layout="centered")
 
+# --- Rerun Safety ---
+if "needs_rerun" not in st.session_state:
+    st.session_state.needs_rerun = False
+
+if st.session_state.needs_rerun:
+    st.session_state.needs_rerun = False
+    st.experimental_rerun()
+
 st.title("📝 Mental Health Screening (Neutral Interface)")
 st.markdown("""
 Welcome to this mental health screening form. Please answer the following questions as honestly as possible.
@@ -12,6 +20,7 @@ Welcome to this mental health screening form. Please answer the following questi
 **Note:** Your responses are confidential, anonymous, and will not be reviewed by medical professionals.
 """)
 
+# --- Scale & Interpretation ---
 scale = ["Not at all (0)", "Several days (1)", "More than half the days (2)", "Nearly every day (3)"]
 
 def interpret_phq(score):
@@ -36,13 +45,11 @@ def interpret_gad(score):
     else:
         return "Severe anxiety"
 
+# --- Logging ---
 def log_step_to_sheet(question, answer, step_type, elapsed=None):
     try:
         scope = ["https://www.googleapis.com/auth/spreadsheets"]
-        creds = Credentials.from_service_account_info(
-            st.secrets["google_sheets"],
-            scopes=scope,
-        )
+        creds = Credentials.from_service_account_info(st.secrets["google_sheets"], scopes=scope)
         client = gspread.authorize(creds)
         sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"])
         worksheet = sheet.sheet1
@@ -70,7 +77,7 @@ def log_step_to_sheet(question, answer, step_type, elapsed=None):
     except Exception as e:
         st.error(f"❌ Data submission failed: {e}")
 
-# --- Questionnaire setup ---
+# --- Content ---
 phq9_items = [
     "Little interest or pleasure in doing things",
     "Feeling down, depressed, or hopeless",
@@ -82,6 +89,7 @@ phq9_items = [
     "Moving or speaking slowly or being fidgety/restless",
     "Thoughts that you would be better off dead or hurting yourself"
 ]
+
 gad7_items = [
     "Feeling nervous, anxious or on edge",
     "Not being able to stop or control worrying",
@@ -91,11 +99,13 @@ gad7_items = [
     "Becoming easily annoyed or irritable",
     "Feeling afraid as if something awful might happen"
 ]
+
 demographic_questions = [
     {"label": "Your age:", "type": "number", "min_value": 18, "max_value": 100, "value": 25, "step": 1, "key": "age"},
     {"label": "Your gender:", "type": "select", "options": ["Prefer not to say", "Male", "Female", "Other"], "key": "gender"},
     {"label": "Have you received mental health care in the past?", "type": "select", "options": ["Prefer not to say", "Yes", "No"], "key": "mental_health_history"},
 ]
+
 feedback_questions = [
     {"label": "How much did you trust the questionnaire process?", "type": "radio", "options": [1, 2, 3, 4, 5], "key": "trust"},
     {"label": "How comfortable did you feel while answering?", "type": "radio", "options": [1, 2, 3, 4, 5], "key": "comfort"},
@@ -103,21 +113,20 @@ feedback_questions = [
 ]
 
 # --- State ---
-if "step" not in st.session_state:
-    st.session_state.step = 0
-if "answers" not in st.session_state:
-    st.session_state.answers = []
-if "start_time" not in st.session_state:
-    st.session_state.start_time = datetime.now().timestamp()
-if "main_done" not in st.session_state:
-    st.session_state.main_done = False
-if "feedback_done" not in st.session_state:
-    st.session_state.feedback_done = False
+for key, default in {
+    "step": 0,
+    "answers": [],
+    "start_time": datetime.now().timestamp(),
+    "main_done": False,
+    "feedback_done": False,
+    "needs_rerun": False,
+}.items():
+    if key not in st.session_state:
+        st.session_state[key] = default
 
-# --- Step-by-step logic ---
+# --- Form Logic ---
 if not st.session_state.main_done:
     current = st.session_state.step
-    # PHQ-9
     if current < len(phq9_items):
         q = phq9_items[current]
         answer = st.radio(q, scale, key=f"phq9_{current}")
@@ -125,10 +134,10 @@ if not st.session_state.main_done:
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "phq9", "question": q, "answer": answer, "elapsed": elapsed})
             log_step_to_sheet(q, answer, "phq9", elapsed)
-            st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
-            st.experimental_rerun()
-    # GAD-7
+            st.session_state.start_time = datetime.now().timestamp()
+            st.session_state.needs_rerun = True
+            st.stop()
     elif current < len(phq9_items) + len(gad7_items):
         idx = current - len(phq9_items)
         q = gad7_items[idx]
@@ -137,10 +146,10 @@ if not st.session_state.main_done:
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "gad7", "question": q, "answer": answer, "elapsed": elapsed})
             log_step_to_sheet(q, answer, "gad7", elapsed)
-            st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
-            st.experimental_rerun()
-    # Demographics
+            st.session_state.start_time = datetime.now().timestamp()
+            st.session_state.needs_rerun = True
+            st.stop()
     elif current < len(phq9_items) + len(gad7_items) + len(demographic_questions):
         idx = current - len(phq9_items) - len(gad7_items)
         dq = demographic_questions[idx]
@@ -152,15 +161,18 @@ if not st.session_state.main_done:
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "demographic", "question": dq["label"], "answer": answer, "elapsed": elapsed})
             log_step_to_sheet(dq["label"], answer, "demographic", elapsed)
-            st.session_state.start_time = datetime.now().timestamp()
+            st.session_state[dq["key"]] = answer
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.session_state.start_time = datetime.now().timestamp()
+            st.session_state.needs_rerun = True
+            st.stop()
     else:
         st.session_state.main_done = True
         st.session_state.start_time = datetime.now().timestamp()
-        st.experimental_rerun()
+        st.session_state.needs_rerun = True
+        st.stop()
 
-# --- After main questions, show summary and feedback ---
+# --- Results + Feedback ---
 if st.session_state.main_done and not st.session_state.feedback_done:
     st.success("✅ You have completed the questionnaire.")
     phq9_scores = [scale.index(ans["answer"]) for ans in st.session_state.answers if ans["type"] == "phq9"]
@@ -173,7 +185,6 @@ if st.session_state.main_done and not st.session_state.feedback_done:
     st.markdown(f"**GAD-7 Total Score:** {total_gad7} ({gad_interp})")
     st.markdown("Please note that this feedback is automatic and does not constitute a diagnosis.")
 
-    # Calculate feedback step based on answers already given
     feedback_answers = [a for a in st.session_state.answers if a["type"] == "feedback"]
     feedback_step = len(feedback_answers)
 
@@ -189,20 +200,16 @@ if st.session_state.main_done and not st.session_state.feedback_done:
             log_step_to_sheet(fq["label"], answer, "feedback", elapsed)
             st.session_state[fq["key"]] = answer
             st.session_state.start_time = datetime.now().timestamp()
-            st.experimental_rerun()
+            st.session_state.step += 1
+            st.session_state.needs_rerun = True
+            st.stop()
     else:
         try:
             scope = ["https://www.googleapis.com/auth/spreadsheets"]
-            creds = Credentials.from_service_account_info(
-                st.secrets["google_sheets"],
-                scopes=scope,
-            )
+            creds = Credentials.from_service_account_info(st.secrets["google_sheets"], scopes=scope)
             client = gspread.authorize(creds)
             sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"])
             worksheet = sheet.sheet1
-            trust = st.session_state.get("trust", "")
-            comfort = st.session_state.get("comfort", "")
-            feedback = st.session_state.get("feedback", "")
             row = [
                 "",  # name
                 st.session_state.get("gender", ""),
@@ -211,10 +218,10 @@ if st.session_state.main_done and not st.session_state.feedback_done:
                 total_phq9,
                 total_gad7,
                 f"{phq_interp}; {gad_interp}",
-                trust,
-                comfort,
+                st.session_state.get("trust", ""),
+                st.session_state.get("comfort", ""),
                 "",  # initial_mood
-                feedback,
+                st.session_state.get("feedback", ""),
                 "static"
             ]
             worksheet.append_row(row, value_input_option="USER_ENTERED")

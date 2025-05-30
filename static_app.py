@@ -114,8 +114,6 @@ if "main_done" not in st.session_state:
 if "feedback_done" not in st.session_state:
     st.session_state.feedback_done = False
 
-total_questions = len(phq9_items) + len(gad7_items) + len(demographic_questions) + len(feedback_questions)
-
 # --- Step-by-step logic ---
 if not st.session_state.main_done:
     current = st.session_state.step
@@ -123,7 +121,7 @@ if not st.session_state.main_done:
     if current < len(phq9_items):
         q = phq9_items[current]
         answer = st.radio(q, scale, key=f"phq9_{current}")
-        if st.button("Next"):
+        if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "phq9", "question": q, "answer": answer, "elapsed": elapsed})
             log_step_to_sheet(q, answer, "phq9", elapsed)
@@ -135,7 +133,7 @@ if not st.session_state.main_done:
         idx = current - len(phq9_items)
         q = gad7_items[idx]
         answer = st.radio(q, scale, key=f"gad7_{idx}")
-        if st.button("Next"):
+        if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "gad7", "question": q, "answer": answer, "elapsed": elapsed})
             log_step_to_sheet(q, answer, "gad7", elapsed)
@@ -150,7 +148,7 @@ if not st.session_state.main_done:
             answer = st.number_input(dq["label"], min_value=dq["min_value"], max_value=dq["max_value"], value=dq["value"], step=dq["step"], key=dq["key"])
         else:
             answer = st.selectbox(dq["label"], dq["options"], key=dq["key"])
-        if st.button("Next"):
+        if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "demographic", "question": dq["label"], "answer": answer, "elapsed": elapsed})
             log_step_to_sheet(dq["label"], answer, "demographic", elapsed)

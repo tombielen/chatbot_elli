@@ -117,8 +117,6 @@ if "feedback_done" not in st.session_state:
 total_questions = len(phq9_items) + len(gad7_items) + len(demographic_questions) + len(feedback_questions)
 
 # --- Step-by-step logic ---
-current = st.session_state.step
-
 if not st.session_state.main_done:
     # PHQ-9
     if current < len(phq9_items):
@@ -161,6 +159,7 @@ if not st.session_state.main_done:
             st.experimental_rerun()
     else:
         st.session_state.main_done = True
+        st.session_state.start_time = datetime.now().timestamp()
         st.experimental_rerun()
 
 # --- After main questions, show summary and feedback ---

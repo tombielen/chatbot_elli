@@ -176,19 +176,22 @@ if st.session_state.main_done and not st.session_state.feedback_done:
     st.markdown(f"**GAD-7 Total Score:** {total_gad7} ({gad_interp})")
     st.markdown("Please note that this feedback is automatic and does not constitute a diagnosis.")
 
-    feedback_step = current - (len(phq9_items) + len(gad7_items) + len(demographic_questions))
+    # Calculate feedback step based on answers already given
+    feedback_answers = [a for a in st.session_state.answers if a["type"] == "feedback"]
+    feedback_step = len(feedback_answers)
+
     if feedback_step < len(feedback_questions):
         fq = feedback_questions[feedback_step]
         if fq["type"] == "radio":
             answer = st.radio(fq["label"], fq["options"], key=fq["key"])
         else:
             answer = st.text_area(fq["label"], key=fq["key"])
-        if st.button("Next"):
+        if st.button("Next", key=f"feedback_next_{feedback_step}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "feedback", "question": fq["label"], "answer": answer, "elapsed": elapsed})
             log_step_to_sheet(fq["label"], answer, "feedback", elapsed)
+            st.session_state[fq["key"]] = answer
             st.session_state.start_time = datetime.now().timestamp()
-            st.session_state.step += 1
             st.experimental_rerun()
     else:
         try:

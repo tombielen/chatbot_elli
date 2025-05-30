@@ -128,6 +128,7 @@ if not st.session_state.main_done:
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
             st.experimental_rerun()
+            st.stop()
     # GAD-7
     elif current < len(phq9_items) + len(gad7_items):
         idx = current - len(phq9_items)
@@ -140,6 +141,7 @@ if not st.session_state.main_done:
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
             st.experimental_rerun()
+            st.stop()
     # Demographics
     elif current < len(phq9_items) + len(gad7_items) + len(demographic_questions):
         idx = current - len(phq9_items) - len(gad7_items)

@@ -26,7 +26,7 @@ else:
         st.session_state.assigned_url = random.choice([static_url, elli_url])
     st.write("Thank you for consenting! You will now be redirected to the study.")
     st.markdown(f"[Click here if you are not redirected automatically.]({st.session_state.assigned_url})")
-    st.experimental_set_query_params(redirected="1")
+    st.query_params.update(redirected="1")
     st.markdown(
         f"""
         <meta http-equiv="refresh" content="2; url={st.session_state.assigned_url}">

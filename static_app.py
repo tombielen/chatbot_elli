@@ -5,14 +5,6 @@ import gspread
 
 st.set_page_config(page_title="Mental Health Screening (Static Form)", page_icon="📝", layout="centered")
 
-# --- Rerun Safety ---
-if "needs_rerun" not in st.session_state:
-    st.session_state.needs_rerun = False
-
-if st.session_state.needs_rerun:
-    st.session_state.needs_rerun = False
-    st.experimental_rerun()
-
 st.title("📝 Mental Health Screening (Neutral Interface)")
 st.markdown("""
 Welcome to this mental health screening form. Please answer the following questions as honestly as possible.
@@ -119,7 +111,6 @@ for key, default in {
     "start_time": datetime.now().timestamp(),
     "main_done": False,
     "feedback_done": False,
-    "needs_rerun": False,
 }.items():
     if key not in st.session_state:
         st.session_state[key] = default
@@ -136,8 +127,7 @@ if not st.session_state.main_done:
             log_step_to_sheet(q, answer, "phq9", elapsed)
             st.session_state.step += 1
             st.session_state.start_time = datetime.now().timestamp()
-            st.session_state.needs_rerun = True
-            st.stop()
+            st.experimental_rerun()
     elif current < len(phq9_items) + len(gad7_items):
         idx = current - len(phq9_items)
         q = gad7_items[idx]
@@ -148,8 +138,7 @@ if not st.session_state.main_done:
             log_step_to_sheet(q, answer, "gad7", elapsed)
             st.session_state.step += 1
             st.session_state.start_time = datetime.now().timestamp()
-            st.session_state.needs_rerun = True
-            st.stop()
+            st.experimental_rerun()
     elif current < len(phq9_items) + len(gad7_items) + len(demographic_questions):
         idx = current - len(phq9_items) - len(gad7_items)
         dq = demographic_questions[idx]
@@ -161,16 +150,13 @@ if not st.session_state.main_done:
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "demographic", "question": dq["label"], "answer": answer, "elapsed": elapsed})
             log_step_to_sheet(dq["label"], answer, "demographic", elapsed)
-            st.session_state[dq["key"]] = answer
-            st.session_state.step += 1
             st.session_state.start_time = datetime.now().timestamp()
-            st.session_state.needs_rerun = True
-            st.stop()
+            st.session_state.step += 1
+            st.experimental_rerun()
     else:
         st.session_state.main_done = True
         st.session_state.start_time = datetime.now().timestamp()
-        st.session_state.needs_rerun = True
-        st.stop()
+        st.experimental_rerun()
 
 # --- Results + Feedback ---
 if st.session_state.main_done and not st.session_state.feedback_done:
@@ -201,8 +187,7 @@ if st.session_state.main_done and not st.session_state.feedback_done:
             st.session_state[fq["key"]] = answer
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
-            st.session_state.needs_rerun = True
-            st.stop()
+            st.experimental_rerun()
     else:
         try:
             scope = ["https://www.googleapis.com/auth/spreadsheets"]

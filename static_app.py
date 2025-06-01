@@ -112,8 +112,8 @@ for key, default in {
     "main_done": False,
     "feedback_done": False,
 }.items():
-    if "answers" not in st.session_state or not isinstance(st.session_state.answers, list):
-        st.session_state.answers = []
+    if key not in st.session_state:
+        st.session_state[key] = default
 
 
 # --- Form Logic ---

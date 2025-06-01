@@ -19,7 +19,6 @@ if not st.session_state.consented:
     if st.button("I Consent and Wish to Continue"):
         st.session_state.consented = True
         st.experimental_rerun()
-        st.stop()  
 else:
     if "assigned_url" not in st.session_state:
         static_url = "https://ellistatic.streamlit.app"

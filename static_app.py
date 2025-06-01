@@ -162,20 +162,33 @@ if st.session_state.main_done and not st.session_state.feedback_done:
             client = gspread.authorize(creds)
             sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"])
             worksheet = sheet.sheet1
-            row = [
-                "",  # name
-                st.session_state.get("gender", ""),
-                st.session_state.get("age", ""),
-                "",  # initial_feeling
+
+            # Build the row with all answers in order
+            row = []
+            # Demographics
+            for dq in demographic_questions:
+                row.append(st.session_state.get(dq["key"], ""))
+            # PHQ-9
+            for q in phq9_items:
+                ans = next((a["answer"] for a in st.session_state.answers if a["question"] == q), "")
+                row.append(ans)
+            # GAD-7
+            for q in gad7_items:
+                ans = next((a["answer"] for a in st.session_state.answers if a["question"] == q), "")
+                row.append(ans)
+            # Feedback
+            for fq in feedback_questions:
+                row.append(st.session_state.get(fq["key"], ""))
+
+            # Add summary columns
+            row += [
                 total_phq9,
+                phq_interp,
                 total_gad7,
-                f"{phq_interp}; {gad_interp}",
-                st.session_state.get("trust", ""),
-                st.session_state.get("comfort", ""),
-                "",  # initial_mood
-                st.session_state.get("feedback", ""),
-                "static"
+                gad_interp,
+                datetime.now().isoformat()
             ]
+
             worksheet.append_row(row, value_input_option="USER_ENTERED")
             st.success("✅ Your responses and feedback have been logged. Thank you for participating!")
             st.session_state.feedback_done = True

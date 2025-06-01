@@ -112,8 +112,8 @@ for key, default in {
     "main_done": False,
     "feedback_done": False,
 }.items():
-    if key not in st.session_state:
-        st.session_state[key] = default
+    if not isinstance(st.session_state.answers, list):
+        st.session_state.answers = []
 
 # --- Form Logic ---
 if not st.session_state.main_done:
@@ -127,7 +127,7 @@ if not st.session_state.main_done:
             log_step_to_sheet(q, answer, "phq9", elapsed)
             st.session_state.step += 1
             st.session_state.start_time = datetime.now().timestamp()
-            st.experimental_rerun()
+            st.rerun()
     elif current < len(phq9_items) + len(gad7_items):
         idx = current - len(phq9_items)
         q = gad7_items[idx]
@@ -138,7 +138,7 @@ if not st.session_state.main_done:
             log_step_to_sheet(q, answer, "gad7", elapsed)
             st.session_state.step += 1
             st.session_state.start_time = datetime.now().timestamp()
-            st.experimental_rerun()
+            st.rerun()
     elif current < len(phq9_items) + len(gad7_items) + len(demographic_questions):
         idx = current - len(phq9_items) - len(gad7_items)
         dq = demographic_questions[idx]
@@ -152,11 +152,11 @@ if not st.session_state.main_done:
             log_step_to_sheet(dq["label"], answer, "demographic", elapsed)
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.rerun()
     else:
         st.session_state.main_done = True
         st.session_state.start_time = datetime.now().timestamp()
-        st.experimental_rerun()
+        st.rerun()
 
 # --- Results + Feedback ---
 if st.session_state.main_done and not st.session_state.feedback_done:
@@ -187,7 +187,7 @@ if st.session_state.main_done and not st.session_state.feedback_done:
             st.session_state[fq["key"]] = answer
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
-            st.experimental_rerun()
+            st.rerun()
     else:
         try:
             scope = ["https://www.googleapis.com/auth/spreadsheets"]

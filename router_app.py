@@ -18,7 +18,8 @@ if "consented" not in st.session_state:
 if not st.session_state.consented:
     if st.button("I Consent and Wish to Continue"):
         st.session_state.consented = True
-        st.rerun()
+        st.experimental_rerun()
+        st.stop()
 else:
     if "assigned_url" not in st.session_state:
         static_url = "https://ellistatic.streamlit.app"
@@ -26,10 +27,11 @@ else:
         st.session_state.assigned_url = random.choice([static_url, elli_url])
     st.write("Thank you for consenting! You will now be redirected to the study.")
     st.markdown(f"[Click here if you are not redirected automatically.]({st.session_state.assigned_url})")
-    st.query_params.update(redirected="1")
     st.markdown(
         f"""
-        <meta http-equiv="refresh" content="2; url={st.session_state.assigned_url}">
+        <script>
+        window.top.location.href = "{st.session_state.assigned_url}";
+        </script>
         """,
         unsafe_allow_html=True,
     )

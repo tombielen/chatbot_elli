@@ -188,7 +188,6 @@ if st.session_state.main_done and not st.session_state.feedback_done:
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "feedback", "question": fq["label"], "answer": answer, "elapsed": elapsed})
             log_step_to_sheet(fq["label"], answer, "feedback", elapsed)
-            st.session_state[fq["key"]] = answer
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
             st.rerun()

@@ -115,13 +115,13 @@ for key, default in {
     if key not in st.session_state:
         st.session_state[key] = default
 
-
 # --- Form Logic ---
 if not st.session_state.main_done:
     current = st.session_state.step
     if current < len(phq9_items):
         q = phq9_items[current]
-        answer = st.radio(q, scale, key=f"phq9_{current}")
+        st.markdown(f"<span style='font-size:1.5em'><b>{q}</b></span>", unsafe_allow_html=True)
+        answer = st.radio("", scale, key=f"phq9_{current}")
         if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "phq9", "question": q, "answer": answer, "elapsed": elapsed})
@@ -132,7 +132,8 @@ if not st.session_state.main_done:
     elif current < len(phq9_items) + len(gad7_items):
         idx = current - len(phq9_items)
         q = gad7_items[idx]
-        answer = st.radio(q, scale, key=f"gad7_{idx}")
+        st.markdown(f"<span style='font-size:1.5em'><b>{q}</b></span>", unsafe_allow_html=True)
+        answer = st.radio("", scale, key=f"gad7_{idx}")
         if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "gad7", "question": q, "answer": answer, "elapsed": elapsed})
@@ -143,10 +144,11 @@ if not st.session_state.main_done:
     elif current < len(phq9_items) + len(gad7_items) + len(demographic_questions):
         idx = current - len(phq9_items) - len(gad7_items)
         dq = demographic_questions[idx]
+        st.markdown(f"<span style='font-size:1.5em'><b>{dq['label']}</b></span>", unsafe_allow_html=True)
         if dq["type"] == "number":
-            answer = st.number_input(dq["label"], min_value=dq["min_value"], max_value=dq["max_value"], value=dq["value"], step=dq["step"], key=dq["key"])
+            answer = st.number_input("", min_value=dq["min_value"], max_value=dq["max_value"], value=dq["value"], step=dq["step"], key=dq["key"])
         else:
-            answer = st.selectbox(dq["label"], dq["options"], key=dq["key"])
+            answer = st.selectbox("", dq["options"], key=dq["key"])
         if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "demographic", "question": dq["label"], "answer": answer, "elapsed": elapsed})
@@ -177,10 +179,11 @@ if st.session_state.main_done and not st.session_state.feedback_done:
 
     if feedback_step < len(feedback_questions):
         fq = feedback_questions[feedback_step]
+        st.markdown(f"<span style='font-size:1.3em'><b>{fq['label']}</b></span>", unsafe_allow_html=True)
         if fq["type"] == "radio":
-            answer = st.radio(fq["label"], fq["options"], key=fq["key"])
+            answer = st.radio("", fq["options"], key=fq["key"])
         else:
-            answer = st.text_area(fq["label"], key=fq["key"])
+            answer = st.text_area("", key=fq["key"])
         if st.button("Next", key=f"feedback_next_{feedback_step}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "feedback", "question": fq["label"], "answer": answer, "elapsed": elapsed})

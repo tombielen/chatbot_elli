@@ -88,24 +88,24 @@ def build_row_with_progress(step_label, phq9_score=None, phq9_interp=None, gad7_
     row = []
     # Demographics
     for dq in demographic_questions:
-        row.append(st.session_state.get(dq["key"], ""))
+        row.append(str(st.session_state.get(dq["key"], "")))
     # PHQ-9
     for q in phq9_items:
         ans = next((a["answer"] for a in st.session_state.answers if a["question"] == q), "")
-        row.append(ans)
+        row.append(str(ans))
     # GAD-7
     for q in gad7_items:
         ans = next((a["answer"] for a in st.session_state.answers if a["question"] == q), "")
-        row.append(ans)
+        row.append(str(ans))
     # Feedback
     for fq in feedback_questions:
-        row.append(st.session_state.get(fq["key"], ""))
+        row.append(str(st.session_state.get(fq["key"], "")))
     # Step label and timestamp
-    row.append(step_label)
+    row.append(str(step_label))
     row.append(datetime.now().isoformat())
     # Optionally add summary columns at the end (only for final row)
     if phq9_score is not None:
-        row += [phq9_score, phq9_interp, gad7_score, gad7_interp]
+        row += [str(phq9_score), str(phq9_interp), str(gad7_score), str(gad7_interp)]
     return row
 
 def log_row(row):

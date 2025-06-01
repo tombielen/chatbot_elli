@@ -37,38 +37,6 @@ def interpret_gad(score):
     else:
         return "Severe anxiety"
 
-# --- Logging ---
-def log_step_to_sheet(question, answer, step_type, elapsed=None):
-    try:
-        scope = ["https://www.googleapis.com/auth/spreadsheets"]
-        creds = Credentials.from_service_account_info(st.secrets["google_sheets"], scopes=scope)
-        client = gspread.authorize(creds)
-        sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"])
-        worksheet = sheet.sheet1
-        now = datetime.now().isoformat()
-        row = [
-            "",  # name
-            st.session_state.get("gender", ""),
-            st.session_state.get("age", ""),
-            "",  # initial_feeling
-            "",  # phq_total
-            "",  # gad_total
-            "",  # elli_interp
-            "",  # trust
-            "",  # comfort
-            "",  # initial_mood
-            "",  # user_reflection
-            "static",
-            step_type,
-            question,
-            answer,
-            now,
-            elapsed if elapsed is not None else ""
-        ]
-        worksheet.append_row(row, value_input_option="USER_ENTERED")
-    except Exception as e:
-        st.error(f"❌ Data submission failed: {e}")
-
 # --- Content ---
 phq9_items = [
     "Little interest or pleasure in doing things",
@@ -125,7 +93,6 @@ if not st.session_state.main_done:
         if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "phq9", "question": q, "answer": answer, "elapsed": elapsed})
-            log_step_to_sheet(q, answer, "phq9", elapsed)
             st.session_state.step += 1
             st.session_state.start_time = datetime.now().timestamp()
             st.rerun()
@@ -137,7 +104,6 @@ if not st.session_state.main_done:
         if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "gad7", "question": q, "answer": answer, "elapsed": elapsed})
-            log_step_to_sheet(q, answer, "gad7", elapsed)
             st.session_state.step += 1
             st.session_state.start_time = datetime.now().timestamp()
             st.rerun()
@@ -152,7 +118,6 @@ if not st.session_state.main_done:
         if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "demographic", "question": dq["label"], "answer": answer, "elapsed": elapsed})
-            log_step_to_sheet(dq["label"], answer, "demographic", elapsed)
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
             st.rerun()
@@ -187,7 +152,6 @@ if st.session_state.main_done and not st.session_state.feedback_done:
         if st.button("Next", key=f"feedback_next_{feedback_step}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "feedback", "question": fq["label"], "answer": answer, "elapsed": elapsed})
-            log_step_to_sheet(fq["label"], answer, "feedback", elapsed)
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
             st.rerun()

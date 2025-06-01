@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import datetime
 from google.oauth2.service_account import Credentials
 import gspread
+import uuid
 
 st.set_page_config(page_title="Mental Health Screening (Static Form)", page_icon="📝", layout="centered")
 
@@ -74,6 +75,7 @@ feedback_questions = [
 
 # --- State ---
 for key, default in {
+    "session_id": str(uuid.uuid4()),
     "step": 0,
     "answers": [],
     "start_time": datetime.now().timestamp(),
@@ -86,6 +88,8 @@ for key, default in {
 # --- Helper: Build row for Google Sheets ---
 def build_row_with_progress(step_label, phq9_score=None, phq9_interp=None, gad7_score=None, gad7_interp=None):
     row = []
+    # Session ID
+    row.append(st.session_state["session_id"])
     # Demographics
     for dq in demographic_questions:
         row.append(str(st.session_state.get(dq["key"], "")))

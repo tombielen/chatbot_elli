@@ -18,7 +18,7 @@ if "consented" not in st.session_state:
 if not st.session_state.consented:
     if st.button("I Consent and Wish to Continue"):
         st.session_state.consented = True
-        st.experimental_rerun()
+        st.rerun()
         st.stop()
 else:
     if "assigned_url" not in st.session_state:

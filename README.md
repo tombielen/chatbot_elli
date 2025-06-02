@@ -1,11 +1,11 @@
 # Elli: AI-Powered Chatbot for Mental Health Screening
 
-This repository contains **Elli**, a GPT-4-powered mental health chatbot developed by **Tom Bielen** as part of his independent bachelor’s thesis research in Applied Psychology at IU International University of Applied Sciences.
+This repository contains Elli, a GPT-4-powered mental health chatbot developed by Tom Bielen as part of his independent bachelor’s thesis research in Applied Psychology at IU International University of Applied Sciences.
 
-**Elli** is designed to conduct **empathetic, conversational mental health screenings** using validated tools like the **PHQ-9** and **GAD-7**, while measuring user trust, comfort, emotional response, and interaction patterns.
+Elli is designed to conduct empathetic, conversational mental health screenings using validated tools like the PHQ-9 and GAD-7, while measuring user trust, comfort, emotional response, and interaction patterns.
 
 > ⚠️ **Disclaimer:**  
-> Elli is a research prototype. It is **not** intended for clinical use, diagnosis, or emergency mental health support.  
+> Elli is a research prototype. It is not intended for clinical use, diagnosis, or emergency mental health support.  
 > If you or someone you know is struggling, please contact a licensed professional or local helpline.
 
 ---

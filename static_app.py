@@ -64,7 +64,6 @@ gad7_items = [
 demographic_questions = [
     {"label": "Your age:", "type": "number", "min_value": 18, "max_value": 100, "value": 25, "step": 1, "key": "age"},
     {"label": "Your gender:", "type": "select", "options": ["Prefer not to say", "Male", "Female", "Other"], "key": "gender"},
-    {"label": "Have you received mental health care in the past?", "type": "select", "options": ["Prefer not to say", "Yes", "No"], "key": "mental_health_history"},
 ]
 
 feedback_questions = [
@@ -155,7 +154,6 @@ if not st.session_state.main_done:
         if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "demographic", "question": dq["label"], "answer": answer, "elapsed": elapsed})
-            # Log progress
             row = build_row_with_progress(f"demographic_{idx+1}")
             log_row(row)
             st.session_state.start_time = datetime.now().timestamp()

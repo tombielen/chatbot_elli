@@ -10,7 +10,9 @@ st.title("📝 Mental Health Screening (Neutral Interface)")
 st.markdown("""
 Welcome to this mental health screening form. Please answer the following questions as honestly as possible.
 
-**Note:** Your responses are confidential, anonymous, and will not be reviewed by medical professionals.
+**Note:** 
+- Your responses are confidential, anonymous, and will not be reviewed by medical professionals.
+- This tool cannot provide crisis support. If you are in emotional distress or thinking about hurting yourself, please contact a local mental health service or suicide hotline in your area.
 """)
 
 # --- Scale & Interpretation ---

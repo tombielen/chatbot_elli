@@ -22,7 +22,7 @@ def log_message_to_sheet(role, content):
         client = get_gsheet_client()
         sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"]).sheet1
         row = [
-            st.session_state.get("name", ""),
+            "",  # Do not store name
             st.session_state.get("gender", ""),
             st.session_state.get("age", ""),
             role,
@@ -38,7 +38,7 @@ def append_to_google_sheet(data):
         client = get_gsheet_client()
         sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"]).sheet1
         row = [
-            data.get("name", ""),
+            "", 
             data.get("gender", ""),
             data.get("age", ""),
             data.get("initial_feeling", ""),

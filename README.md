@@ -31,7 +31,6 @@ The study investigates how conversational empathy and relational dynamics in lar
 - **Measures Collected:**
   - PHQ-9, GAD-7 scores
   - Trust, comfort, empathy perception
-  - System Usability Scale (SUS)
   - Behavioral metrics (completion time, dropout, disclosure depth)
   - Open-ended feedback (privacy, emotional experience)
 
@@ -53,7 +52,7 @@ The study investigates how conversational empathy and relational dynamics in lar
 - **Conditions:** Participants are assigned to either Elli (empathic chatbot) or a static, neutral web form.
 - **Platform:** Built with Streamlit and hosted on a secure, GDPR-compliant server.
 - **Data:** Responses are anonymized, encrypted, and stored with strict access control.
-- **Instruments:** PHQ-9, GAD-7, System Usability Scale (SUS), trust and empathy scales, behavioral logs, and open-ended feedback.
+- **Instruments:** PHQ-9, GAD-7, trust and empathy scales, behavioral logs, and open-ended feedback.
 
 ---
 

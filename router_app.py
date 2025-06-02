@@ -3,13 +3,38 @@ import random
 
 st.set_page_config(page_title="Study Consent", page_icon="🔗", layout="centered")
 
-st.title("Consent for Participation")
+st.title("Take Part in Our Study")
+
 st.markdown("""
-Before you begin, please read the following consent information:
+### About This Study
 
-*Your participation is voluntary. Your responses are confidential and will be used for research purposes only. You may withdraw at any time.*
+Please consider participating in our research study exploring how digital interfaces influence user experiences in mental health screening.
 
-If you agree to participate, click the button below to continue.
+In this study, you will be asked to complete two short self-assessment questionnaires related to mood and anxiety, followed by a brief feedback form. Participation should take approximately 5–7 minutes.
+
+Your responses will be used anonymously for academic research. All data will be stored securely in accordance with GDPR regulations and used strictly for scientific purposes.
+
+You may withdraw at any time before submitting your responses. If you later wish to delete your data, you can contact the lead researcher by email.
+
+This study is conducted by **Tom Bielen** (tom2004.bielen@gmail.com), BSc in Applied Psychology.
+
+---
+
+### Privacy and Data Protection
+
+- Your participation is **voluntary** and **anonymous**.
+- No personally identifying data is collected.
+- All responses are stored on **secure, encrypted servers**.
+- Data will only be used for academic research and may be published in aggregated form.
+- If you wish to have your data deleted after participation, contact **tom2004.bielen@gmail.com**.
+
+---
+
+### Consent
+
+By clicking "I Consent and Wish to Continue", you confirm that you have read and understood the information above, and agree to participate in this study.
+
+If you do not wish to participate, you may close this page at any time.
 """)
 
 if "consented" not in st.session_state:

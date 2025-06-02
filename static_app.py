@@ -175,8 +175,15 @@ if st.session_state.main_done and not st.session_state.feedback_done:
     total_gad7 = sum(gad7_scores)
     phq_interp = interpret_phq(total_phq9)
     gad_interp = interpret_gad(total_gad7)
-    st.markdown(f"**PHQ-9 Total Score:** {total_phq9} ({phq_interp})")
-    st.markdown(f"**GAD-7 Total Score:** {total_gad7} ({gad_interp})")
+
+    st.markdown(
+        f"**PHQ-9 Total Score:** {total_phq9}  \n"
+        f"Your answers on the PHQ-9 suggest that your symptoms could be a sign of: **{phq_interp}**"
+    )
+    st.markdown(
+        f"**GAD-7 Total Score:** {total_gad7}  \n"
+        f"Your answers on the GAD-7 suggest that your symptoms could be a sign of: **{gad_interp}**"
+    )
     st.markdown("Please note that this feedback is automatic and does not constitute a diagnosis.")
 
     feedback_answers = [a for a in st.session_state.answers if a["type"] == "feedback"]

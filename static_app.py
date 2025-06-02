@@ -88,26 +88,19 @@ for key, default in {
 # --- Helper: Build row for Google Sheets ---
 def build_row_with_progress(step_label, phq9_score=None, phq9_interp=None, gad7_score=None, gad7_interp=None):
     row = []
-    # Session ID
     row.append(st.session_state["session_id"])
-    # Demographics
     for dq in demographic_questions:
         row.append(str(st.session_state.get(dq["key"], "")))
-    # PHQ-9
     for q in phq9_items:
         ans = next((a["answer"] for a in st.session_state.answers if a["question"] == q), "")
         row.append(str(ans))
-    # GAD-7
     for q in gad7_items:
         ans = next((a["answer"] for a in st.session_state.answers if a["question"] == q), "")
         row.append(str(ans))
-    # Feedback
     for fq in feedback_questions:
         row.append(str(st.session_state.get(fq["key"], "")))
-    # Step label and timestamp
     row.append(str(step_label))
     row.append(datetime.now().isoformat())
-    # Optionally add summary columns at the end (only for final row)
     if phq9_score is not None:
         row += [str(phq9_score), str(phq9_interp), str(gad7_score), str(gad7_interp)]
     return row
@@ -133,7 +126,6 @@ if not st.session_state.main_done:
         if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "phq9", "question": q, "answer": answer, "elapsed": elapsed})
-            # Log progress
             row = build_row_with_progress(f"phq9_{current+1}")
             log_row(row)
             st.session_state.step += 1
@@ -147,7 +139,6 @@ if not st.session_state.main_done:
         if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "gad7", "question": q, "answer": answer, "elapsed": elapsed})
-            # Log progress
             row = build_row_with_progress(f"gad7_{idx+1}")
             log_row(row)
             st.session_state.step += 1
@@ -201,7 +192,6 @@ if st.session_state.main_done and not st.session_state.feedback_done:
         if st.button("Next", key=f"feedback_next_{feedback_step}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "feedback", "question": fq["label"], "answer": answer, "elapsed": elapsed})
-            # Log progress
             row = build_row_with_progress(f"feedback_{feedback_step+1}")
             log_row(row)
             st.session_state.start_time = datetime.now().timestamp()
@@ -209,7 +199,6 @@ if st.session_state.main_done and not st.session_state.feedback_done:
             st.rerun()
     else:
         try:
-            # Final row with summary columns
             row = build_row_with_progress(
                 "complete",
                 phq9_score=total_phq9,

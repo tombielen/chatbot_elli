@@ -154,13 +154,20 @@ def log_row_static_final():
         client = gspread.authorize(creds)
         sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"]).sheet1
 
-        # Find the next empty row in columns A–Z (row 2+)
-        existing_rows = sheet.get_all_values()
-        row_index = 2
-        while row_index <= len(existing_rows):
-            if all(cell.strip() == "" for cell in existing_rows[row_index - 1][:26]):
-                break
-            row_index += 1
+        # Use the same row index as for progress logging
+        if "row_index" not in st.session_state:
+            # Find the next empty row (should only happen for a new session)
+            existing_rows = sheet.get_all_values()
+            row_index = 2
+            while row_index <= len(existing_rows):
+                if all(cell.strip() == "" for cell in existing_rows[row_index - 1][:26]):
+                    break
+                row_index += 1
+            if row_index > len(existing_rows):
+                sheet.append_row([""] * 26)
+            st.session_state["row_index"] = row_index
+        else:
+            row_index = st.session_state["row_index"]
 
         # Build the row based on the A-Z column spec
         row_data = [""] * 26  # A-Z
@@ -192,7 +199,7 @@ def log_row_static_final():
         # Z: Feedback
         row_data[25] = str(st.session_state.get("feedback", ""))
 
-        # Write the row
+        # Write the row to the correct row index
         sheet.update(f"A{row_index}:Z{row_index}", [row_data])
         print(f"✅ Wrote static data to row {row_index}")
     except Exception as e:

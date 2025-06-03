@@ -58,6 +58,75 @@ def append_to_google_sheet(data):
         print("❌ Google Sheets append failed:", e)
         raise e
 
+def log_row_elli_final():
+    try:
+        client = get_gsheet_client()
+        sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"]).sheet1
+
+        # Assign a row for this session if not already done
+        if "row_index" not in st.session_state:
+            existing_rows = sheet.get_all_values()
+            row_index = 2
+            while row_index <= len(existing_rows):
+                if all(cell.strip() == "" for cell in existing_rows[row_index - 1][:26]):
+                    break
+                row_index += 1
+            if row_index > len(existing_rows):
+                sheet.append_row([""] * 26)
+            st.session_state["row_index"] = row_index
+        else:
+            row_index = st.session_state["row_index"]
+
+        # Build the row for columns A–Z
+        row_data = [""] * 26  # A-Z
+
+        row_data[0] = "Elli"  # A: Version
+        row_data[1] = str(st.session_state.get("age", ""))  # B: Age
+        row_data[2] = str(st.session_state.get("gender", ""))  # C: Gender
+
+        # D: Mood (user input + Elli's response)
+        user_mood = st.session_state.get("initial_mood", "")
+        elli_mood_response = ""
+        # Find Elli's mood response (the bot message after user mood input)
+        for i, msg in enumerate(st.session_state.messages):
+            if msg["role"] == "user" and msg["content"] == user_mood:
+                # Next bot message is Elli's response
+                if i + 1 < len(st.session_state.messages):
+                    next_msg = st.session_state.messages[i + 1]
+                    if next_msg["role"] == "bot":
+                        elli_mood_response = next_msg["content"]
+                break
+        if user_mood or elli_mood_response:
+            row_data[3] = f"User: {user_mood}\nElli: {elli_mood_response}"
+
+        # E–M: PHQ-9 answers
+        phq_answers = st.session_state.get("phq_answers", [])
+        for i in range(min(9, len(phq_answers))):
+            row_data[4 + i] = str(phq_answers[i])
+
+        # N–T: GAD-7 answers
+        gad_answers = st.session_state.get("gad_answers", [])
+        for i in range(min(7, len(gad_answers))):
+            row_data[13 + i] = str(gad_answers[i])
+
+        # U: Total PHQ, V: Total GAD
+        row_data[20] = str(sum(phq_answers)) if phq_answers else ""
+        row_data[21] = str(sum(gad_answers)) if gad_answers else ""
+
+        # W: Trust, X: Comfort, Y: Empathy
+        row_data[22] = str(st.session_state.get("trust", ""))
+        row_data[23] = str(st.session_state.get("comfort", ""))
+        row_data[24] = str(st.session_state.get("empathy", ""))
+
+        # Z: Feedback
+        row_data[25] = str(st.session_state.get("feedback", ""))
+
+        # Write the row to the correct row index
+        sheet.update(f"A{row_index}:Z{row_index}", [row_data])
+        print(f"✅ Wrote Elli data to row {row_index}")
+    except Exception as e:
+        st.error(f"❌ Final data write failed: {e}")
+
 st.set_page_config(page_title="Elli - Mental Health Assistant", page_icon="🌱")
 st.title("🌱 Elli – Your Mental Health Companion")
 
@@ -389,21 +458,7 @@ if user_input:
         elif st.session_state.feedback_final_asked and st.session_state.feedback == "":
             st.session_state.feedback = user_input
             try:
-                data = {
-                    
-                    "gender": st.session_state.get("gender", ""),
-                    "age": st.session_state.get("age", ""),
-                    "initial_feeling": st.session_state.get("initial_feeling", ""),
-                    "phq_total": sum(st.session_state.get("phq_answers", [])),
-                    "gad_total": sum(st.session_state.get("gad_answers", [])),
-                    "elli_interp": st.session_state.get("elli_interp", ""),  
-                    "trust": st.session_state.get("trust", ""),
-                    "comfort": st.session_state.get("comfort", ""),
-                    "empathy": st.session_state.get("empathy", ""),
-                    "initial_mood": st.session_state.messages[2]["content"] if len(st.session_state.messages) > 2 else "",
-                    "user_reflection": st.session_state.get("feedback", ""),
-                }
-                append_to_google_sheet(data)
+                log_row_elli_final()
                 closing = f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"
                 st.session_state.messages.append({"role": "bot", "content": closing})
                 log_message_to_sheet("bot", closing)

@@ -114,24 +114,27 @@ def log_row(row_data_dict):
         client = gspread.authorize(creds)
         sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"]).sheet1
 
-        existing_rows = sheet.get_all_values()
-        row_index = 2
-        while row_index <= len(existing_rows):
-            row = existing_rows[row_index - 1]
-            if all(cell.strip() == "" for cell in row[:26]):
-                break
-            row_index += 1
+        # 👇 Use or determine session row
+        if "row_index" not in st.session_state:
+            existing_rows = sheet.get_all_values()
+            row_index = 2
+            while row_index <= len(existing_rows):
+                row = existing_rows[row_index - 1]
+                if all(cell.strip() == "" for cell in row[:26]):
+                    break
+                row_index += 1
+            if row_index > len(existing_rows):
+                sheet.append_row([""] * 26)
+            st.session_state["row_index"] = row_index
+        else:
+            row_index = st.session_state["row_index"]
 
-        if row_index > len(existing_rows):
-            sheet.append_row([""] * 26)  # ensure row exists
-
-        # Get existing values to avoid overwriting
+        # Fetch and prepare row
         existing_row = sheet.row_values(row_index)
-        existing_row += [""] * (26 - len(existing_row))  # pad
-
-        # Map the input data dict (like {"A": "static", "B": "25"}) to row index
-        col_map = {chr(65 + i): i for i in range(26)}  # A-Z to 0-25
+        existing_row += [""] * (26 - len(existing_row))
+        col_map = {chr(65 + i): i for i in range(26)}
         new_row = existing_row.copy()
+
         for col_letter, value in row_data_dict.items():
             col_index = col_map[col_letter]
             if new_row[col_index].strip() == "":
@@ -141,6 +144,7 @@ def log_row(row_data_dict):
         print(f"✅ Logged progress at row {row_index}")
     except Exception as e:
         st.error(f"❌ Intermediate data write failed: {e}")
+
 
 
 def log_row_static_final():
@@ -242,11 +246,18 @@ if not st.session_state.main_done:
         if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "demographic", "question": dq["label"], "answer": answer, "elapsed": elapsed})
-            row = {
-                "A": "static",
-                "B": str(answer)
-            }
+            if dq["key"] == "age":
+                row = {
+                    "A": "static",
+                    "B": str(answer)
+                }
+            elif dq["key"] == "gender":
+                row = {
+                    "A": "static",
+                    "C": str(answer)
+                }
             log_row(row)
+
             row = build_row_with_progress(f"demographic_{idx+1}")
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1

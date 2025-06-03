@@ -332,7 +332,6 @@ if user_input:
                 st.stop()
 
     elif step == "feedback":
-        # Trust question
         if st.session_state.feedback_trust_asked and st.session_state.trust == 0:
             try:
                 trust_score = int(user_input)
@@ -351,7 +350,6 @@ if user_input:
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.rerun()
-        # Comfort question
         elif st.session_state.feedback_comfort_asked and st.session_state.comfort == 0:
             try:
                 comfort_score = int(user_input)
@@ -370,7 +368,6 @@ if user_input:
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.rerun()
-        # Empathy question
         elif st.session_state.feedback_empathy_asked and st.session_state.empathy == 0:
             try:
                 empathy_score = int(user_input)
@@ -389,7 +386,6 @@ if user_input:
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.rerun()
-        # Open feedback
         elif st.session_state.feedback_final_asked and st.session_state.feedback == "":
             st.session_state.feedback = user_input
             try:
@@ -419,7 +415,6 @@ if user_input:
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.error(f"Error: {e}")
-        # Fallback: start with trust question if no flags set
         elif not (st.session_state.feedback_trust_asked or st.session_state.feedback_comfort_asked or st.session_state.feedback_empathy_asked or st.session_state.feedback_final_asked):
             bot_msg = "To finish, how much did you feel you could trust Elli? (1–5)"
             st.session_state.messages.append({"role": "bot", "content": bot_msg})

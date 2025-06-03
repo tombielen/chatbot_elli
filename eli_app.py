@@ -318,7 +318,7 @@ if user_input:
                 summary_msgs = [
                     "Here’s a gentle summary of what you’ve shared:",
                     summary,
-                    "To finish, how much did you feel you could trust Elli? (1–5)"
+                    "How much did you feel you could trust Elli? (1–5)"
                 ]
                 for msg in summary_msgs:
                     if not any(existing_msg["content"] == msg for existing_msg in st.session_state.messages):
@@ -390,7 +390,7 @@ if user_input:
             st.session_state.feedback = user_input
             try:
                 data = {
-                    "name": st.session_state.get("name", ""),
+                    
                     "gender": st.session_state.get("gender", ""),
                     "age": st.session_state.get("age", ""),
                     "initial_feeling": st.session_state.get("initial_feeling", ""),
@@ -423,7 +423,7 @@ if user_input:
             st.session_state.feedback_final_asked
         ]):
             if st.session_state.trust == 0:
-                bot_msg = "To finish, how much did you feel you could trust Elli? (1–5)"
+                bot_msg = "How much did you feel you could trust Elli? (1–5)"
                 st.session_state.feedback_trust_asked = True
             elif st.session_state.comfort == 0:
                 bot_msg = "How comfortable did you feel interacting with Elli? (1–5)"

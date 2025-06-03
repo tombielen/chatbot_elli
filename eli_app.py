@@ -63,7 +63,6 @@ def log_row_elli_final():
         client = get_gsheet_client()
         sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"]).sheet1
 
-        # Assign a row for this session if not already done
         if "row_index" not in st.session_state:
             existing_rows = sheet.get_all_values()
             row_index = 2
@@ -79,22 +78,16 @@ def log_row_elli_final():
 
         row_data = [""] * 26  # A-Z
 
-        # A: Version
         row_data[0] = "Elli"
 
-        # B: Age
         row_data[1] = str(st.session_state.get("age", ""))
 
-        # C: Gender
         row_data[2] = str(st.session_state.get("gender", ""))
 
-        # D: Mood (user + Elli's response)
         user_mood = st.session_state.get("initial_mood", "")
         elli_mood_response = ""
-        # Find Elli's mood response (the first bot message after user mood input)
         for i, msg in enumerate(st.session_state.messages):
             if msg["role"] == "user" and msg["content"] == user_mood:
-                # Next bot message is Elli's response
                 for j in range(i + 1, len(st.session_state.messages)):
                     next_msg = st.session_state.messages[j]
                     if next_msg["role"] == "bot":
@@ -104,35 +97,26 @@ def log_row_elli_final():
         if user_mood or elli_mood_response:
             row_data[3] = f"User: {user_mood}\nElli: {elli_mood_response}"
 
-        # E–M: PHQ-9 answers (Likert scale values 0–3)
         phq_answers = st.session_state.get("phq_answers", [])
         for i in range(9):
             row_data[4 + i] = str(phq_answers[i]) if i < len(phq_answers) else ""
 
-        # N–T: GAD-7 answers (Likert scale values 0–3)
         gad_answers = st.session_state.get("gad_answers", [])
         for i in range(7):
             row_data[13 + i] = str(gad_answers[i]) if i < len(gad_answers) else ""
 
-        # U: Total PHQ
         row_data[20] = str(sum(phq_answers)) if phq_answers else ""
 
-        # V: Total GAD
         row_data[21] = str(sum(gad_answers)) if gad_answers else ""
 
-        # W: Trust
         row_data[22] = str(st.session_state.get("trust", ""))
 
-        # X: Comfort
         row_data[23] = str(st.session_state.get("comfort", ""))
 
-        # Y: Empathy
         row_data[24] = str(st.session_state.get("empathy", ""))
 
-        # Z: Feedback
         row_data[25] = str(st.session_state.get("feedback", ""))
 
-        # Write the row to the correct row index
         sheet.update(f"A{row_index}:Z{row_index}", [row_data])
         print(f"✅ Wrote Elli data to row {row_index}")
     except Exception as e:

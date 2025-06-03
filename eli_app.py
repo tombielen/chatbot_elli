@@ -340,12 +340,12 @@ if user_input:
                 bot_msg = "Thank you. How comfortable did you feel interacting with Elli? (1–5)"
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
-                st.stop()
+                st.rerun()
             except ValueError:
                 bot_msg = "Please enter a number from 1 to 5."
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
-                st.stop()
+                st.rerun()
         # 2. Comfort question
         elif st.session_state.feedback_comfort_asked and st.session_state.comfort == 0:
             try:
@@ -359,12 +359,12 @@ if user_input:
                 bot_msg = "Thanks. Finally, do you have any thoughts or feedback about this experience?"
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
-                st.stop()
+                st.rerun()
             except ValueError:
                 bot_msg = "Please enter a number from 1 to 5."
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
-                st.stop()
+                st.rerun()
         # 3. Open feedback
         elif st.session_state.feedback_final_asked and st.session_state.feedback == "":
             st.session_state.feedback = user_input
@@ -388,7 +388,7 @@ if user_input:
                 log_message_to_sheet("bot", closing)
                 st.session_state.feedback_final_asked = False
                 st.session_state.step = "done"
-                st.stop()
+                st.rerun()
             except Exception as e:
                 bot_msg = "An error occurred while processing your feedback. Please try again later."
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})

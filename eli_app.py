@@ -339,37 +339,35 @@ if user_input:
                 if trust_score not in [1, 2, 3, 4, 5]:
                     raise ValueError
                 st.session_state.trust = trust_score
+                bot_msg = "Thank you. How comfortable did you feel interacting with Elli? (1–5)"
+                st.session_state.messages.append({"role": "bot", "content": bot_msg})
+                log_message_to_sheet("bot", bot_msg)
+                st.session_state.feedback_comfort_asked = True
+                st.stop()
             except ValueError:
                 bot_msg = "Please enter a number from 1 to 5."
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.stop()
-        if st.session_state.trust != 0 and not st.session_state.feedback_comfort_asked:
-            bot_msg = "Thank you. How comfortable did you feel interacting with Elli? (1–5)"
-            st.session_state.messages.append({"role": "bot", "content": bot_msg})
-            log_message_to_sheet("bot", bot_msg)
-            st.session_state.feedback_comfort_asked = True
-            st.stop()
         elif st.session_state.comfort == 0 and st.session_state.feedback_comfort_asked:
             try:
                 comfort_score = int(user_input)
                 if comfort_score not in [1, 2, 3, 4, 5]:
                     raise ValueError
                 st.session_state.comfort = comfort_score
+                bot_msg = "Thanks. Finally, do you have any thoughts or feedback about this experience?"
+                st.session_state.messages.append({"role": "bot", "content": bot_msg})
+                log_message_to_sheet("bot", bot_msg)
+                st.session_state.feedback_final_asked = True
+                st.stop()
             except ValueError:
                 bot_msg = "Please enter a number from 1 to 5."
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.stop()
-        if st.session_state.comfort != 0 and not st.session_state.feedback_final_asked:
-            bot_msg = "Thanks. Finally, do you have any thoughts or feedback about this experience?"
-            st.session_state.messages.append({"role": "bot", "content": bot_msg})
-            log_message_to_sheet("bot", bot_msg)
-            st.session_state.feedback_final_asked = True
-            st.stop()
         elif st.session_state.feedback == "" and st.session_state.feedback_final_asked:
+            st.session_state.feedback = user_input
             try:
-                st.session_state.feedback = user_input
                 data = {
                     "name": st.session_state.get("name", ""),
                     "gender": st.session_state.get("gender", ""),

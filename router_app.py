@@ -16,7 +16,7 @@ Your responses will be used anonymously for academic research. All data will be 
 
 You may withdraw at any time before submitting your responses. If you later wish to delete your data, you can contact the lead researcher by email.
 
-This study is conducted by **Tom Bielen** (tom2004.bielen@gmail.com), BSc in Applied Psychology.
+This study is conducted by **Tom Bielen** (tom.bielen@iu-study.org), BSc in Applied Psychology.
 
 ---
 
@@ -26,7 +26,7 @@ This study is conducted by **Tom Bielen** (tom2004.bielen@gmail.com), BSc in App
 - No personally identifying data is collected.
 - All responses are stored on **secure, encrypted servers**.
 - Data will only be used for academic research and may be published in aggregated form.
-- If you wish to have your data deleted after participation, contact **tom2004.bielen@gmail.com**.
+- If you wish to have your data deleted after participation, contact **tom.bielen@iu-study.org**.
 
 ---
 

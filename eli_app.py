@@ -370,6 +370,7 @@ if user_input:
                 gad_total = sum(st.session_state.gad_answers)
                 phq_interp = interpret(phq_total, "phq")
                 gad_interp = interpret(gad_total, "gad")
+                user_name = st.session_state.get("name", "there")
                 summary = summarize_results(
                     phq_total,
                     phq_interp,
@@ -379,7 +380,7 @@ if user_input:
                 )
                 st.session_state.step = "feedback"
                 summary_msgs = [
-                    "Here’s a gentle summary of what you’ve shared:",
+                    f"Here’s a gentle summary of what you’ve shared, {user_name}:",
                     summary,
                     "How much did you feel you could trust Elli? (1–5)"
                 ]
@@ -487,5 +488,3 @@ if user_input:
             st.session_state.messages.append({"role": "bot", "content": bot_msg})
             log_message_to_sheet("bot", bot_msg)
             st.rerun()
-if st.session_state.get("step") == "done":
-    st.info("Thank you for your participation! You may now close this window.")

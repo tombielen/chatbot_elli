@@ -310,17 +310,18 @@ if user_input:
                     mood_text=st.session_state.initial_mood
                 )
                 st.session_state.step = "feedback"
-                follow_up = [
+                summary_msgs = [
                     "Here’s a gentle summary of what you’ve shared:",
-                    summary
+                    summary,
+                    "To finish, how much did you feel you could trust Elli? (1–5)"
                 ]
-                for msg in follow_up:
+                for msg in summary_msgs:
                     if not any(existing_msg["content"] == msg for existing_msg in st.session_state.messages):
                         st.session_state.messages.append({"role": "bot", "content": msg})
                         log_message_to_sheet("bot", msg)
                     with st.chat_message("assistant", avatar="assets/elli_avatar.png"):
                         st.markdown(msg)
-                st.session_state.feedback_trust_asked = False
+                st.session_state.feedback_trust_asked = True
                 st.session_state.feedback_comfort_asked = False
                 st.session_state.feedback_final_asked = False
                 st.stop()

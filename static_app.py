@@ -87,7 +87,6 @@ for key, default in {
     if key not in st.session_state:
         st.session_state[key] = default
 
-# --- Helper: Build row for Google Sheets ---
 def build_row_with_progress(step_label, phq9_score=None, phq9_interp=None, gad7_score=None, gad7_interp=None):
     row = []
     row.append(st.session_state["session_id"])
@@ -129,7 +128,6 @@ def log_row(row_data_dict):
         else:
             row_index = st.session_state["row_index"]
 
-        # Fetch and prepare row
         existing_row = sheet.row_values(row_index)
         existing_row += [""] * (26 - len(existing_row))
         col_map = {chr(65 + i): i for i in range(26)}
@@ -154,9 +152,7 @@ def log_row_static_final():
         client = gspread.authorize(creds)
         sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"]).sheet1
 
-        # Use the same row index as for progress logging
         if "row_index" not in st.session_state:
-            # Find the next empty row (should only happen for a new session)
             existing_rows = sheet.get_all_values()
             row_index = 2
             while row_index <= len(existing_rows):
@@ -169,37 +165,30 @@ def log_row_static_final():
         else:
             row_index = st.session_state["row_index"]
 
-        # Build the row based on the A-Z column spec
-        row_data = [""] * 26  # A-Z
+        row_data = [""] * 26  
 
-        row_data[0] = "static"  # A: Version
-        row_data[1] = str(st.session_state.get("age", ""))  # B: Age
-        row_data[2] = str(st.session_state.get("gender", ""))  # C: Gender
-        # D is skipped for static version (mood)
+        row_data[0] = "static"  
+        row_data[1] = str(st.session_state.get("age", ""))  
+        row_data[2] = str(st.session_state.get("gender", ""))  
 
-        # E–M: PHQ-9
         phq_answers = [a["answer"] for a in st.session_state.answers if a["type"] == "phq9"]
         for i in range(min(9, len(phq_answers))):
             row_data[4 + i] = str(scale.index(phq_answers[i]))
 
-        # N–T: GAD-7
+
         gad_answers = [a["answer"] for a in st.session_state.answers if a["type"] == "gad7"]
         for i in range(min(7, len(gad_answers))):
             row_data[13 + i] = str(scale.index(gad_answers[i]))
 
-        # U: Total PHQ, V: Total GAD
         row_data[20] = str(sum(scale.index(ans) for ans in phq_answers))  # U
         row_data[21] = str(sum(scale.index(ans) for ans in gad_answers))  # V
 
-        # W–Y: Trust, Comfort, Empathy
         row_data[22] = str(st.session_state.get("trust", ""))
         row_data[23] = str(st.session_state.get("comfort", ""))
         row_data[24] = str(st.session_state.get("empathy", ""))
 
-        # Z: Feedback
         row_data[25] = str(st.session_state.get("feedback", ""))
 
-        # Write the row to the correct row index
         sheet.update(f"A{row_index}:Z{row_index}", [row_data])
         print(f"✅ Wrote static data to row {row_index}")
     except Exception as e:
@@ -218,9 +207,9 @@ if not st.session_state.main_done:
             st.session_state.answers.append({"type": "phq9", "question": q, "answer": answer, "elapsed": elapsed})
             row = {
                 "A": "static",
-                f"{chr(69 + current)}": str(scale.index(answer))  # E=69 in ASCII, for PHQ1–PHQ9 (E–M)
+                f"{chr(69 + current)}": str(scale.index(answer))  
             }
-            if current + 1 == len(phq9_items):  # Last PHQ question
+            if current + 1 == len(phq9_items):  
                 total_phq9 = sum(scale.index(a["answer"]) for a in st.session_state.answers if a["type"] == "phq9")
                 row["U"] = str(total_phq9)
                 log_row(row)
@@ -242,9 +231,9 @@ if not st.session_state.main_done:
             st.session_state.answers.append({"type": "gad7", "question": q, "answer": answer, "elapsed": elapsed})
             row = {
                 "A": "static",
-                f"{chr(78 + idx)}": str(scale.index(answer))  # N=78 for GAD1–GAD7 (N–T)
+                f"{chr(78 + idx)}": str(scale.index(answer))  
             }
-            if current + 1 == len(phq9_items) + len(gad7_items):  # Last GAD question
+            if current + 1 == len(phq9_items) + len(gad7_items):  
                 total_gad7 = sum(scale.index(a["answer"]) for a in st.session_state.answers if a["type"] == "gad7")
                 row["V"] = str(total_gad7)
                 log_row(row)

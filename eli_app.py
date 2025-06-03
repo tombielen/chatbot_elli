@@ -323,6 +323,7 @@ if user_input:
                 st.session_state.feedback_trust_asked = False
                 st.session_state.feedback_comfort_asked = False
                 st.session_state.feedback_final_asked = False
+                st.stop()
 
     elif step == "feedback":
         if not st.session_state.feedback_trust_asked:

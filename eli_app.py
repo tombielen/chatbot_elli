@@ -327,7 +327,6 @@ if user_input:
                 st.stop()
 
     elif step == "feedback":
-        # 1. Trust question
         if st.session_state.feedback_trust_asked and st.session_state.trust == 0:
             try:
                 trust_score = int(user_input)
@@ -335,7 +334,7 @@ if user_input:
                     raise ValueError
                 st.session_state.trust = trust_score
                 st.session_state.feedback_trust_asked = False
-                st.session_state.comfort = 0  # <-- Reset comfort before asking
+                st.session_state.comfort = 0  
                 st.session_state.feedback_comfort_asked = True
                 bot_msg = "Thank you. How comfortable did you feel interacting with Elli? (1–5)"
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
@@ -346,7 +345,6 @@ if user_input:
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.rerun()
-        # 2. Comfort question
         elif st.session_state.feedback_comfort_asked and st.session_state.comfort == 0:
             try:
                 comfort_score = int(user_input)
@@ -354,7 +352,7 @@ if user_input:
                     raise ValueError
                 st.session_state.comfort = comfort_score
                 st.session_state.feedback_comfort_asked = False
-                st.session_state.feedback = ""  # <-- Reset feedback before asking
+                st.session_state.feedback = ""  
                 st.session_state.feedback_final_asked = True
                 bot_msg = "Thanks. Finally, do you have any thoughts or feedback about this experience?"
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
@@ -365,7 +363,6 @@ if user_input:
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.rerun()
-        # 3. Open feedback
         elif st.session_state.feedback_final_asked and st.session_state.feedback == "":
             st.session_state.feedback = user_input
             try:

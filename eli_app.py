@@ -47,6 +47,7 @@ def append_to_google_sheet(data):
             data.get("elli_interp", ""),
             data.get("trust", ""),
             data.get("comfort", ""),
+            data.get("empathy", ""),
             data.get("initial_mood", ""),
             data.get("user_reflection", ""),
             "chatbot"
@@ -87,6 +88,10 @@ if "feedback_comfort_asked" not in st.session_state:
     st.session_state.feedback_comfort_asked = False
 if "feedback_final_asked" not in st.session_state:
     st.session_state.feedback_final_asked = False
+if "feedback_empathy_asked" not in st.session_state:
+    st.session_state.feedback_empathy_asked = False
+if "empathy" not in st.session_state:
+    st.session_state.empathy = 0
 
 PHQ_9_QUESTIONS = [
     "Little interest or pleasure in doing things?",
@@ -327,6 +332,7 @@ if user_input:
                 st.stop()
 
     elif step == "feedback":
+        # Trust question
         if st.session_state.feedback_trust_asked and st.session_state.trust == 0:
             try:
                 trust_score = int(user_input)
@@ -334,7 +340,7 @@ if user_input:
                     raise ValueError
                 st.session_state.trust = trust_score
                 st.session_state.feedback_trust_asked = False
-                st.session_state.comfort = 0  
+                st.session_state.comfort = 0
                 st.session_state.feedback_comfort_asked = True
                 bot_msg = "Thank you. How comfortable did you feel interacting with Elli? (1–5)"
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
@@ -345,6 +351,7 @@ if user_input:
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.rerun()
+        # Comfort question
         elif st.session_state.feedback_comfort_asked and st.session_state.comfort == 0:
             try:
                 comfort_score = int(user_input)
@@ -352,7 +359,26 @@ if user_input:
                     raise ValueError
                 st.session_state.comfort = comfort_score
                 st.session_state.feedback_comfort_asked = False
-                st.session_state.feedback = ""  
+                st.session_state.empathy = 0
+                st.session_state.feedback_empathy_asked = True
+                bot_msg = "And how empathic did you find Elli? (1–5)"
+                st.session_state.messages.append({"role": "bot", "content": bot_msg})
+                log_message_to_sheet("bot", bot_msg)
+                st.rerun()
+            except ValueError:
+                bot_msg = "Please enter a number from 1 to 5."
+                st.session_state.messages.append({"role": "bot", "content": bot_msg})
+                log_message_to_sheet("bot", bot_msg)
+                st.rerun()
+        # Empathy question
+        elif st.session_state.feedback_empathy_asked and st.session_state.empathy == 0:
+            try:
+                empathy_score = int(user_input)
+                if empathy_score not in [1, 2, 3, 4, 5]:
+                    raise ValueError
+                st.session_state.empathy = empathy_score
+                st.session_state.feedback_empathy_asked = False
+                st.session_state.feedback = ""
                 st.session_state.feedback_final_asked = True
                 bot_msg = "Thanks. Finally, do you have any thoughts or feedback about this experience?"
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
@@ -363,6 +389,7 @@ if user_input:
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.rerun()
+        # Open feedback
         elif st.session_state.feedback_final_asked and st.session_state.feedback == "":
             st.session_state.feedback = user_input
             try:
@@ -376,6 +403,7 @@ if user_input:
                     "elli_interp": st.session_state.get("elli_interp", ""),  
                     "trust": st.session_state.get("trust", ""),
                     "comfort": st.session_state.get("comfort", ""),
+                    "empathy": st.session_state.get("empathy", ""),
                     "initial_mood": st.session_state.messages[2]["content"] if len(st.session_state.messages) > 2 else "",
                     "user_reflection": st.session_state.get("feedback", ""),
                 }
@@ -391,9 +419,10 @@ if user_input:
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.error(f"Error: {e}")
-        elif not (st.session_state.feedback_trust_asked or st.session_state.feedback_comfort_asked or st.session_state.feedback_final_asked):
+        # Fallback: start with trust question if no flags set
+        elif not (st.session_state.feedback_trust_asked or st.session_state.feedback_comfort_asked or st.session_state.feedback_empathy_asked or st.session_state.feedback_final_asked):
             bot_msg = "To finish, how much did you feel you could trust Elli? (1–5)"
             st.session_state.messages.append({"role": "bot", "content": bot_msg})
             log_message_to_sheet("bot", bot_msg)
             st.session_state.feedback_trust_asked = True
-            st.stop()
+            st.rerun()

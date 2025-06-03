@@ -71,6 +71,7 @@ demographic_questions = [
 feedback_questions = [
     {"label": "How much did you trust the questionnaire process?", "type": "radio", "options": [1, 2, 3, 4, 5], "key": "trust"},
     {"label": "How comfortable did you feel while answering?", "type": "radio", "options": [1, 2, 3, 4, 5], "key": "comfort"},
+    {"label": "How empathic did you find the questionnaire?", "type": "radio", "options": [1, 2, 3, 4, 5], "key": "empathy"},
     {"label": "Do you have any feedback about your experience?", "type": "text", "key": "feedback"}
 ]
 

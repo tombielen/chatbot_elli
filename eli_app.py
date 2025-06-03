@@ -335,6 +335,7 @@ if user_input:
                     raise ValueError
                 st.session_state.trust = trust_score
                 st.session_state.feedback_trust_asked = False
+                st.session_state.comfort = 0  # <-- Reset comfort before asking
                 st.session_state.feedback_comfort_asked = True
                 bot_msg = "Thank you. How comfortable did you feel interacting with Elli? (1–5)"
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
@@ -353,6 +354,7 @@ if user_input:
                     raise ValueError
                 st.session_state.comfort = comfort_score
                 st.session_state.feedback_comfort_asked = False
+                st.session_state.feedback = ""  # <-- Reset feedback before asking
                 st.session_state.feedback_final_asked = True
                 bot_msg = "Thanks. Finally, do you have any thoughts or feedback about this experience?"
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
@@ -393,9 +395,4 @@ if user_input:
                 log_message_to_sheet("bot", bot_msg)
                 st.error(f"Error: {e}")
         # If no feedback flags are set, start with trust question
-        elif not (st.session_state.feedback_trust_asked or st.session_state.feedback_comfort_asked or st.session_state.feedback_final_asked):
-            bot_msg = "To finish, how much did you feel you could trust Elli? (1–5)"
-            st.session_state.messages.append({"role": "bot", "content": bot_msg})
-            log_message_to_sheet("bot", bot_msg)
-            st.session_state.feedback_trust_asked = True
-            st.stop()
+        elif not (st.session

@@ -415,9 +415,26 @@ if user_input:
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.error(f"Error: {e}")
-        elif not (st.session_state.feedback_trust_asked or st.session_state.feedback_comfort_asked or st.session_state.feedback_empathy_asked or st.session_state.feedback_final_asked):
-            bot_msg = "To finish, how much did you feel you could trust Elli? (1–5)"
+
+        elif st.session_state.step == "feedback" and not any([
+            st.session_state.feedback_trust_asked,
+            st.session_state.feedback_comfort_asked,
+            st.session_state.feedback_empathy_asked,
+            st.session_state.feedback_final_asked
+        ]):
+            if st.session_state.trust == 0:
+                bot_msg = "To finish, how much did you feel you could trust Elli? (1–5)"
+                st.session_state.feedback_trust_asked = True
+            elif st.session_state.comfort == 0:
+                bot_msg = "How comfortable did you feel interacting with Elli? (1–5)"
+                st.session_state.feedback_comfort_asked = True
+            elif st.session_state.empathy == 0:
+                bot_msg = "And how empathic did you find Elli? (1–5)"
+                st.session_state.feedback_empathy_asked = True
+            else:
+                bot_msg = "Finally, do you have any thoughts or feedback about this experience?"
+                st.session_state.feedback_final_asked = True
+
             st.session_state.messages.append({"role": "bot", "content": bot_msg})
             log_message_to_sheet("bot", bot_msg)
-            st.session_state.feedback_trust_asked = True
             st.rerun()

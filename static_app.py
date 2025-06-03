@@ -107,16 +107,57 @@ def build_row_with_progress(step_label, phq9_score=None, phq9_interp=None, gad7_
         row += [str(phq9_score), str(phq9_interp), str(gad7_score), str(gad7_interp)]
     return row
 
-def log_row(row):
+def log_row_static_final():
     try:
         scope = ["https://www.googleapis.com/auth/spreadsheets"]
         creds = Credentials.from_service_account_info(st.secrets["google_sheets"], scopes=scope)
         client = gspread.authorize(creds)
-        sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"])
-        worksheet = sheet.sheet1
-        worksheet.append_row(row, value_input_option="USER_ENTERED")
+        sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"]).sheet1
+
+        # Find the next empty row in columns A–Z (row 2+)
+        existing_rows = sheet.get_all_values()
+        row_index = 2
+        while row_index <= len(existing_rows):
+            if all(cell.strip() == "" for cell in existing_rows[row_index - 1][:26]):
+                break
+            row_index += 1
+
+        # Build the row based on the A-Z column spec
+        row_data = [""] * 26  # A-Z
+
+        row_data[0] = "static"  # A: Version
+        row_data[1] = str(st.session_state.get("age", ""))  # B: Age
+        row_data[2] = str(st.session_state.get("gender", ""))  # C: Gender
+        # D is skipped for static version (mood)
+
+        # E–M: PHQ-9
+        phq_answers = [a["answer"] for a in st.session_state.answers if a["type"] == "phq9"]
+        for i in range(min(9, len(phq_answers))):
+            row_data[4 + i] = str(scale.index(phq_answers[i]))
+
+        # N–T: GAD-7
+        gad_answers = [a["answer"] for a in st.session_state.answers if a["type"] == "gad7"]
+        for i in range(min(7, len(gad_answers))):
+            row_data[13 + i] = str(scale.index(gad_answers[i]))
+
+        # U: Total PHQ, V: Total GAD
+        row_data[20] = str(sum(scale.index(ans) for ans in phq_answers))  # U
+        row_data[21] = str(sum(scale.index(ans) for ans in gad_answers))  # V
+
+        # W–Y: Trust, Comfort, Empathy
+        row_data[22] = str(st.session_state.get("trust", ""))
+        row_data[23] = str(st.session_state.get("comfort", ""))
+        row_data[24] = str(st.session_state.get("empathy", ""))
+
+        # Z: Feedback
+        row_data[25] = str(st.session_state.get("feedback", ""))
+
+        # Write the row
+        sheet.update(f"A{row_index}:Z{row_index}", [row_data])
+        print(f"✅ Wrote static data to row {row_index}")
     except Exception as e:
-        st.error(f"❌ Data submission failed: {e}")
+        st.error(f"❌ Final data write failed: {e}")
+
 
 # --- Form Logic ---
 if not st.session_state.main_done:
@@ -208,18 +249,12 @@ if st.session_state.main_done and not st.session_state.feedback_done:
             st.rerun()
     else:
         try:
-            row = build_row_with_progress(
-                "complete",
-                phq9_score=total_phq9,
-                phq9_interp=phq_interp,
-                gad7_score=total_gad7,
-                gad7_interp=gad_interp
-            )
-            log_row(row)
+            log_row_static_final()
             st.success("✅ Your responses and feedback have been logged. Thank you for participating!")
             st.session_state.feedback_done = True
         except Exception as e:
             st.error(f"❌ Data submission failed: {e}")
+
 
 if st.session_state.feedback_done:
     st.info("You have already submitted your feedback. Thank you!")

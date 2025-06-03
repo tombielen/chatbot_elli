@@ -459,7 +459,7 @@ if user_input:
                 log_message_to_sheet("bot", closing)
                 st.session_state.feedback_final_asked = False
                 st.session_state.step = "done"
-                st.experimental_rerun()
+                st.rerun()
             except Exception as e:
                 bot_msg = "An error occurred while processing your feedback. Please try again later."
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})

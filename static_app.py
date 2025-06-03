@@ -165,6 +165,7 @@ if not st.session_state.main_done:
     else:
         st.session_state.main_done = True
         st.session_state.start_time = datetime.now().timestamp()
+        st.session_state.step += 1
         st.rerun()
 
 # --- Results + Feedback ---

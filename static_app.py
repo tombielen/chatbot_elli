@@ -107,6 +107,42 @@ def build_row_with_progress(step_label, phq9_score=None, phq9_interp=None, gad7_
         row += [str(phq9_score), str(phq9_interp), str(gad7_score), str(gad7_interp)]
     return row
 
+def log_row(row_data_dict):
+    try:
+        scope = ["https://www.googleapis.com/auth/spreadsheets"]
+        creds = Credentials.from_service_account_info(st.secrets["google_sheets"], scopes=scope)
+        client = gspread.authorize(creds)
+        sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"]).sheet1
+
+        existing_rows = sheet.get_all_values()
+        row_index = 2
+        while row_index <= len(existing_rows):
+            row = existing_rows[row_index - 1]
+            if all(cell.strip() == "" for cell in row[:26]):
+                break
+            row_index += 1
+
+        if row_index > len(existing_rows):
+            sheet.append_row([""] * 26)  # ensure row exists
+
+        # Get existing values to avoid overwriting
+        existing_row = sheet.row_values(row_index)
+        existing_row += [""] * (26 - len(existing_row))  # pad
+
+        # Map the input data dict (like {"A": "static", "B": "25"}) to row index
+        col_map = {chr(65 + i): i for i in range(26)}  # A-Z to 0-25
+        new_row = existing_row.copy()
+        for col_letter, value in row_data_dict.items():
+            col_index = col_map[col_letter]
+            if new_row[col_index].strip() == "":
+                new_row[col_index] = str(value)
+
+        sheet.update(f"A{row_index}:Z{row_index}", [new_row])
+        print(f"✅ Logged progress at row {row_index}")
+    except Exception as e:
+        st.error(f"❌ Intermediate data write failed: {e}")
+
+
 def log_row_static_final():
     try:
         scope = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -169,8 +205,12 @@ if not st.session_state.main_done:
         if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "phq9", "question": q, "answer": answer, "elapsed": elapsed})
-            row = build_row_with_progress(f"phq9_{current+1}")
+            row = {
+                "A": "static",
+                f"{chr(69 + current)}": str(scale.index(answer))  # E=69 in ASCII, for PHQ1–PHQ9 (E–M)
+            }
             log_row(row)
+            row = build_row_with_progress(f"phq9_{current+1}")
             st.session_state.step += 1
             st.session_state.start_time = datetime.now().timestamp()
             st.rerun()
@@ -182,8 +222,12 @@ if not st.session_state.main_done:
         if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "gad7", "question": q, "answer": answer, "elapsed": elapsed})
-            row = build_row_with_progress(f"gad7_{idx+1}")
+            row = {
+                "A": "static",
+                f"{chr(78 + idx)}": str(scale.index(answer))  # N=78 for GAD1–GAD7 (N–T)
+            }
             log_row(row)
+            row = build_row_with_progress(f"gad7_{idx+1}")
             st.session_state.step += 1
             st.session_state.start_time = datetime.now().timestamp()
             st.rerun()
@@ -198,8 +242,12 @@ if not st.session_state.main_done:
         if st.button("Next", key=f"next_{current}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "demographic", "question": dq["label"], "answer": answer, "elapsed": elapsed})
-            row = build_row_with_progress(f"demographic_{idx+1}")
+            row = {
+                "A": "static",
+                "B": str(answer)
+            }
             log_row(row)
+            row = build_row_with_progress(f"demographic_{idx+1}")
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
             st.rerun()
@@ -242,8 +290,19 @@ if st.session_state.main_done and not st.session_state.feedback_done:
         if st.button("Next", key=f"feedback_next_{feedback_step}"):
             elapsed = datetime.now().timestamp() - st.session_state.start_time
             st.session_state.answers.append({"type": "feedback", "question": fq["label"], "answer": answer, "elapsed": elapsed})
-            row = build_row_with_progress(f"feedback_{feedback_step+1}")
+            column_map = {
+                "trust": "W",
+                "comfort": "X",
+                "empathy": "Y",
+                "feedback": "Z"
+            }
+            row = {
+                "A": "static",
+                column_map[fq["key"]]: str(answer)
+            }
             log_row(row)
+
+            row = build_row_with_progress(f"feedback_{feedback_step+1}")
             st.session_state.start_time = datetime.now().timestamp()
             st.session_state.step += 1
             st.rerun()

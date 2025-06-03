@@ -327,45 +327,44 @@ if user_input:
                 st.stop()
 
     elif step == "feedback":
-        if not st.session_state.feedback_trust_asked:
-            bot_msg = "To finish, how much did you feel you could trust Elli? (1–5)"
-            st.session_state.messages.append({"role": "bot", "content": bot_msg})
-            log_message_to_sheet("bot", bot_msg)
-            st.session_state.feedback_trust_asked = True
-            st.stop()
-        elif st.session_state.trust == 0:
+        # 1. Trust question
+        if st.session_state.feedback_trust_asked and st.session_state.trust == 0:
             try:
                 trust_score = int(user_input)
                 if trust_score not in [1, 2, 3, 4, 5]:
                     raise ValueError
                 st.session_state.trust = trust_score
+                st.session_state.feedback_trust_asked = False
+                st.session_state.feedback_comfort_asked = True
                 bot_msg = "Thank you. How comfortable did you feel interacting with Elli? (1–5)"
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
-                st.session_state.feedback_comfort_asked = True
                 st.stop()
             except ValueError:
                 bot_msg = "Please enter a number from 1 to 5."
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.stop()
-        elif st.session_state.comfort == 0 and st.session_state.feedback_comfort_asked:
+        # 2. Comfort question
+        elif st.session_state.feedback_comfort_asked and st.session_state.comfort == 0:
             try:
                 comfort_score = int(user_input)
                 if comfort_score not in [1, 2, 3, 4, 5]:
                     raise ValueError
                 st.session_state.comfort = comfort_score
+                st.session_state.feedback_comfort_asked = False
+                st.session_state.feedback_final_asked = True
                 bot_msg = "Thanks. Finally, do you have any thoughts or feedback about this experience?"
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
-                st.session_state.feedback_final_asked = True
                 st.stop()
             except ValueError:
                 bot_msg = "Please enter a number from 1 to 5."
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.stop()
-        elif st.session_state.feedback == "" and st.session_state.feedback_final_asked:
+        # 3. Open feedback
+        elif st.session_state.feedback_final_asked and st.session_state.feedback == "":
             st.session_state.feedback = user_input
             try:
                 data = {
@@ -385,6 +384,7 @@ if user_input:
                 closing = f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"
                 st.session_state.messages.append({"role": "bot", "content": closing})
                 log_message_to_sheet("bot", closing)
+                st.session_state.feedback_final_asked = False
                 st.session_state.step = "done"
                 st.stop()
             except Exception as e:
@@ -392,3 +392,10 @@ if user_input:
                 st.session_state.messages.append({"role": "bot", "content": bot_msg})
                 log_message_to_sheet("bot", bot_msg)
                 st.error(f"Error: {e}")
+        # If no feedback flags are set, start with trust question
+        elif not (st.session_state.feedback_trust_asked or st.session_state.feedback_comfort_asked or st.session_state.feedback_final_asked):
+            bot_msg = "To finish, how much did you feel you could trust Elli? (1–5)"
+            st.session_state.messages.append({"role": "bot", "content": bot_msg})
+            log_message_to_sheet("bot", bot_msg)
+            st.session_state.feedback_trust_asked = True
+            st.stop()

@@ -254,7 +254,7 @@ if user_input:
             elli_intro = f"Hi {name}, I’m Elli. 🌱 I’m here to gently check in with you. How are you feeling today? (2-3 sentences)"
             st.session_state.step = "mood"
         else:
-            elli_intro = "Thanks for sharing. Could you please give me just your name or nickname so I can know how to address you?"
+            elli_intro = "Thanks for sharing. Could you please give me just your name or nickname so I can know how to address you? (Your name will not be stored or used for any other purpose.)"
         st.session_state.messages.append({"role": "bot", "content": elli_intro})
         log_message_to_sheet("bot", elli_intro)
         st.rerun()

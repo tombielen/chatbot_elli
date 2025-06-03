@@ -213,11 +213,18 @@ if not st.session_state.main_done:
                 "A": "static",
                 f"{chr(69 + current)}": str(scale.index(answer))  # E=69 in ASCII, for PHQ1–PHQ9 (E–M)
             }
-            log_row(row)
+            if current + 1 == len(phq9_items):  # Last PHQ question
+                total_phq9 = sum(scale.index(a["answer"]) for a in st.session_state.answers if a["type"] == "phq9")
+                row["U"] = str(total_phq9)
+                log_row(row)
+            else:
+                log_row(row)
+
             row = build_row_with_progress(f"phq9_{current+1}")
             st.session_state.step += 1
             st.session_state.start_time = datetime.now().timestamp()
             st.rerun()
+
     elif current < len(phq9_items) + len(gad7_items):
         idx = current - len(phq9_items)
         q = gad7_items[idx]
@@ -230,11 +237,18 @@ if not st.session_state.main_done:
                 "A": "static",
                 f"{chr(78 + idx)}": str(scale.index(answer))  # N=78 for GAD1–GAD7 (N–T)
             }
-            log_row(row)
+            if current + 1 == len(phq9_items) + len(gad7_items):  # Last GAD question
+                total_gad7 = sum(scale.index(a["answer"]) for a in st.session_state.answers if a["type"] == "gad7")
+                row["V"] = str(total_gad7)
+                log_row(row)
+            else:
+                log_row(row)
+
             row = build_row_with_progress(f"gad7_{idx+1}")
             st.session_state.step += 1
             st.session_state.start_time = datetime.now().timestamp()
             st.rerun()
+
     elif current < len(phq9_items) + len(gad7_items) + len(demographic_questions):
         idx = current - len(phq9_items) - len(gad7_items)
         dq = demographic_questions[idx]
@@ -318,12 +332,8 @@ if st.session_state.main_done and not st.session_state.feedback_done:
             st.session_state.step += 1
             st.rerun()
     else:
-        try:
-            log_row_static_final()
-            st.success("✅ Your responses and feedback have been logged. Thank you for participating!")
-            st.session_state.feedback_done = True
-        except Exception as e:
-            st.error(f"❌ Data submission failed: {e}")
+        st.success("✅ Your responses and feedback have been logged. Thank you for participating!")
+        st.session_state.feedback_done = True
 
 
 if st.session_state.feedback_done:

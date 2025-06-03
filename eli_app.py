@@ -487,3 +487,5 @@ if user_input:
             st.session_state.messages.append({"role": "bot", "content": bot_msg})
             log_message_to_sheet("bot", bot_msg)
             st.rerun()
+if st.session_state.get("step") == "done":
+    st.info("Thank you for your participation! You may now close this window.")

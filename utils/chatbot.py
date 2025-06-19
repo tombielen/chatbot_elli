@@ -1,14 +1,10 @@
 import os
 import sys
 from datetime import datetime
-from dotenv import load_dotenv 
+import streamlit as st
 from openai import OpenAI
 
-load_dotenv() 
-print("Current working directory:", os.getcwd())
-print("API KEY from .env:", os.getenv("OPENAI_API_KEY"))
-
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) 
+client = OpenAI(api_key=st.secrets["openai"]["api_key"])
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 

@@ -328,7 +328,7 @@ if st.session_state.main_done and not st.session_state.feedback_done:
             st.session_state.step += 1
             st.rerun()
     else:
-        st.success("✅ Your responses and feedback have been logged. Thank you for participating!")
+        st.success("✅ Your responses and feedback have been logged. Thank you for participating!The following code gives you Karma that can be used to get free research participants at SurveySwap.io.  Go to: https://surveyswap.io/sr/28OB-1306-INE4 . Or, alternatively, enter the code manually: 28OB-1306-INE4")
         st.session_state.feedback_done = True
 
 

@@ -454,7 +454,7 @@ if user_input:
             st.session_state.feedback = user_input
             try:
                 log_row_elli_final()
-                closing = f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻"
+                closing = f"Thanks so much for checking in today, {st.session_state.name}. Wishing you care and calm. 🌻 The following code gives you Karma that can be used to get free research participants at SurveySwap.io. Go to: https://surveyswap.io/sr/28OB-1306-INE4 . Or, alternatively, enter the code manually: 28OB-1306-INE4"
                 st.session_state.messages.append({"role": "bot", "content": closing})
                 log_message_to_sheet("bot", closing)
                 st.session_state.feedback_final_asked = False

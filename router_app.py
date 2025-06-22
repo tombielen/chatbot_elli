@@ -50,7 +50,7 @@ if not st.session_state.consented:
 else:
     if "assigned_url" not in st.session_state:
         static_url = "https://ellistatic.streamlit.app"
-        elli_url = "https://ellichatbot.streamlit.app"
+        elli_url = "https://ellichat.streamlit.app"
         st.session_state.assigned_url = random.choice([static_url, elli_url])
     st.write("Thank you for consenting! You will now be redirected to the study.")
     st.markdown(f"[Click here if you are not redirected automatically.]({st.session_state.assigned_url})")

@@ -113,7 +113,6 @@ def log_row(row_data_dict):
         client = gspread.authorize(creds)
         sheet = client.open_by_key(st.secrets["google_sheets"]["sheet_id"]).sheet1
 
-        # 👇 Use or determine session row
         if "row_index" not in st.session_state:
             existing_rows = sheet.get_all_values()
             row_index = 2
@@ -180,8 +179,8 @@ def log_row_static_final():
         for i in range(min(7, len(gad_answers))):
             row_data[13 + i] = str(scale.index(gad_answers[i]))
 
-        row_data[20] = str(sum(scale.index(ans) for ans in phq_answers))  # U
-        row_data[21] = str(sum(scale.index(ans) for ans in gad_answers))  # V
+        row_data[20] = str(sum(scale.index(ans) for ans in phq_answers))  
+        row_data[21] = str(sum(scale.index(ans) for ans in gad_answers)) 
 
         row_data[22] = str(st.session_state.get("trust", ""))
         row_data[23] = str(st.session_state.get("comfort", ""))
@@ -328,7 +327,7 @@ if st.session_state.main_done and not st.session_state.feedback_done:
             st.session_state.step += 1
             st.rerun()
     else:
-        st.success("✅ Your responses and feedback have been logged. Thank you for participating!The following code gives you Karma that can be used to get free research participants at SurveySwap.io.  Go to: https://surveyswap.io/sr/28OB-1306-INE4 . Or, alternatively, enter the code manually: 28OB-1306-INE4")
+        st.success("✅ Your responses and feedback have been logged. Thank you for participating!")
         st.session_state.feedback_done = True
 
 

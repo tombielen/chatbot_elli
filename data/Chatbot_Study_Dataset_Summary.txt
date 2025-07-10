@@ -1,0 +1,64 @@
+
+Summary of Cleaned Dataset Structure (Chatbot Study)
+
+Dataset title: Chatbot_Study_Data_Cleaned.xlsx
+Rows: Each row corresponds to a unique participant.
+Unit of analysis: Individual participant responses to the experimental interface and assessments.
+
+Inclusion and Exclusion Indicators
+----------------------------------
+Dropout_status:
+  - 0: Participant completed the study and is eligible for analysis
+  - 1: Participant dropped out or was excluded; not included in analysis
+
+Participant_status:
+  - 0: Participant is valid and included
+  - 1: Participant officially dropped out mid-study
+  - 2: Participant excluded due to predefined rules (e.g., underage, technical issue)
+
+Reason:
+  - Text description explaining exclusion or dropout (e.g., “Technical issue”, “Under 18”)
+
+Experimental Condition (Independent Variable)
+---------------------------------------------
+Version:
+  - "Elli": Participant interacted with the conversational GPT-4 chatbot
+  - "static": Participant completed the same questionnaires in a plain static web form
+
+Psychological Measures
+----------------------
+PHQ-9 Items: PHQ1 to PHQ9 (individual items), Total_PHQ (sum score, 0–27)
+GAD-7 Items: GAD1 to GAD7 (individual items), Total_GAD (sum score, 0–21)
+
+Subjective Ratings (Primary Dependent Variables)
+------------------------------------------------
+All rated on a 6-point Likert scale (0–5):
+  - Trust: Trust in the interface
+  - Comfort: Emotional comfort during the experience
+  - Empathy: Perceived empathy of the interface
+
+Other Columns
+-------------
+Mood: Optional open-ended input describing the participant's mood at start
+Feedback: Open-ended qualitative feedback at the end (yes, no, or blank)
+Age: Open text field (cleaned for underage participants)
+Gender: Multiple choice (with open-ended option if applicable)
+
+Notes on Cleaning
+-----------------
+- Completion time was excluded from the final dataset but used during cleaning to filter out invalid participants (<60s).
+- Dataset contains both complete and excluded entries; only those with Dropout_status == 0 and Participant_status == 0 are used in final analyses.
+
+Ready for Analysis
+------------------
+Participants with:
+  - Dropout_status == 0 AND
+  - Participant_status == 0
+...are included in inferential statistics and hypothesis testing.
+
+Special Rule for Static Condition:
+----------------------------------
+For participants in the static version:
+- If they did not complete all 9 PHQ-9 items (which are presented first), they are marked as "excluded".
+- If they completed all PHQ-9 items but did not reach the Trust, Comfort, and Empathy questions, they are marked as "dropped out".
+- The absence of feedback alone does not result in a dropout classification.

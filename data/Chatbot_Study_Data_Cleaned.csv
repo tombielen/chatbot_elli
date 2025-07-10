@@ -1,0 +1,301 @@
+﻿Version,Age,Gender,Mood,PHQ1,PHQ2,PHQ3,PHQ4,PHQ5,PHQ6,PHQ7,PHQ8,PHQ9,GAD1,GAD2,GAD3,GAD4,GAD5,GAD6,GAD7,Total_PHQ,Total_GAD,Trust,Comfort,Empathy,Feedback,Dropout_status,Participant_status,Reason
+Elli,21,female,"User: I am feeling good, but maybe a little tired. I have been working hard lately
+Elli: [NAME], it's great to hear that you're feeling good despite the hard work. Sometimes, even when we're doing well, it's beneficial to take a moment and reflect on our mental wellbeing. Would you like to do a brief check-in to gain some insights about your current state?",1,0,0,1,0,0,2,0,0,1,0,1,0,0,0,0,4,2,3,5,2,yes,0,0,
+static,38,Male,,1,1,2,1,3,2,2,0,1,1,2,2,3,1,2,2,13,13,5,5,3,No,0,0,
+static,44,Male,,1,1,1,2,0,1,1,0,1,1,1,2,2,0,0,1,8,7,3,5,1,,0,0,
+static,21,Female,,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,30,21,4,5,4,,0,0,
+Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Technical issue
+static,,,,1,1,0,3,1,1,3,3,0,1,2,3,1,,,,13,,,,,,1,1,incomplete
+Elli,25,female,"User: I’m feeling a little bored and restless. I think that my brain is fried for the day, but I’m still at work, and I’m ready to go home.
+Elli: I understand how you're feeling, [NAME]. It's quite normal to feel restless and eager for a change of scenery when you're mentally exhausted. It could be beneficial to do a brief mental wellbeing check-in. It can offer some valuable insights, even on 'okay' days, and help you understand your feelings better.",2,1,0,3,2,0,1,1,0,1,0,1,2,2,1,0,10,7,5,5,3,"I think instead of recommending that I consider rest or a soothing activity, maybe Elli could have recommended specific activities. Otherwise, I thought it was fine.",0,0,
+static,,,,0,0,0,0,0,,,,,,,,,,,,,,,,,,1,2,No full PHQ-9 completed
+static,20,Female,,2,1,3,3,0,3,3,1,0,0,0,0,0,0,3,0,16,3,1,3,4,,0,0,
+Elli,30,female,"User: Neutral
+Elli: I appreciate your honesty, [NAME]. Sometimes, even when we're feeling neutral, it can be helpful to delve a bit deeper into our emotional state. Would you be open to a mental wellbeing check-in? It might offer some valuable insights about yourself.",0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,2,2,1,1,2,No,0,0,
+Elli,32,,Well,,,,,,,,,,,,,,,,,,,,,,,1,2,Refuse communicating with Elli
+static,31,Male,,3,3,2,3,1,3,3,0,3,3,3,3,3,1,1,1,21,15,4,4,4,This is similar to the generic forms they give you before a psychiatrist appointment.,0,0,
+static,,,,3,1,3,3,3,,,,,,,,,,,,,,,,,,1,2,Incomplete PHQ-9
+static,21,Female,,1,0,1,2,0,0,1,0,0,1,1,1,1,0,1,1,5,6,5,3,(missing),,1,1,missing Empathy score
+static,41,Female,,2,1,1,1,3,1,3,1,1,2,1,1,1,0,2,3,14,10,5,5,3,Thank you and wishing you the best of luck ,0,0,
+static,18,Female,,1,2,2,3,2,2,2,3,1,2,3,2,3,3,2,2,18,20,4,5,4,"I LOVE THE ANIMATION CYCLE FOR THE RUNNING, IK ITS NOT FEEDBACK ABT THE SURVEY BUT IT KEPT MY ATTENTION, AND I LOVE IT SO SO MUCH",0,0,
+static,25,Female,,2,3,2,1,1,0,0,1,0,0,1,1,1,1,1,1,12,6,3,1,3,,0,0,
+static,53,Female,,1,1,1,1,0,1,1,0,0,0,0,0,0,0,1,0,6,1,5,2,4,,0,0,
+static,20,Female,,1,0,1,1,1,1,1,0,1,1,2,0,2,1,1,0,7,7,3,1,3,"I didn't think I had depression or anxiety before. I believed that I was just experiencing high levels of stress at certain times or having a pessimistic personality. However, your questionnaire made me consider that perhaps I need to seek some psychological counseling.",0,0,
+Elli,18,male,"User: Feeling not great. Have just eaten fast food which i’m trying to fully refuse from, and because of it I do not feel productive or any good, it do a lot of damage to my health.
+Elli: I'm sorry to hear you're not feeling great after eating fast food, [NAME]. It's completely normal to have off days. Checking in on your mental wellbeing may be beneficial, even if you're feeling okay. It's a personal journey that can provide valuable insight.",0,1,3,3,3,1,1,0,0,3,2,1,3,0,0,3,12,12,1,3,2,"sure. First of all, I do really think that Elly has potential and it is a great project to develop, however, personally for me, it wasn’t really helpful, and here is why:",0,0,
+Elli,20,female,"User: I am feeling alright. The weather is very nice and I returned from a few errands that I needed to run.
+Elli: That sounds like a nice day, [NAME]. It's great to hear you're feeling alright. Even on good days, a mental wellbeing check-in can offer valuable insights. How about we go through one now?",1,1,3,2,3,1,1,0,0,2,2,2,3,2,2,1,12,14,5,5,5,There is always room for improvement however the current state of the chat is pretty good,0,0,
+static,30,Female,,3,0,3,2,1,2,3,3,0,1,2,3,2,1,2,1,17,12,2,3,3,,0,0,
+Elli,20,female,"User: Honestly, not too bad. I've finally getting something done (I finally managed to meet up with my prof for a discussion. It was so hard getting ahold of her, it was frustrating), but it's done now, and there's little to no faults in my work, so I feel relieved.
+Elli: That's wonderful to hear, [NAME]! It must be a huge relief to have that discussion with your professor and receive positive feedback on your work. It shows your resilience even in challenging situations. How about we take a moment to check in with your general mental wellbeing? Remember, it's a valuable exercise even when things are going well.",2,3,3,3,3,3,2,1,2,2,2,3,1,1,0,2,22,11,3,5,2,"No, I feel like it's still in early WIP, but it's already so cool.",0,0,
+static,20,Female,,0,0,0,0,0,0,0,0,0,1,1,1,1,0,1,0,0,5,5,5,4,,0,0,
+static,24,Female,,3,2,3,2,2,1,1,0,0,3,3,3,3,1,1,2,14,16,3,2,2,,0,0,
+Elli,36,female,"User: Well
+Elli: It's good to hear from you, [NAME]. It's always insightful to understand more about our feelings, even when we're feeling 'well'. How about we do a mental wellbeing check-in to explore your emotions a bit more? It's a valuable and personal way to stay in tune with yourself.",0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,1,1,Mo,0,0,
+Elli,42,male,"stressed, I didnt sleep well. I have been holding my breath alot.",,,,,,,,,,,,,,,,,,,,,,,1,1,"Over 60 seconds participation, incomplete PHQ-9"
+static,31,Male,,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,5,5,2,I've seen these questions many times.,0,0,
+static,22,Female,,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,1,2,3,5,4,3,,0,0,
+Elli,39,male,"User: Well, it's 4am and I can't sleep. I haven't been very productive today, and in all honesty I feel slightly manic.
+Elli: [NAME], it sounds like you're experiencing some restlessness and heightened energy, which can be quite challenging. Have you considered doing a mental wellbeing check-in? It might help you understand your feelings better, even on days when you're feeling okay. Remember, this is a personal journey and every step counts.",1,2,2,2,1,1,2,1,0,2,0,1,1,1,2,0,12,7,5,5,3,"The model could be expanded to handle extra input than what is required, but the onboarding and testing process were quick and simple.",0,0,
+static,20,Female,,0,0,1,1,0,0,2,0,0,1,0,0,0,1,0,0,4,2,3,5,3,The options could be better like from not at all the next option is directly several days like find a balance it's a huge gap,0,0,
+Elli,29,male,"User: Good. Not bad
+Elli: I'm glad to hear you're feeling good, [NAME]. It's still valuable to take a moment to reflect on our mental wellbeing, even on good days. Would you be open to continuing with a mental wellbeing check-in? It can help us understand your feelings in a deeper way.",1,1,1,2,0,1,1,0,0,0,1,0,0,0,1,0,7,2,2,3,1,No,0,0,
+static,23,Female,,1,1,3,3,0,1,1,0,0,2,2,2,1,2,2,0,10,11,4,4,4,,0,0,
+Elli,47,male,"User: Pretty good.  Sitting here watching tv and smoking a joint.
+Elli: It sounds like you're having a relaxed evening, [NAME]. Taking a moment to check in with your mental wellbeing, even when you're feeling pretty good, can be a valuable part of self-care. How about we go through a quick check-in together?",0,0,0,1,0,0,1,0,0,0,0,1,0,0,1,1,2,3,2,2,1,Nope.,0,0,
+static,20,Male,,1,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,2,2,4,5,5,I did not feel that there were any issues with this questionnaire. The use of rating scales used in psychology lends it credibility.,0,0,
+Elli,32,other,"User: Lost and slowly drifting away
+Emotionally disconnected
+Elli: [NAME], it sounds like you're experiencing a tough time, feeling lost and emotionally disconnected. It can be really helpful to understand what you're going through better. Would you like to try a mental wellbeing check-in? It's a supportive tool that might offer some insights, regardless of how you're feeling.",2,2,1,2,1,3,1,0,2,2,2,3,2,1,2,2,14,14,3,3,3,happy to help :),0,0,
+static,22,Female,,2,1,3,2,3,1,1,2,0,0,1,2,2,0,1,0,15,6,5,5,3,,0,0,
+Elli,22,male,"User: I am feeling alright. Both happy but also a bit sad
+Elli: That's an interesting mix of feelings, [NAME]. It's completely okay to have these complex emotions. How about we do a mental wellbeing check-in? It can offer some insight into your feelings and help you understand them better.",2,1,0,2,0,3,2,0,0,3,3,1,3,2,2,3,10,17,5,5,4,not really,0,0,
+Elli,28,female,"User: I’m feeling ok. I had a not so great interaction with my uber driver which was stressful. But I spent a lot of time with my friends which was fun
+Elli: I'm glad to hear you had a fun time with your friends, [NAME]. It's understandable that the stressful interaction with your Uber driver left an impact. How about we do a mental wellbeing check-in? It can help you understand your feelings better, even on days when you're feeling okay.",1,1,2,1,1,0,2,0,0,1,0,0,2,1,1,1,8,6,2,3,1,I think putting specifications/word counts on the “how are you feeling” question feels impersonal/dismissive,0,0,
+static,22,Male,,3,1,0,1,0,3,2,0,0,1,3,3,1,2,3,3,10,16,5,5,5,,0,0,
+static,23,Female,,2,2,3,3,3,3,2,3,1,3,3,2,3,3,1,2,22,17,4,5,4,,0,0,
+static,20,Male,,2,1,0,2,0,1,3,3,0,1,0,1,2,3,0,1,12,8,4,5,2,,0,0,
+static,26,Female,,3,2,3,3,2,2,2,3,0,2,2,2,3,3,3,1,20,16,3,4,3,,0,0,
+static,19,Male,,1,2,3,1,0,1,1,0,0,0,2,2,3,3,2,3,9,15,5,4,4,,0,0,
+static,,,,2,1,0,2,1,2,2,1,0,0,0,0,1,0,2,0,11,5,,,,,1,1,"No trust, comfort, or empathy score"
+static,40,Male,,1,1,2,1,2,1,1,1,0,3,0,0,3,0,0,3,10,9,1,3,1,"I gave answered these two questionnaires many, many times before ",0,0,
+static,41,Other,,3,3,3,3,3,3,3,1,0,3,3,0,3,3,0,3,22,15,4,5,2,"You should also ask for reasons like ""Do you think of suicide because... [  ] people discriminate against your age, [  ] people discriminate against your gender, [  ] people discriminate against your skin color, [  ] people discriminate against your nationality, [  ] people discriminate against your health... and so on.",0,0,
+static,20,Female,,2,2,1,3,3,2,3,3,1,3,3,3,2,1,1,1,20,14,4,2,4,,,,
+static,20,Male,,0,1,0,1,0,1,0,0,0,1,0,1,0,0,0,1,3,3,,,,,1,1,"No trust, comfort, or empathy score"
+static,22,Female,,1,1,3,2,1,1,2,2,0,2,2,1,2,1,1,2,13,11,3,1,3,I'd like a go back button,0,0,
+static,24,Female,,1,1,0,1,0,0,1,0,0,1,1,1,1,0,1,1,4,6,4,4,3,,0,0,
+static,27,Other,,0,0,1,3,0,0,2,0,0,1,0,0,0,0,0,0,6,1,1,3,1,"I've done the same quiz hundreds of times in my life. It's probably one of the most irritating experiences I have when trying to access support in 2025. Went to an occupational health appointment a couple of years ago, and they diagnosed me on my report with ""symptoms of low mood"", despite my mood not being low - I just have chronic fatigue. The PHQ-9 and GAD-7 are my enemies.",0,0,
+static,20,Male,,0,1,1,1,2,2,1,1,0,3,1,1,1,2,0,2,9,10,1,3,1,,,,
+static,23,Female,,1,1,2,2,0,0,2,0,0,1,1,1,0,1,0,0,8,4,4,5,4,,,,
+static,,,,0,0,1,,,,,,,,,,,,,,,,,,,,1,2,No PHQ-9 completed
+static,19,Male,,3,3,3,1,3,3,3,3,0,3,1,0,1,1,2,0,22,8,3,5,1,"e and is going toDon't use AI to help with mental health. It sets a bad example and the reach is going to go far beyond your targeted audienc be used for the wrong purposes. If your goal is to actually help people, provide a method of people speaking with real people or some other field where AI can help in. If your goal is monetization, I think this idea is really good. The problem is with the marketing... How do you plan to sell the idea? What about all the design elements? If you need any designing insights, Contact: spooperpoop@gmail.com",0,0,
+Elli,21,female,"User: Yaa..not bad
+Elli: I'm glad to hear you're doing okay, [NAME]. It's really beneficial to understand our mental wellbeing, even on better days. How about we continue with a brief check-in to help you gain more insights into your feelings and thoughts?",2,0,1,0,2,0,3,2,2,0,0,1,0,0,2,1,12,4,4,3,2,No,0,0,
+Elli,18,male,"User: i am feeling happy today. very normal
+Elli: That's wonderful to hear, [NAME]! It's heartening that you're feeling happy and normal today. Even when we're feeling good, it can be insightful to do a mental wellbeing check-in. It helps us understand ourselves better and maintain our wellbeing. Would you like to proceed with a brief check-in?",3,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,4,0,3,2,4,good chatbot,0,0,
+static,,,,2,,,,,,,,,,,,,,,,,,,,,,1,2,No PHQ-9 completed
+Elli,24,female,"User: Good! A little bit Stressful because of my dissertation
+Elli: I'm glad to hear you're doing well, [NAME], even with the stress of your dissertation. Stress can be a part of our lives, especially during challenging projects. Would you like to take a moment to check in on your mental wellbeing? It could provide a useful pause and some personal insights, even if you're feeling mostly okay.",1,2,2,3,2,1,2,2,0,2,1,0,0,1,0,0,15,4,4,4,3,"Overall, it’s a good experience",,0,0
+static,20,Male,,0,0,0,1,1,0,1,1,1,0,1,1,0,0,0,1,5,3,,,,,1,1,"No trust, comfort, or empathy score"
+static,35,Prefer not to say,,2,3,2,3,3,2,2,0,0,1,1,2,1,1,2,1,17,9,,,,,1,1,"No trust, comfort, or empathy score"
+Elli,25,male,"User: feeling pretty good, got good sleep cant complain
+Elli: It's wonderful to hear you're feeling good and well-rested, [NAME]. Even in these positive moments, it can be insightful to understand more about our mental wellbeing. How about we continue with a quick wellbeing check-in to explore this further?",0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,4,4,3,no,0,0,
+static,25,Male,,2,1,1,1,0,0,3,0,2,1,2,2,2,1,3,3,10,14,3,1,1,,0,0,
+static,27,Female,,1,1,0,1,1,1,1,1,0,0,0,0,1,0,0,0,7,1,1,1,1,You didn't explain what the scale 1-5 represented so I answered all as 1....,0,0,
+static,26,Male,,0,1,1,1,0,0,2,0,0,1,1,0,2,0,0,0,5,4,3,2,1,,0,0,
+Elli,36,female,"User: I am alright, mostly. But worried about the future.
+Elli: [NAME], it's perfectly natural to have concerns about what lies ahead. It's great that you're open about your feelings. What do you think about taking a moment to reflect more on your wellbeing? Even when we're feeling alright, a check-in can help us understand ourselves better.",1,2,1,2,0,1,1,0,1,1,1,2,1,0,1,1,9,7,2,3,4,Nothing particular.,0,0,
+Elli,23,female,"User: I'm feeling good, but a bit tired and bored
+Elli: It's lovely to hear that you're feeling good, [NAME], but I understand that feeling tired and bored can be a bit challenging. Would you like to do a mental wellbeing check-in? It's a valuable tool to understand your feelings better, even when you're feeling okay.",1,2,1,2,1,1,1,0,0,2,1,1,1,0,2,0,9,7,3,5,2,Nice chatbot,0,0,
+static,,,,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,2,1,4,1,3,,0,0,
+Elli,24,male,"User: Im feeling good, had a great day by the coast and went swimming with the dog
+Elli: That sounds like such a rejuvenating day, [NAME]! The coast and a playful dog can be such mood boosters. While you're feeling good, would you be open to doing a mental wellbeing check-in? It can be a valuable tool for self-awareness, regardless of how we're feeling in the moment.",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,5,2,"As someone who has gone through therapy these questions can feel pretty bad like not helpful, i think it would be better for Elli to ask further questions about how i feel and if there is anything i want to talk about",0,0,
+static,29,Male,,0,0,1,1,0,1,2,0,0,0,1,0,1,0,1,0,5,3,2,3,1,"The options for responses were a bit confusing, I wasn’t sure what it meant by several days vs more than half of the days and at the end I wasn’t sure which end of the scale 1 -5 reprsented. I thought the questions themselves were very good and it was nice to reflect on these things as it is not something I would typically evaluate about myself.",0,0,
+Elli,22,male,"User: Today was a long day. I worked all day as a waiter at Pain Quotidien, and it was very hot.
+Elli: I understand, [NAME], that your day has been quite tiring and challenging, especially under the heat. It could be really beneficial to reflect on your mental wellbeing after such a day. How about we go through a brief check-in, just to see how you're doing emotionally?",3,2,2,2,0,3,3,1,2,1,1,1,2,1,2,1,18,9,4,3,4,I think Elli sounds too « robotic ». It could be more “human”,0,0,
+static,25,Female,,2,1,3,3,2,1,2,1,0,1,2,3,1,0,2,2,15,11,5,3,3,,0,0,
+static,23,Female,,1,1,1,2,1,3,2,1,0,3,3,3,3,3,0,3,12,18,3,4,2,Just felt a bit alone to be honest and focussed more on the negative ,0,0,
+static,26,Prefer not to say,,1,1,1,1,0,0,1,0,1,0,0,1,2,0,0,2,6,5,3,3,2,,0,0,
+Elli,29,male,"User: Feeling fine. Little listless. It's hot out. But generally fine.
+Elli: It's great to hear that you're generally feeling fine, [NAME]. Sometimes, even when we're okay, a bit of listlessness can hint at underlying emotions or thoughts. It could be beneficial to check in with your mental wellbeing, as it can provide a deeper understanding of your feelings. What do you think about giving it a try?",1,0,1,1,2,1,1,0,0,1,1,1,1,1,0,0,7,5,1,2,1,"I find the sort of toxic overwhelming positivity and therapy speak of chat bots/llms/etc to be more annoying than anything. I try to avoid them. Nothing against you, personally, elli. Just not for me. When talking about deep subjects I need to be talking to someone who can actually push back.",0,0,
+Elli,31,male,"User: fine, thanks
+Elli: I'm glad to hear you're feeling fine, [NAME]. Even on our good days, it can be insightful to understand our mental wellbeing a bit more. Would you like to continue with a simple check-in? It's a valuable tool to learn more about yourself.",3,3,2,3,2,3,3,1,3,3,3,3,3,2,1,2,23,17,3,2,3,i have nothing to add,0,0,
+Elli,34,female,"User: I'm feeling tired and happy to be alive
+Elli: Thank you for sharing your feelings, [NAME]. It's wonderful to hear that you're happy to be alive, even in times of exhaustion. Would you consider doing a mental wellbeing check-in? It's a valuable tool to understand ourselves better, even when we're feeling okay.",2,0,3,3,2,0,3,2,0,3,3,3,3,2,3,1,15,18,1,1,3,0,0,0,
+Elli,male,26,"Today, generlaly i feel fine, small anxiety spikes, but overall good, nothing out of control. But perhaps anxiety is a big higher then latley.",0,0,1,1,1,1,2,1,0,2,1,0,2,1,0,0,7,6,3,2,1,No,0,0,
+Elli,female,25,Overall good. In the morning I was dwelling in Dua Lipa’s last night concert video. Afternoon I was a little bit anxious about whether I can collect enough respondences for my thesis survey.,1,2,2,2,1,,,,,,,,,,,,,,,,,,1,1,Incomplete PHQ-9 over 60 seconds
+,,,,,,,,,,,,,,,,,,,,,,5,5,3,"The model could be expanded to handle extra input than what is required, but the onboarding and testing process were quick and simple.",,,
+Elli,female,21,Yaa..not bad,2,0,1,0,2,0,3,2,2,0,0,1,0,0,2,1,,,,,,,1,1,No trust empathy comfort
+Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Obvious spam
+Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Uninterested in comunicating with Elli
+Elli,24,male,"happy, energised, fulfilled",,,,,,,,,,,,,,,,,,,,,,,1,2,Less than 60 seconds interaction
+Elli,27,male,"User: Had a tiring day but I am feeling good.
+Elli: It's great to hear that you're feeling good, [NAME], even after a tiring day. It's still worth taking some time to reflect on our mental wellbeing, though. Would you like to continue with a mental wellbeing check-in? It can provide some valuable personal insights.",1,0,3,3,3,0,2,2,0,2,2,2,3,2,2,1,14,14,3,5,2,No,0,0,
+,male,27,bot,"Thanks so much for checking in today, Sam. Wishing you care and calm. 🌻 The following code gives you Karma that can be used to get free research participants at SurveySwap.io. Go to: https://surveyswap.io/sr/28OB-1306-INE4 . Or, alternatively, enter the code manually: 28OB-1306-INE4",2025-06-23 07:18:13,,,,,,,,,,,,,,,,,,,,,,,
+static,19,Male,,1,2,2,3,0,1,2,0,0,2,3,3,0,0,2,1,11,11,3,4,3,"I think the options should change to frequently, sometimes, rarely, none, etc.",,,
+static,25,Male,,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,3,5,4,,,,
+Elli,male,23,pretty good what about you,3,0,2,1,2,1,3,0,0,2,0,0,1,0,3,0,,,,,,,1,1,No completion of empathy trust comfort scale
+Elli,18,female,"User: i feel okay. nothing much is going on. its a very chill day
+Elli: I'm glad to hear you're having a chill day, [NAME]. Even on calm days, it can be beneficial to reflect on our mental wellbeing. Shall we take a moment to do a quick check-in to better understand how you're truly feeling today?",1,1,3,3,3,3,3,2,3,2,3,3,3,3,3,3,22,20,3,3,2,no,0,0,
+static,26,Female,,2,1,3,2,1,3,2,1,3,2,3,2,1,2,3,2,18,15,4,4,5,,0,0,
+Elli,24,female,"Not great, I've given into some temptations and am disappointed for indulging myself",2,2,3,3,3,3,2,1,0,,,,,,,,,,,,,,1,1,Incomplete participation over 60 seconds
+Elli,19,male,"User: Im feeling okay. Im also very sweaty because its hot outside
+Elli: [NAME], it's great to hear that you're feeling okay, even if the heat is making you a bit uncomfortable. Remember, checking in on our mental wellbeing can be valuable, regardless of how we're feeling. Would you be open to a brief mental wellbeing check-in, just to ensure everything is on track?",0,0,1,2,0,0,0,0,0,0,0,0,0,0,0,0,3,0,3,3,4,No,0,0,
+,male,19,bot,"Thanks so much for checking in today, Drew. Wishing you care and calm. 🌻 The following code gives you Karma that can be used to get free research participants at SurveySwap.io. Go to: https://surveyswap.io/sr/28OB-1306-INE4 . Or, alternatively, enter the code manually: 28OB-1306-INE4",2025-06-23 14:09:12,,,,,,,,,,,,,,,,,,,,,,,
+static,27,Female,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,3,please tell us what the numbers mean in the final feedback questionnaire,0,0,
+static,22,Male,,0,0,2,1,0,0,1,0,0,2,0,1,1,0,0,0,4,4,1,1,1,,0,0,
+Elli,25,female,"User: Physically tired and stressed but mentally happy, because I am doing what I like and feel purposeful
+Elli: It's wonderful to hear that you're finding joy and purpose in what you're doing, [NAME]. Feeling physically tired and stressed can be quite a contrast though. How about we go through a mental wellbeing check-in? Even when we're feeling generally okay, it can provide valuable insights and help us understand ourselves better.",0,0,3,1,1,0,1,1,0,1,1,2,2,3,1,1,7,11,3,4,2,"It starts with conversation like interaction but falls back to Q&A later. I am a heavy general AI user, I would prefer to just dump all my symptoms and thoughts, then maybe Elli can ask some questions to better refine the scope, but not like a traditional survey.",0,0,
+,27,female,,,,,,,,,,,,,,,,,,,,,,,,1,2,Disconnected due to wifi issues
+Elli,27,female,,,,,,,,,,,,,,,,,,,,,,,,1,2,",same participant, Disconnected due to wifi issues"
+Elli,27,female,"User: I am hungry but must wait till after lecture.
+Elli: I understand, [NAME], waiting for a meal can sometimes be challenging, especially when you're trying to focus. While you're waiting, why not take a moment to check in with your mental wellbeing? It can be a valuable way to understand yourself better, even when things seem okay.",2,0,0,2,2,0,0,0,0,0,0,0,1,0,1,1,6,3,1,2,3,"I think this is a cool chat idea. I will say that I was on my period last week, so the answers are influenced by this and not exactly what I felt some time ago.",0,0,"Same participant, successfull this time"
+Elli,25,male,"User: I'm feeling stressed
+Elli: [NAME], it sounds like you're experiencing a challenging time with stress. It's really valuable that you're recognizing these feelings. I suggest we do a mental wellbeing check-in together, which can help in understanding your feelings better, even if you feel okay otherwise.",1,2,1,2,0,3,0,0,0,3,3,2,3,1,1,3,9,16,3,3,2,Nope,0,0,
+Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Participation under 60 seconds
+Elli,,,I'm feeling ass.,,,,,,,,,,,,,,,,,,,,,,,1,2,Participation under 60 seconds
+static,23,Prefer not to say,,2,1,3,2,2,1,1,0,0,2,1,2,1,0,2,0,12,8,1,2,1,,,,
+Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Participation under 60 seconds
+Elli,37,female,"User: I'm well
+Elli: That's wonderful to hear, Sandra! Even when we're feeling well, it can be helpful to regularly check in with our mental wellbeing. Would you be open to carrying out a brief wellbeing check-in, just to make sure everything is as great as it seems?",2,1,2,3,2,2,1,1,1,2,2,2,1,1,2,2,15,12,3,3,3,No,0,0,
+,female,37,bot,"Thanks so much for checking in today, Sandra. Wishing you care and calm. 🌻 The following code gives you Karma that can be used to get free research participants at SurveySwap.io. Go to: https://surveyswap.io/sr/28OB-1306-INE4 . Or, alternatively, enter the code manually: 28OB-1306-INE4",0,,,,,,,,,,,,,,,,,,,,,,,
+static,25,Female,,3,1,3,2,0,1,2,1,0,1,2,2,0,0,1,0,13,6,1,5,3,,0,0,
+static,36,Other,,0,0,0,0,0,0,0,0,0,0,0,0,1,3,3,1,0,8,1,3,1,,0,0,
+Elli,46,male,"User: I’m okay. It’s a bit hot outside and I have hard time to progress with my job.  I also have some worrying thoughts about my future.
+Elli: I hear you, [NAME]. Weather and work can indeed influence how we feel, and thoughts about the future can sometimes be worrying. Would you be open to doing a mental wellbeing check-in? Even when we're feeling okay, it can be insightful to understand ourselves better.",1,1,2,2,1,1,2,0,0,1,0,1,1,1,2,1,10,7,3,3,2,"No, thanks.",0,0,
+Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Participation under 60 seconds
+Elli,24,female,"User: Im feeling s bit tired and a bit stressed since i have to finish some reports from my job and work on a university project
+Elli: I understand how you're feeling, [NAME]. Juggling job responsibilities and university work can indeed be tiring and stressful. It might be helpful to do a mental wellbeing check-in, to help maintain a balanced perspective even when things get busy.",2,1,1,1,0,1,1,2,1,2,1,2,2,2,2,2,10,13,3,3,3,I feel like i would love to have more time to talk to Elli and feel closer before responding the questionnaires bc it feels a bit impersonal,0,0,
+static,23,Female,,0,0,2,1,1,1,2,0,0,1,1,2,0,0,3,1,7,8,3,1,1,"I wasn’t too sure what 1-5 (regarding how comfortable i felt taking the survey) was, such as whether 1 was not uncomfortable and vice versa. Clarification on that for future instances would be great.  Otherwise the survey is nice! ",0,0,
+Elli,22,female,"User: Today is being good. I'am feeling a little bit stressed due to all the tasks I need to do.
+Elli: I'm glad to hear your day is going well, [NAME]. It's completely understandable to feel stressed with a lot on your plate. Would you like to do a quick mental wellbeing check-in? It can be a valuable way to gain insights, even on days when you're feeling okay.",1,2,2,2,1,3,2,0,0,2,3,3,2,0,2,1,13,13,4,5,3,The bot seems well-designed and precise.,0,0,
+static,25,Female,,1,0,1,1,0,0,1,0,0,1,0,1,1,0,1,1,4,5,3,3,3,,0,0,
+static,23,Male,,1,1,3,1,1,1,0,0,1,1,0,1,0,0,1,1,9,4,2,5,2,,0,0,
+Elli,22,male,"User: I'm feeling good and productive.
+Elli: That's wonderful to hear, [NAME]! Your sense of productivity must feel really satisfying. Even when things are going well, it can be beneficial to understand our mental state better. Would you like to continue with a mental wellbeing check-in? It can provide valuable insights into your personal wellbeing.",1,1,1,1,0,1,0,0,0,2,0,1,0,0,1,0,5,4,5,5,5,Maybe add in 1 extra number to the scale to provide the opportunity for more nuanced responses.,0,0,
+static,23,Male,,1,1,2,1,0,1,1,1,0,2,0,3,2,0,0,1,8,8,3,1,2,,0,0,
+static,21,Female,,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,1,5,5,5,Interesting survey! Good luck on your stuff!,0,0,
+static,29,Female,,1,0,1,1,0,0,0,0,0,0,1,1,1,0,1,1,3,5,4,5,4,No its good questionnaire ,0,0,
+Elli,23,female,"Hello nice to meet you as well. I’m doing alright today, a little bit exhausted and sleepy, that’s it.",2,2,0,1,3,2,3,0,2,2,3,2,1,,,,,,,,,,1,1,Did not complete gad-7 and rest of questionnaire
+Elli,25,male,"User: I’m feeling good but a bit tired. It was a long day
+Elli: I'm glad to hear you're feeling good, [NAME], even after a long day. Sometimes, even when we're feeling okay, exploring our emotions can be beneficial. Would you be open to doing a brief mental wellbeing check-in to reflect on how you're really feeling?",0,0,1,1,0,2,1,0,0,2,1,2,1,0,1,2,5,9,2,1,3,Nope!,0,0,
+Elli,20,,I feeling quite exhausted but at the same time I am happy because I was to the gym,,,,,,,,,,,,,,,,,,,,,,,1,1,Dropped out after 60 seconds
+static,20,Female,,3,1,3,3,2,2,3,3,0,2,2,3,2,1,2,2,20,16,3,4,4,,0,0,
+static,24,Male,,1,0,0,1,0,0,1,0,1,2,1,1,0,0,0,0,4,4,1,5,3,,0,0,
+static,24,Female,,1,1,1,1,1,1,1,1,1,1,2,2,1,0,1,1,9,8,5,5,3,,0,0,
+static,27,Female,,0,2,3,1,1,3,2,0,0,3,1,0,0,0,1,0,12,5,5,5,3,,0,0,
+static,21,Male,,2,0,3,1,0,0,2,0,0,0,2,3,3,0,3,2,8,13,3,5,5,"It was pretty cool to be asked these type of questions. People don't really ask stuff like this often, so it's good to be free with someone at least ",0,0,
+static,,,,0,0,,,,,,,,,,,,,,,,,,,,,1,2,No PHQ-9 filled
+static,22,Female,,2,1,3,3,3,0,2,2,0,0,3,3,1,1,1,3,16,12,5,5,5,"well from my personal observation of whats happening in the world has influenced human experience in general.
+some might say its depression due to a school system or unresolved trauma or some type of dissatisfaction. but truth is the whole system made us in that position. tired, stagnant, reliant, and too aware of everything too soon.
+ this misery we feel and call anxiety, or stress, is just our bodies adapting to a system it wasn't built for. 
+our evolution wasn't supposed to be fast, so now we have this modernity dealing with an ancient bodies. and because of that mismatch, all sorts of problems are occurring. mental, sexual, economical, social...etc.",0,0,
+Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Left after first question
+static,42,Female,,1,0,1,2,0,0,2,1,0,1,0,2,2,0,2,2,7,9,2,4,3,,0,0,
+static,39,Female,,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,3,1,3,3,1,,0,0,
+static,21,Other,,1,1,3,3,2,1,3,3,0,3,3,3,3,3,1,3,17,19,4,3,3,,0,0,
+static,33,Female,,0,1,0,2,0,1,1,2,0,1,0,1,2,1,1,1,7,7,3,3,4,,0,0,
+static,21,Male,,2,1,3,3,2,2,2,2,3,3,1,2,0,2,2,1,20,11,4,1,3,,0,0,
+static,24,Female,,1,0,2,1,0,0,1,0,0,0,0,1,0,0,1,0,5,2,4,5,5,,0,0,
+Elli,24,male,"User: 2
+Elli: I'm here for you, [NAME]. Sometimes, expressing ourselves can be challenging. How about we go through a mental wellbeing check-in together? It's a valuable way to gain insights about ourselves, even on days we feel okay.",3,3,3,3,3,3,3,3,0,2,3,3,3,3,3,3,24,20,4,4,4,No,0,0,
+Elli,40,male,"User: I'm feeling fine, thanks. I slept well last night
+Elli: That's great to hear, [NAME]! Good sleep definitely plays a crucial role in our overall wellbeing. Even when we're feeling okay, it can be beneficial to reflect on our mental health. Would you like to continue with a brief check-in to gain more insight into your personal wellbeing?",0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,3,3,1,It felt like an interrogation,0,0,
+static,25,Prefer not to say,,0,0,0,0,0,0,0,0,3,2,3,3,1,0,0,3,3,12,4,5,5,,,,
+static,39,Male,,3,3,3,3,1,3,1,3,3,2,2,2,3,2,3,0,26,14,3,4,4,,,,
+Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,"Obvious spam, less than 60 seconds"
+static,18,Other,,2,3,3,2,3,3,1,1,3,2,2,2,2,0,2,1,21,11,5,5,3,,,,
+Elli,24,male,"User: i'm feeling good
+Elli: That's wonderful to hear, [NAME]! Even on good days, it can be beneficial to tune into our mental wellbeing. Would you like to continue with a quick check-in? It could offer some interesting insights about yourself.",3,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,6,1,3,4,4,went smoothly,0,0,
+static,24,Male,,3,0,2,1,1,0,3,0,0,0,0,0,1,1,0,0,10,2,2,5,2,It was a great experience,0,0,
+static,44,Male,,1,1,1,2,1,0,1,1,0,2,1,2,2,0,2,1,8,10,3,5,3,,0,0,
+Elli,24,female,"User: tired
+Elli: I understand you're feeling tired, [NAME]. Even when we're feeling okay, it's essential to pay attention to both our physical and mental wellbeing. Would you like to do a quick mental wellbeing check-in? It can help provide more insight into how you're feeling.",3,0,3,3,3,0,3,0,0,3,3,3,3,2,3,2,15,19,1,5,5,no,0,0,
+static,35,Female,,1,0,0,3,3,1,2,1,0,0,0,0,1,0,1,0,11,2,4,4,2,"Some of the questions and answers would have physical roots not mental, like overeating. Worth integrating it at some point to exclude errors.",0,0,
+static,25,Female,,1,0,1,1,1,0,1,0,0,0,0,1,1,0,1,0,5,3,5,5,5,,0,0,
+static,23,Female,,0,2,1,1,0,2,2,0,0,1,0,2,1,1,1,1,8,7,3,1,3,,0,0,
+Elli,27,female,"User: I'm good, I'm just anxious about my future
+Elli: It's understandable to feel anxious about the future, [NAME]. Even when we're generally okay, these feelings can surface. Would you like to explore these feelings a bit more with a mental wellbeing check-in? Remember, this isn't just about identifying problems, it's also a tool for self-awareness and personal growth.",1,1,1,1,0,1,0,0,1,2,2,2,0,0,0,0,6,6,2,3,5,no,0,0,
+Elli,,,Good but anxious,,,,,,,,,,,,,,,,,,,,,,,1,2,Less than 60 seconds interaction
+Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Refuse to talk to Elli
+static,35,Other,,0,0,0,1,0,0,3,1,0,0,0,0,0,0,0,0,5,0,1,2,1,"There needs to be nuance. I have trouble concentrating & am fidgety because I have unmediated ADHD - not depression or anxiety 
+
+I feel fatigued not because of depression but because I have a medical condition, POTS where a main symptom is fatigue. 
+
+Without nuance you’re not seeing an actuate picture. My mental health has never been better. ",,,
+Elli,20,male,"User: Im feeling okayish. I had a good shift at work, but have been having some troubles with one coworker I put a formal complaint in about. She wasn't too bad on today's shift and I got to vent about everything to another coworker which was good
+Elli: It's great to hear that you had a good shift, [NAME], and that you found a chance to express your feelings about the situation with your coworker. Even when we're feeling okay, it can be beneficial to check in with our mental wellbeing. Would you be open to continuing with a little check-in? It could help clarify your feelings and maybe even offer some personal insights.",0,0,2,1,0,0,1,0,0,1,0,1,0,1,1,0,4,4,3,4,3,This seems like a well implemented basic concept so far. I'd like to see how it expands further and is able to analyse answers deeper and provide more catered assessments and responses to them! It could be a good tool in self screening and helping work out the level of mental health intervention needed at different points in time or providing professionals with pre-screening and summaries of patient struggles in healthcare settings. Or even just as a personal mental health tool,0,0,
+Elli,27,female,"User: Puh the paast weeks have been harsh, i had a vaccine and the got a herpes just after it, i then got sick with head hurts etc.. a wekk later I felt better but then back to it a herpes again and throught hurts I got better and puff week later same sh it
+Elli: I'm really sorry to hear that you've been having such a tough time recently, [NAME]. It sounds like it's been a cycle of feeling better only to fall ill again, and that can be really hard. How about we go through a mental wellbeing check-in together? It might help you to understand and navigate your feelings better during these trying times.",1,0,3,3,3,2,0,0,0,0,0,0,0,0,0,0,12,0,3,4,1,Yes i considered 1 as very low and 5 as high just to clarify,0,0,
+Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Less than 60 seconds interaction
+static,38,Female,,1,1,1,2,2,1,1,0,0,1,1,1,2,0,3,2,9,10,,,,,1,1,Dropping out at rating scale empathy
+Elli,32,female,"User: Tired but good
+Elli: It's great to hear that you're feeling good, [NAME], even if a bit tired. Why not take a few moments to check in on your mental wellbeing? Even on our good days, it can be beneficial to foster self-awareness and better understand how things are going.",0,0,1,0,0,2,1,1,0,1,1,1,1,1,1,1,5,7,3,3,4,I quite liked,0,0,
+Elli,23,male,"User: I am feeling good. I am just getting on with my work, so I am neither happy nor sad.
+Elli: It's great to hear that you're feeling good, [NAME]. Even when we're feeling neutral, it can be valuable to reflect on our mental wellbeing. How about we do a quick check-in to keep track of how you're doing overall?",1,0,1,1,0,1,1,0,0,2,2,2,3,2,2,2,5,15,2,2,2,nope,0,0,
+Elli,23,female,"User: good
+Elli: It's wonderful to hear that you're feeling good, [NAME]. Even on our good days, it can be insightful to check in with our mental wellbeing. Would you like to continue with a brief check-in? It's a valuable tool to understand ourselves better.",1,1,2,3,3,0,2,1,0,0,2,2,2,3,2,1,13,12,4,5,3,"very intriguing and interesting system to interact with. it was easy to answer the questions but i think context on my answers matter. I'm not qualified or have been diagnosed myself, but i do not think I am (at least clinically) depressed or anxious, I'm just going through a lot of stress atm",0,0,
+Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Below 60 seconds
+static,26,Female,,1,1,3,2,1,2,2,1,0,3,1,1,0,0,1,0,13,6,5,5,5,,0,0,
+static,24,Female,,2,1,1,2,1,2,3,2,0,3,3,2,2,1,1,2,14,14,2,2,1,Many symptoms of anxiety that are being tested for with these forms also overlap with adhd (which i have and thus score higher on too) - just some things to be aware of! :),0,0,
+Elli,24,female,"User: good and productive
+Elli: That's wonderful to hear, [NAME]! It's fantastic when we can feel good and productive. Even so, it can be beneficial to perform regular mental wellbeing check-ins. It's a valuable way to better understand your feelings and maintain your overall wellbeing. Would you like to try a brief check-in now?",0,1,1,1,0,1,0,0,0,0,1,1,1,0,0,0,4,3,1,1,1,"I would make it more human, it feels robotic and unnatural, not friednly",0,0,
+Elli,24,male,I am feeling really good,1,0,0,0,1,0,2,2,0,0,0,0,0,0,1,0,,,,,,,1,1,Did not answer empathy questions
+static,22,Male,,0,0,1,1,0,0,1,1,0,0,0,0,1,0,0,0,4,1,4,5,3,,0,0,
+static,18,Male,,1,0,0,1,0,0,1,0,0,0,1,1,0,0,0,1,3,3,,,,,1,1,Did not answer empathy questions
+Elli,22,female,"User: I am feeling okay. Quite stressed with the workload and deadlines
+Elli: I understand, [NAME], that stress from workload and deadlines can feel overwhelming at times. Let's take a moment to explore this further with a mental wellbeing check-in. Even when we're feeling okay, it can be helpful to gain a deeper understanding of our emotions.",3,3,3,3,2,3,3,2,2,3,3,3,3,3,3,3,24,21,2,3,3,None,0,0,
+static,,,,0,,,,,,,,,,,,,,,,,,,,,,1,2,Answered just 1 question
+Elli,921,male,ok and ok and ok,,,,,,,,,,,,,,,,,,,,,,,1,2,Obvious spam
+Elli,22,female,"User: Not great, I'm feeling extremely demotivated. I think I'm also feeling depressed?
+Elli: I'm really sorry to hear that you're feeling this way, [NAME]. It's important to pay attention to these feelings and I'm here to support you through this. Would you like to continue with a mental wellbeing check-in? It could provide some useful insights about what you're experiencing.",3,2,3,3,3,3,3,3,3,3,3,3,2,3,3,3,26,20,5,5,5,No,0,0,
+static,19,Female,,1,1,3,2,1,3,1,0,0,1,0,1,0,0,0,0,12,2,4,4,3,,0,0,
+static,20,Female,,1,0,0,2,0,1,2,1,0,0,0,0,0,1,0,0,7,1,4,3,3,,0,0,
+Elli,28,other,"User: You annoyed me with making me answering certain nickname just now. Not feeling much otherwise, weekend is coming afterall
+Elli: I'm sorry to hear that, [NAME], and I appreciate your honesty. Even though it's almost the weekend, it could still be beneficial to reflect on your mental wellbeing. What do you think about taking a few moments to do a check-in? It's a personal journey to understanding yourself better, even on days when you're feeling okay.",0,0,1,3,1,0,0,0,0,0,0,0,3,0,0,0,5,3,1,1,1,"I feel like Elli is a survey bot, I felt like I was filling out another survey. Also Elli didn't try to understand why I feel what I felt, no further questions to understand my situation. Besides, Elli expected certain nickname and gender and it just refused to call me a nickname I want.",0,0,
+Elli,27,female,"User: ok, tired, tons of school work
+Elli: I hear you, [NAME]. It sounds like you're feeling overwhelmed with your school work and it's leaving you feeling exhausted. Have you considered taking a moment to check in on your mental wellbeing? It can be a valuable tool for understanding your feelings, even when things seem okay.",2,2,3,3,1,2,3,2,1,2,1,2,2,2,1,3,19,13,2,1,1,Nobody likes answering numbers to a machine,0,0,
+Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Obvious spam
+Elli,26,female,"User: tired and restless
+Elli: I'm really sorry to hear that you're feeling tired and restless, [NAME]. It's important to listen to what our bodies and minds are telling us. Might you be open to doing a quick mental wellbeing check-in? It can be a helpful way to gain insight into how you're feeling, even on the okay days.",2,1,0,2,1,0,0,0,1,1,1,1,1,2,1,1,7,8,1,2,2,no,0,0,
+Elli,25,male,"User: Quite good, filling out a lot of surveys on survey swap. I have a little stress with my master thesis
+Elli: It's great to hear that you're keeping busy, [NAME]. Balancing your master thesis and other tasks can indeed be a bit stressful. Would you like to take a moment for a mental wellbeing check-in? It might help you gain insights about handling your stress, even when you're feeling quite good.",2,2,2,2,2,0,1,1,0,0,1,1,2,3,2,2,12,11,4,4,4,"Nice chatbot, I use a similar one for my study!",0,0,
+Elli,27,female,"User: Fine
+Elli: I'm glad to hear you're feeling fine, [NAME]. It's still important to touch base with ourselves even on our better days. Would you like to continue with a mental wellbeing check-in? It can offer valuable insights into your personal emotional landscape.",1,2,3,3,3,3,3,2,2,2,2,2,2,2,2,2,22,14,2,2,3,Good,0,0,
+Elli,27,male,"User: I feel very good today, and nothing special happened.
+Elli: That's wonderful to hear, [NAME]! Even on good days, it can be insightful to reflect on our mental wellbeing. Would you be open to continuing with a brief check-in? It could provide some valuable personal insight.",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,2,1,Can't give the correct feedback based on my response.,0,0,
+Elli,20,male,"User: I'm doing alright. I'm a little tired today as I didn't get the best sleep and I am currently going through a breakup but I am okay. What about you?
+Elli: I'm glad to hear you're doing alright, [NAME], even amidst the challenges you're facing. It's natural to feel tired after restless nights and dealing with emotional upheavals like a breakup. Would you like to do a mental wellbeing check-in? It's a helpful tool, even on seemingly okay days, to better understand and support your emotional health.",1,1,1,2,1,1,1,0,0,3,2,2,1,0,0,0,8,8,3,5,3,no,0,0,
+Elli,23,female,"User: I am feeling well, a little tired and frustrated earlier. But I am better now! Life is great, and I am so thankful.
+Elli: I'm glad to hear you're feeling better now, [NAME]. It's quite normal to have ups and downs in our emotions throughout the day. Why not consider doing a mental wellbeing check-in? Even on good days, it can provide valuable insights into your overall emotional health.",0,0,0,1,0,0,0,3,0,2,2,3,3,3,2,0,4,15,1,2,3,It was unlike anything I have done before!,0,0,
+Elli,24,male,"User: Kinda tensed not gonna lie
+Elli: I hear you, [NAME], feeling tense can be really tough. How about we do a quick mental wellbeing check-in? Even if you're feeling okay overall, it can be a helpful way to understand what you're experiencing in more detail.",3,2,1,3,3,3,2,2,2,3,2,3,2,3,3,2,21,18,3,3,2,Good,0,0,
+Elli,41,male,"User: Im feeling really good, mentally and physically.
+Elli: That's wonderful to hear, [NAME]! It's great that you're feeling well both mentally and physically. Even so, it can be beneficial to do a mental wellbeing check-in. It's a simple way to cultivate self-awareness and continue supporting your wellbeing journey. Would you like to try it?",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,3,no,0,0,
+Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Interaction of less than 60 seconds
+Elli,32,male,"User: I'm okay, but a little bit stressed. I've been experiencing chronic pain so that makes me a bit irritable. I also still feel a lot of pressure to constantly be doing something ""productive""
+Elli: [NAME], it sounds like you're carrying a lot right now, with the chronic pain and the pressure to always be productive. It might be beneficial to take a moment for a mental wellbeing check-in, as it can help provide a clearer understanding of your feelings and stressors, even when you're feeling okay.",2,2,3,2,2,3,3,1,3,2,2,2,3,2,3,3,21,17,3,3,4,the transition between the depression and anxiety questions was a bit confusing. Better to rework the phrasing somehow & reiterate the number scale there.,0,0,
+Elli,20,male,shay about u,,,,,,,,,,,,,,,,,,,,,,,1,1,Interaction of more than 60 seconds
+Elli,39,male,"User: Slightly tired, but okay.
+Elli: I appreciate your honesty, [NAME]. Even when you're feeling generally okay, it can be beneficial to check in with your mental wellbeing. Why don't we proceed with a little self-awareness exercise? It could offer some interesting insights.",1,1,1,1,0,1,1,0,0,1,1,1,1,0,1,1,6,6,3,4,3,It wasn't clear enough upfront the answers should only be 0 to 5,0,0,
+Elli,25,,not good,,,,,,,,,,,,,,,,,,,,,,,1,2,Did not want to communicate further with Elli
+Elli,21,female,Pretty tired,,,,,,,,,,,,,,,,,,,,,,,1,2,Communicated less than 60 seconds with Elli
+Elli,20,female,"User: I am a bit anxious since i have alot to do today. However, I am trying to stay positive and gentle with myself.
+Elli: I understand, [NAME]. It's great that you're being gentle with yourself amidst the anxiety. Have you considered doing a mental wellbeing check-in? It can be a valuable tool for self-awareness, even on ok days.",1,1,2,2,2,1,2,2,0,2,1,2,2,1,0,2,13,10,3,4,3,It is a very interesting experience! Looking forward to see where this goes.,0,0,
+Elli,48,female,"User: I'm feeling fairly good today
+Elli: That's wonderful to hear, [NAME]! Even when you're feeling good, it can be helpful to check in on your mental wellbeing. It can offer valuable insights and help you maintain this positive state. Would you like to continue with a brief check-in?",0,0,1,1,1,1,1,0,0,1,1,0,0,1,1,0,5,4,2,3,3,"It's very hard to understand the word 'empathetic' in relation to this; there is no empathy, it's just using words it's been programmed to use. It felt ok in that the wordings were kind, but I was mildly annoyed by a grammatical error (split infinitive 'to gently check in') early on. The summary at the end felt a bit 'one size fits all' and that it didn't really relate to me or my answers. But answering the questions felt more comfortable than I have felt answering the same questions either when on a written form or when asked them directly by an human, which I find interesting. Thank you.",0,0,
+Elli,26,male,"User: a little bit stressed since i have a big submission coming up and i have to send an important email to my professor which i feel a little unprepared for
+Elli: I hear you, [NAME]. It's completely natural to feel stressed when you're facing important tasks. It might be helpful to take a moment to check in with your mental wellbeing, even if you're feeling okay overall. Remember, this is a valuable personal practice that can provide you with some clarity and perspective.",0,1,1,0,1,2,0,0,0,2,1,2,1,1,0,1,5,8,4,4,3,no,0,0,
+Elli,37,female,"User: Stressful for my thesis. But I still feel hope
+Elli: I'm really sorry to hear that your thesis is causing you stress, [NAME]. It's great that you're holding onto hope. Sometimes, taking a moment to check in with ourselves can provide valuable insights, even when we feel okay. Would you be open to a mental wellbeing check-in to explore these feelings a bit more?",3,1,2,3,3,1,2,0,1,1,3,2,0,0,1,1,16,8,3,3,3,,0,0,
+Elli,25,male,"User: pretty alright i would say
+Elli: It's great to hear that you're feeling pretty alright, [NAME]. Have you considered doing a mental wellbeing check-in? Even on our good days, it's beneficial to understand our emotional landscape better.",1,0,0,0,0,0,0,1,0,1,0,1,0,0,1,0,2,3,3,5,2,0,0,0,
+Elli,20,female,"User: I am feeling okay, a little bit stressed because I have something big due tomorrow. However I am moving on, even though I am feeling a little bothered
+Elli: It's great to hear that you're moving forward, [NAME], even amidst the stress of your big task. Stress is a natural part of life, especially when we're faced with important deadlines. Would you consider going through a mental wellbeing check-in? It can be a valuable tool to better understand your feelings, even on your okay days.",2,2,3,2,3,3,3,1,1,2,1,2,2,1,3,2,20,13,2,3,1,"It's not a big deal to talk to the chatbot, but I don't think I can feel 'trust' in sharing my emotions with something that isn't human",0,0,
+Elli,30,female,"User: I am feeling good
+Elli: I'm glad to hear that you're feeling good, [NAME]. It's still beneficial to maintain self-awareness about our mental wellbeing, even on our good days. Would you like to continue with a wellbeing check-in? It can provide insights that are personal and valuable.",2,0,2,0,0,2,0,0,0,2,0,0,2,0,2,0,6,6,4,5,4,It would be much appreciated if Ellie would help with some tips to deal with anxiety or depression. Or suggest some professional help linked to it.,0,0,
+Elli,25,male,"User: I’m Francesco. I feel good and positive. The sun is shining outside.
+Elli: That's wonderful to hear, [NAME]! The impact of a sunny day on our mood can be truly amazing. While you're feeling good, it might be an interesting time to do a mental wellbeing check-in. It's a valuable tool that can offer insights, even on our good days.",1,1,0,1,2,2,3,2,1,3,2,2,3,1,2,3,13,16,5,5,4,No,0,0,
+Elli,20,female,Good,1,1,1,0,0,1,0,0,0,1,1,1,1,0,1,1,,,5,5,(missing),,1,1,Forgot to fill empathy rating
+Elli,24,male,"User: Good
+Elli: It's great to hear that you're feeling good, [NAME]! Even so, doing a mental wellbeing check-in can be a valuable way to understand yourself better. How about we take a few moments for this?",0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,3,0,3,3,3,No,0,0,
+Elli,23,male,"User: Today is just a normal day. Now working on assignments
+Elli: It's great to hear that you're having a normal day, [NAME], and staying productive with your assignments. Even so, it could be beneficial to check in on your mental wellbeing. This isn't just for tough times; understanding how you're feeling on regular days like today can offer valuable insights into your overall emotional health.",1,0,1,1,0,0,1,0,0,0,0,0,0,0,0,1,4,1,2,3,3,"I would say this is a great concept to work on. Personally, I feel that because I did not intentionally seek out for help so maybe the whole process is a bit stiff, but it is a nice way to conduct the survey for a psychology student.",0,0,
+Elli,27,male,"User: a little bit stressed but I'm good. And you ?
+Elli: I'm glad to hear you're doing well, [NAME], even with some stress. It's completely normal to experience stress, but keeping an eye on our mental wellbeing is always beneficial. How about we do a quick check-in to better understand how you're feeling?",2,2,3,3,0,3,3,2,1,3,3,3,3,3,3,2,19,20,4,5,4,"that was nice, good luck for the future",,,
+Elli,23,other,"User: I am feeling okay! I am a bit tired today and have been feeling emotional recently
+Elli: [NAME], it's completely natural to have days when we feel a bit tired or more emotional than usual. Given what you've shared, I think it could be beneficial to do a mental wellbeing check-in. It's a valuable exercise, even when you're feeling okay, as it can contribute to greater self-awareness and personal understanding.",2,1,3,3,2,1,2,0,1,3,2,2,3,1,3,1,15,15,3,4,1,"It would be helpful to see the benchmarks for the questions because I had to keep scrolling back up to the beginning. Also, I think its important to have resources provided for people who report suicidal ideation...",0,0,
+Elli,38,male,"User: Normal
+Elli: It's great to hear you're feeling normal, [NAME]. Even when we're feeling okay, it can be beneficial to engage in a bit of reflection. How about we walk through a mental wellbeing check-in? It could provide some additional insights into your emotional state.",2,1,3,3,0,3,3,3,1,1,1,1,1,1,0,1,19,6,1,1,1,None,0,0,
+Elli,24,,Not great,,,,,,,,,,,,,,,,,,,,,,,1,1,The user did not intend to communicate with Elli further
+Elli,22,female,"User: I'm a bit tense, but also bored. And I feel like I ate way too many unhealthy snacks, but I don't have the energy to properly cook right now, and prefer distracting myself
+Elli: It sounds like you're experiencing a mix of tension and boredom, [NAME], and it's completely okay to have days where energy levels are low. Even when we're feeling alright, it's beneficial to check in on our mental wellbeing. How about we continue with a self-awareness exercise? It might provide some personal insights.",1,1,0,1,0,2,1,0,1,2,2,1,3,0,0,1,7,9,2,2,1,I am a bit salty that you didn't take my first nickname,0,0,
+Elli,20,female,"User: Im good so far, i do have lots of projects due this week so its a little overwhelming. But i think i can get used to this
+Elli: It's great to hear that you're doing well, [NAME], even with the pressures of your upcoming projects. It's completely normal to feel a bit overwhelmed during busy times. If you're up for it, why not take a moment for a mental wellbeing check-in? It can be a helpful tool to understand how you're managing stress, and might provide some valuable insights, even when you're feeling okay.",3,1,3,3,2,3,2,1,0,1,2,3,3,0,1,0,18,10,4,5,4,its all good,0,0,
+Elli,23,female,"User: Im feeling okay - a little stressed as im a masters student with a heavy workload but my stress isn't at its peak yet
+Elli: I hear you, [NAME]. Balancing a heavy workload as a master's student can indeed be stressful. It's great that you're aware of your feelings. Would you be interested in taking a mental wellbeing check-in? Even when we're feeling okay, it can be a helpful tool to understand our emotions better.",1,1,0,3,1,2,0,0,0,0,2,3,2,0,1,0,8,8,3,5,3,I really enjoyed it! it seems promising but I think topics like anxiety and mental health is such a vast umbrella which portrays itself differently for everyone that a rating system for these questions can seem a little too conclusive and not a true reflection of feelings for most individuals,0,0,
+Elli,22,female,"User: Hi Elli, im feeling very exhausted and stressed. I've been working a lot these days and it feels like theres no end. But at the end of the day I have my friends and family which cheers me up :)
+Elli: [NAME], it sounds like you've been under quite a bit of strain with work recently, but it's heartening to hear that your friends and family bring you cheer. Feeling stressed and exhausted can be a signal from our bodies and minds asking for attention. Perhaps it could be helpful to take a few moments for a mental wellbeing check-in, just to understand how you're really doing beyond just the surface. This can be a useful personal exercise, even when we think we're managing okay.",3,3,3,1,1,3,1,3,3,3,2,3,0,1,1,3,21,13,2,2,2,no,,,
+,,,,,,,0,1,1,0,0,0,2,1,0,0,0,0,0,3,3,3,4,2,The number scores made it easier to communicate,0,0,
+Elli,30,male,"User: im ok. a little stressed because its finals week and also a lot of bill and things are due. Ive also been feeling really tired every day
+Elli: I understand, [NAME], the stress from finals and bills can indeed be quite challenging, especially when you're also feeling tired. Even when we feel okay, it can be helpful to check in on our mental wellbeing. Would you like to try a quick check-in? It can offer some personal insights and might be a valuable tool for you.",3,1,3,3,3,1,3,0,0,2,0,1,3,1,3,3,17,13,3,5,4,I like Elli. I use these screenings all the times with my clients so I think this would be an awesome tool to continue to develop. I think it would be helpful to offer some coping skills or resources at the end for the participant. Like offering to look up MH resources in their area by putting in their location or insurance coverage/ insurance-free options.,0,0,

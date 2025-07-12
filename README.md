@@ -1,64 +1,88 @@
 # Elli: AI-Powered Chatbot for Mental Health Screening
 
-This repository contains Elli, a GPT-4-powered mental health chatbot developed by Tom Bielen as part of an independent research project. 
-
-Elli is designed to conduct empathetic, conversational mental health screenings using validated tools like the PHQ-9 and GAD-7, while measuring user trust, comfort, emotional response, and interaction patterns.
-
-> ⚠️ **Disclaimer:**  
-> Elli is a research prototype. It is not intended for clinical use, diagnosis, or emergency mental health support.  
-> If you or someone you know is struggling, please contact a licensed professional or local helpline.
+**Author**: Tom Bielen  
+**Affiliation**: IU International University of Applied Sciences  
+**Preprint**: [PsyArXiv – The Illusion of Empathy (link pending)](https://psyarxiv.com/xxxxxx)  
+**Preregistration**: [OSF Protocol](https://osf.io/6yrkw/)  
+**License**: MIT
 
 ---
 
-## 🧠 Research Background
+This repository contains **Elli**, a GPT-4-powered research chatbot developed for an independent, preregistered experimental study. Elli conducts conversational mental health screening using the PHQ-9 and GAD-7 with adaptive, empathic dialogue. The project compares this chatbot interface against a static web form to evaluate trust, emotional response, and user disclosure.
 
-**Initial Research Question:**  
-> _Can an AI-powered chatbot effectively and empathetically conduct mental health screening using validated psychometric tools such as GAD-7 and PHQ-9?_
-
-### Thesis Title  
-**Redefining Digital Therapeutic Alliance: A Multidimensional Model of Empathy, Trust, and Bias in LLM-Powered Mental Health Screening**
-
-The study investigates how conversational empathy and relational dynamics in large language models (LLMs) influence psychological processes such as trust, self-disclosure, and screening accuracy, compared to static digital forms.
+> ⚠️ **Disclaimer**:  
+> Elli is a **research prototype only** and is not intended for diagnosis, therapy, or crisis support.  
+> If you are in emotional distress, please seek help from a qualified mental health professional or hotline.
 
 ---
 
-## 🧪 Study Design
+## 🧠 Study Overview
 
-- **Participants:** 100+ English-speaking adults (18+)
-- **Conditions:**
-  - **Elli Chatbot:** GPT-4 powered, adaptive, empathic
-  - **Static Web Form:** Control condition, no empathy or interactivity
-- **Measures Collected:**
-  - PHQ-9, GAD-7 scores
-  - Trust, comfort, empathy perception
-  - Behavioral metrics (completion time, dropout, disclosure depth)
-  - Open-ended feedback (privacy, emotional experience)
+**Study Title**:  
+_The Illusion of Empathy: Why Users Distrust GPT-4 Chatbots for Mental Health Screening_
+
+**Objective**:  
+Evaluate whether an AI chatbot offering simulated empathy enhances or hinders trust, comfort, and disclosure compared to a static mental health screening form.
 
 ---
 
-## 🎯 Research Objectives
+## 🔬 Methodology
 
-1. **Model Development:** Create a multidimensional framework linking empathy, trust, and bias in AI mental health screening.
-2. **Experimental Evaluation:** Compare Elli against a static form using randomized assignment.
-3. **Mechanistic Analysis:** Analyze how empathy and interactivity affect trust, disclosure, and diagnostic outcomes.
-4. **Bias Forensics:** Audit for demographic and linguistic bias in screening results and user feedback.
-5. **Ethical Implications:** Inform policy and design recommendations for responsible LLM integration in mental health tools.
-
----
-
-## 🧪 Methodology Overview
-
-- **Design:** Randomized, cross-sectional, mixed-methods.
-- **Conditions:** Participants are assigned to either Elli (empathic chatbot) or a static, neutral web form.
-- **Platform:** Built with Streamlit and hosted on a secure, GDPR-compliant server.
-- **Data:** Responses are anonymized, encrypted, and stored with strict access control.
-- **Instruments:** PHQ-9, GAD-7, trust and empathy scales, behavioral logs, and open-ended feedback.
+- **Design**: Randomized, cross-sectional, between-subjects, mixed-methods experiment
+- **Participants**: 149 adults (age 18+), English-speaking, recruited online
+- **Conditions**:
+  - **Elli Chatbot**: Adaptive, GPT-4-powered, empathic
+  - **Static Form**: No feedback, simple input form (control)
+- **Measures**:
+  - PHQ-9 and GAD-7 (validated tools)
+  - Trust, comfort, and empathy (Likert ratings)
+  - Completion time, dropout rate, and open-ended self-disclosure
 
 ---
 
-## 🔐 Ethics and Privacy
+## 📁 Repository Structure
 
-- Informed consent is required before participation.
-- Participants experiencing acute distress are referred to support resources.
-- All data are anonymized and stored in encrypted, GDPR-compliant systems.
-- Elli’s limitations as a non-clinical tool are clearly communicated to users.
+```bash
+elli-chatbot-study/
+├── README.md                  ← This file
+├── preprint.pdf               ← Final preprint manuscript (PsyArXiv)
+├── LICENSE                    ← MIT license
+├── requirements.txt           ← Python dependencies
+
+# Main chatbot logic and Streamlit apps
+├── Elli_version/
+│   └── eli_app.py             ← Streamlit app for Elli (GPT-4 chatbot)
+├── Static_version/
+│   └── static_app.py          ← Streamlit app for static form (control)
+├── Consent_script/
+│   └── router_app.py          ← Pre-screening consent and eligibility logic
+
+# Data and results
+├── data/
+│   ├── Chatbot_Study_Data_Cleaned.csv
+│   ├── Chatbot_Study_Dataset_Summary.txt
+│   └── data analysis/
+│       ├── age_subgroup_analysis.py
+│       ├── analyze_feedback.py
+│       ├── analyze_outcomes_with_assumptions.py
+│       ├── demographic_table.py
+│       ├── dropout_analysis.py
+│       ├── interaction_effects.py
+│       ├── mediation_analysis.py
+│       ├── Participant_flow_table.py
+│       ├── plotting_visuals.py
+│       └── save_thematic_table.py
+
+# Final statistical output tables (partial due to .gitignore exclusions)
+├── outputs/
+│   ├── table1_demographic_table1.csv
+│   └── table2_outcomes.csv
+
+# Assets
+├── gpt_prompts.py             ← Prompt engineering for chatbot empathy
+├── chat_log.txt               ← Example output log (demo or testing)
+├── utils/
+│   └── chatbot.py             ← Utility functions for interaction logic
+├── assets/
+│   ├── elli_avatar.png
+│   └── user_avatar.png

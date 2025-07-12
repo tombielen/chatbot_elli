@@ -3,33 +3,25 @@ from scipy.stats import ttest_ind, mannwhitneyu, shapiro, levene
 import numpy as np
 import os
 
-# Load cleaned data
 df = pd.read_csv("../../data/Chatbot_Study_Data_Cleaned.csv")
 
-# Filter analytic sample
 df = df[df["Dropout_status"] == 0].copy()
 
-# Ensure numeric columns
 for col in ["Trust", "Comfort", "Empathy", "Total_PHQ", "Total_GAD"]:
     df[col] = pd.to_numeric(df[col], errors="coerce")
 
-# Outcome variables
 variables = ["Trust", "Comfort", "Empathy", "Total_PHQ", "Total_GAD"]
 
-# Grouped data
 elli = df[df["Version"].str.strip().str.capitalize() == "Elli"]
 static = df[df["Version"].str.strip().str.capitalize() == "Static"]
 
-# Cohen’s d function
 def cohens_d(x, y):
     nx, ny = len(x), len(y)
     pooled_std = np.sqrt(((nx - 1)*np.nanstd(x, ddof=1)**2 + (ny - 1)*np.nanstd(y, ddof=1)**2) / (nx + ny - 2))
     return (np.nanmean(x) - np.nanmean(y)) / pooled_std if pooled_std > 0 else np.nan
 
-# Initialize results
 results = []
 
-# Loop through each variable
 for var in variables:
     x = elli[var].dropna()
     y = static[var].dropna()
@@ -37,12 +29,10 @@ for var in variables:
     mean_x, std_x = np.nanmean(x), np.nanstd(x, ddof=1)
     mean_y, std_y = np.nanmean(y), np.nanstd(y, ddof=1)
 
-    # Statistical tests
     t_stat, p_t = ttest_ind(x, y, equal_var=False, nan_policy="omit")
     u_stat, p_u = mannwhitneyu(x, y, alternative="two-sided")
     d = cohens_d(x, y)
 
-    # Assumption checks
     sw_x_stat, sw_x_p = shapiro(x)
     sw_y_stat, sw_y_p = shapiro(y)
     lev_stat, lev_p = levene(x, y)
@@ -61,10 +51,6 @@ for var in variables:
         "Levene p": round(lev_p, 3)
     })
 
-# Create output DataFrame
 table2_df = pd.DataFrame(results)
-
-# Save to CSV
 os.makedirs("../../outputs", exist_ok=True)
 table2_df.to_csv("../../outputs/table2_outcomes.csv", index=False)
-print("✅ Table 2 with assumptions exported to outputs/table2_outcomes.csv")

@@ -5,19 +5,15 @@ from collections import Counter
 import nltk
 import os
 
-# Download NLTK stopwords (first time only)
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 
-# === Load & Filter ===
 df = pd.read_csv("data/Chatbot_Study_Data_Cleaned.csv")
 df = df[df["Dropout_status"] == 0].copy()
 df["Version"] = df["Version"].str.strip().str.capitalize()
 
-# Keep only rows with actual feedback
 df = df[df["Feedback"].notna() & df["Feedback"].str.strip().ne("")].copy()
 
-# === Text Preprocessing ===
 df["Cleaned_feedback"] = (
     df["Feedback"]
     .str.lower()
@@ -26,14 +22,12 @@ df["Cleaned_feedback"] = (
 )
 
 
-# === Save cleaned feedback ===
 os.makedirs("outputs/qualitative", exist_ok=True)
 df.to_csv("outputs/qualitative/cleaned_feedback.csv", index=False)
 print("✅ Cleaned feedback saved to: outputs/qualitative/cleaned_feedback.csv")
 
-# === Word Cloud (all participants) ===
 stopwords_custom = set(STOPWORDS).union(stopwords.words("english"))
-stopwords_custom.update(["elli", "chatbot", "static", "feel", "felt"])  # domain-specific ignore list
+stopwords_custom.update(["elli", "chatbot", "static", "feel", "felt"])  
 
 all_text = " ".join(df["Cleaned_feedback"])
 wordcloud = WordCloud(
@@ -53,7 +47,6 @@ plt.savefig("figures/wordcloud_feedback.png", dpi=300)
 plt.close()
 print("📊 Word cloud saved to: figures/wordcloud_feedback.png")
 
-# === Condition-specific Word Frequencies ===
 def get_top_words(text_series):
     words = " ".join(text_series).split()
     words = [w for w in words if w not in stopwords_custom]
@@ -65,6 +58,3 @@ static_words = get_top_words(df[df["Version"] == "Static"]["Cleaned_feedback"])
 pd.DataFrame(elli_words, columns=["Word", "Frequency"]).to_csv("outputs/qualitative/elli_word_freq.csv", index=False)
 pd.DataFrame(static_words, columns=["Word", "Frequency"]).to_csv("outputs/qualitative/static_word_freq.csv", index=False)
 
-print("📁 Condition-specific word frequencies saved to:")
-print("- outputs/qualitative/elli_word_freq.csv")
-print("- outputs/qualitative/static_word_freq.csv")

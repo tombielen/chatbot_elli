@@ -1,16 +1,11 @@
 import pandas as pd
 import os
 
-# Load the cleaned dataset
 df = pd.read_csv("data/Chatbot_Study_Data_Cleaned.csv")
 
-# Normalize version names for grouping
 df["Version"] = df["Version"].str.strip().str.capitalize()
 
-# Prepare output directory
 os.makedirs("outputs", exist_ok=True)
-
-# Initialize list to store summary rows
 flow_rows = []
 
 for version in ["Elli", "Static"]:
@@ -33,11 +28,7 @@ for version in ["Elli", "Static"]:
         "Final analytic sample": final_sample
     })
 
-# Create the summary table
 flow_table = pd.DataFrame(flow_rows)
 
-# Display the result
 print(flow_table)
-
-# Save to CSV
 flow_table.to_csv("outputs/participant_flow_table.csv", index=False)

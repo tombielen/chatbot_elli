@@ -1,7 +1,5 @@
 import pandas as pd
 import os
-
-# Define thematic summary content
 data = {
     "Theme": [
         "Perceived lack of humanity",
@@ -37,15 +35,9 @@ data = {
     ]
 }
 
-# Create DataFrame
 df = pd.DataFrame(data)
 
-# Create output directory if it doesn't exist
 output_path = "outputs/qualitative"
 os.makedirs(output_path, exist_ok=True)
-
-# Save CSV
 file_path = os.path.join(output_path, "thematic_summary.csv")
 df.to_csv(file_path, index=False)
-
-print(f"✅ Thematic summary saved to: {file_path}")

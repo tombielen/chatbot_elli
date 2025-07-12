@@ -2,16 +2,11 @@ import pandas as pd
 from scipy.stats import ttest_ind, chi2_contingency
 import numpy as np
 
-# Load data
 df = pd.read_csv("../../data/Chatbot_Study_Data_Cleaned.csv")
-
-# Step 1: Filter final analytic sample
 analytic_df = df[df["Dropout_status"] == 0].copy()
 
-# Convert Age to numeric (important for stats)
 analytic_df["Age"] = pd.to_numeric(analytic_df["Age"], errors="coerce")
 
-# Step 2: Normalize gender values
 def normalize_gender(val):
     if pd.isna(val):
         return "Prefer not to say"
@@ -30,7 +25,6 @@ def normalize_gender(val):
 analytic_df["Gender"] = analytic_df["Gender"].apply(normalize_gender)
 analytic_df["Version"] = analytic_df["Version"].str.strip().str.capitalize()
 
-# Step 3a: Age stats
 elli = analytic_df[analytic_df["Version"] == "Elli"]
 static = analytic_df[analytic_df["Version"] == "Static"]
 
@@ -41,18 +35,14 @@ age_elli = mean_sd(elli["Age"])
 age_static = mean_sd(static["Age"])
 age_total = mean_sd(analytic_df["Age"])
 
-# Step 3b: Gender counts
 gender_levels = ["Female", "Male", "Other", "Prefer not to say"]
 gender_counts = pd.crosstab(analytic_df["Version"], analytic_df["Gender"]).reindex(index=["Elli", "Static"], columns=gender_levels, fill_value=0)
 gender_totals = analytic_df["Gender"].value_counts().reindex(gender_levels, fill_value=0)
 
-# Step 4a: Age t-test
 t_stat, p_val = ttest_ind(elli["Age"].dropna(), static["Age"].dropna(), equal_var=False)
 
-# Step 4b: Chi-square for gender
 chi2, chi_p, chi_dof, _ = chi2_contingency(gender_counts)
 
-# Step 5: Print Table 1
 n_elli, n_static, n_total = len(elli), len(static), len(analytic_df)
 print("\nTable 1: Demographic Characteristics of Final Analytic Sample\n")
 print(f"{'Variable':<35} {'Elli (n=' + str(n_elli) + ')':<20} {'Static (n=' + str(n_static) + ')':<20} {'Total (N=' + str(n_total) + ')':<20} {'Statistical Test'}")
@@ -71,7 +61,6 @@ for gender in gender_levels:
 
 print(f"{'':<97} χ²({chi_dof}) = {chi2:.2f}, p = {chi_p:.3f}")
 
-# Optionally, save as CSV
 table1 = []
 table1.append([
     "Age (M ± SD)",

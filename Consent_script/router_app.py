@@ -1,4 +1,5 @@
 import streamlit as st
+import random
 
 st.set_page_config(page_title="Study Consent", page_icon="🔗", layout="centered")
 
@@ -39,13 +40,21 @@ If you do not wish to participate, you may close this page at any time.
 if "consented" not in st.session_state:
     st.session_state.consented = False
 
+if "assigned_url" not in st.session_state:
+    st.session_state.assigned_url = None
+
 if not st.session_state.consented:
     if st.button("I Consent and Wish to Continue"):
         st.session_state.consented = True
+
+        st.session_state.assigned_url = random.choice([
+            "https://ellichat.streamlit.app",
+            "https://staticversion.streamlit.app"
+        ])
         st.rerun()
-        st.stop()
+
 else:
-    assigned_url = "https://ellichat.streamlit.app"
+    assigned_url = st.session_state.assigned_url
     st.write("Thank you for consenting! You will now be redirected to the study.")
     st.markdown(f"[Click here if you are not redirected automatically.]({assigned_url})")
     st.markdown(

@@ -2,7 +2,7 @@
 
 **Author**: Tom Bielen  
 **Affiliation**: IU International University of Applied Sciences  
-**Preprint**: [PsyArXiv – The Illusion of Empathy (link pending)](https://psyarxiv.com/xxxxxx)  
+**Preprint**: [PsyArXiv – The Illusion of Empathy](https://osf.io/preprints/psyarxiv/32ztw_v1)  
 **Preregistration**: [OSF Protocol](https://osf.io/6yrkw/)  
 **License**: MIT
 

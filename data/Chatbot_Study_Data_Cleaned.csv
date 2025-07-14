@@ -102,26 +102,26 @@ Elli,31,male,"User: fine, thanks
 Elli: I'm glad to hear you're feeling fine, [NAME]. Even on our good days, it can be insightful to understand our mental wellbeing a bit more. Would you like to continue with a simple check-in? It's a valuable tool to learn more about yourself.",3,3,2,3,2,3,3,1,3,3,3,3,3,2,1,2,23,17,3,2,3,i have nothing to add,0,0,
 Elli,34,female,"User: I'm feeling tired and happy to be alive
 Elli: Thank you for sharing your feelings, [NAME]. It's wonderful to hear that you're happy to be alive, even in times of exhaustion. Would you consider doing a mental wellbeing check-in? It's a valuable tool to understand ourselves better, even when we're feeling okay.",2,0,3,3,2,0,3,2,0,3,3,3,3,2,3,1,15,18,1,1,3,0,0,0,
-Elli,male,26,"Today, generlaly i feel fine, small anxiety spikes, but overall good, nothing out of control. But perhaps anxiety is a big higher then latley.",0,0,1,1,1,1,2,1,0,2,1,0,2,1,0,0,7,6,3,2,1,No,0,0,
-Elli,female,25,Overall good. In the morning I was dwelling in Dua Lipa’s last night concert video. Afternoon I was a little bit anxious about whether I can collect enough respondences for my thesis survey.,1,2,2,2,1,,,,,,,,,,,,,,,,,,1,1,Incomplete PHQ-9 over 60 seconds
+Elli,26,male,"Today, generlaly i feel fine, small anxiety spikes, but overall good, nothing out of control. But perhaps anxiety is a big higher then latley.",0,0,1,1,1,1,2,1,0,2,1,0,2,1,0,0,7,6,3,2,1,No,0,0,
+Elli,25,female,Overall good. In the morning I was dwelling in Dua Lipa’s last night concert video. Afternoon I was a little bit anxious about whether I can collect enough respondences for my thesis survey.,1,2,2,2,1,,,,,,,,,,,,,,,,,,1,1,Incomplete PHQ-9 over 60 seconds
 ,,,,,,,,,,,,,,,,,,,,,,5,5,3,"The model could be expanded to handle extra input than what is required, but the onboarding and testing process were quick and simple.",,,
-Elli,female,21,Yaa..not bad,2,0,1,0,2,0,3,2,2,0,0,1,0,0,2,1,,,,,,,1,1,No trust empathy comfort
+Elli,21,female,Yaa..not bad,2,0,1,0,2,0,3,2,2,0,0,1,0,0,2,1,,,,,,,1,1,No trust empathy comfort
 Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Obvious spam
 Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Uninterested in comunicating with Elli
 Elli,24,male,"happy, energised, fulfilled",,,,,,,,,,,,,,,,,,,,,,,1,2,Less than 60 seconds interaction
 Elli,27,male,"User: Had a tiring day but I am feeling good.
 Elli: It's great to hear that you're feeling good, [NAME], even after a tiring day. It's still worth taking some time to reflect on our mental wellbeing, though. Would you like to continue with a mental wellbeing check-in? It can provide some valuable personal insights.",1,0,3,3,3,0,2,2,0,2,2,2,3,2,2,1,14,14,3,5,2,No,0,0,
-,male,27,bot,"Thanks so much for checking in today, Sam. Wishing you care and calm. 🌻 The following code gives you Karma that can be used to get free research participants at SurveySwap.io. Go to: https://surveyswap.io/sr/28OB-1306-INE4 . Or, alternatively, enter the code manually: 28OB-1306-INE4",2025-06-23 07:18:13,,,,,,,,,,,,,,,,,,,,,,,
+,27,male,bot,"Thanks so much for checking in today, Sam. Wishing you care and calm. 🌻 The following code gives you Karma that can be used to get free research participants at SurveySwap.io. Go to: https://surveyswap.io/sr/28OB-1306-INE4 . Or, alternatively, enter the code manually: 28OB-1306-INE4",6/23/25 7:18,,,,,,,,,,,,,,,,,,,,,,,
 static,19,Male,,1,2,2,3,0,1,2,0,0,2,3,3,0,0,2,1,11,11,3,4,3,"I think the options should change to frequently, sometimes, rarely, none, etc.",,,
 static,25,Male,,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,3,5,4,,,,
-Elli,male,23,pretty good what about you,3,0,2,1,2,1,3,0,0,2,0,0,1,0,3,0,,,,,,,1,1,No completion of empathy trust comfort scale
+Elli,23,male,pretty good what about you,3,0,2,1,2,1,3,0,0,2,0,0,1,0,3,0,,,,,,,1,1,No completion of empathy trust comfort scale
 Elli,18,female,"User: i feel okay. nothing much is going on. its a very chill day
 Elli: I'm glad to hear you're having a chill day, [NAME]. Even on calm days, it can be beneficial to reflect on our mental wellbeing. Shall we take a moment to do a quick check-in to better understand how you're truly feeling today?",1,1,3,3,3,3,3,2,3,2,3,3,3,3,3,3,22,20,3,3,2,no,0,0,
 static,26,Female,,2,1,3,2,1,3,2,1,3,2,3,2,1,2,3,2,18,15,4,4,5,,0,0,
 Elli,24,female,"Not great, I've given into some temptations and am disappointed for indulging myself",2,2,3,3,3,3,2,1,0,,,,,,,,,,,,,,1,1,Incomplete participation over 60 seconds
 Elli,19,male,"User: Im feeling okay. Im also very sweaty because its hot outside
 Elli: [NAME], it's great to hear that you're feeling okay, even if the heat is making you a bit uncomfortable. Remember, checking in on our mental wellbeing can be valuable, regardless of how we're feeling. Would you be open to a brief mental wellbeing check-in, just to ensure everything is on track?",0,0,1,2,0,0,0,0,0,0,0,0,0,0,0,0,3,0,3,3,4,No,0,0,
-,male,19,bot,"Thanks so much for checking in today, Drew. Wishing you care and calm. 🌻 The following code gives you Karma that can be used to get free research participants at SurveySwap.io. Go to: https://surveyswap.io/sr/28OB-1306-INE4 . Or, alternatively, enter the code manually: 28OB-1306-INE4",2025-06-23 14:09:12,,,,,,,,,,,,,,,,,,,,,,,
+,19,male,bot,"Thanks so much for checking in today, Drew. Wishing you care and calm. 🌻 The following code gives you Karma that can be used to get free research participants at SurveySwap.io. Go to: https://surveyswap.io/sr/28OB-1306-INE4 . Or, alternatively, enter the code manually: 28OB-1306-INE4",6/23/25 14:09,,,,,,,,,,,,,,,,,,,,,,,
 static,27,Female,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,3,please tell us what the numbers mean in the final feedback questionnaire,0,0,
 static,22,Male,,0,0,2,1,0,0,1,0,0,2,0,1,1,0,0,0,4,4,1,1,1,,0,0,
 Elli,25,female,"User: Physically tired and stressed but mentally happy, because I am doing what I like and feel purposeful
@@ -138,7 +138,7 @@ static,23,Prefer not to say,,2,1,3,2,2,1,1,0,0,2,1,2,1,0,2,0,12,8,1,2,1,,,,
 Elli,,,,,,,,,,,,,,,,,,,,,,,,,,1,2,Participation under 60 seconds
 Elli,37,female,"User: I'm well
 Elli: That's wonderful to hear, Sandra! Even when we're feeling well, it can be helpful to regularly check in with our mental wellbeing. Would you be open to carrying out a brief wellbeing check-in, just to make sure everything is as great as it seems?",2,1,2,3,2,2,1,1,1,2,2,2,1,1,2,2,15,12,3,3,3,No,0,0,
-,female,37,bot,"Thanks so much for checking in today, Sandra. Wishing you care and calm. 🌻 The following code gives you Karma that can be used to get free research participants at SurveySwap.io. Go to: https://surveyswap.io/sr/28OB-1306-INE4 . Or, alternatively, enter the code manually: 28OB-1306-INE4",0,,,,,,,,,,,,,,,,,,,,,,,
+,37,female,bot,"Thanks so much for checking in today, Sandra. Wishing you care and calm. 🌻 The following code gives you Karma that can be used to get free research participants at SurveySwap.io. Go to: https://surveyswap.io/sr/28OB-1306-INE4 . Or, alternatively, enter the code manually: 28OB-1306-INE4",0,,,,,,,,,,,,,,,,,,,,,,,
 static,25,Female,,3,1,3,2,0,1,2,1,0,1,2,2,0,0,1,0,13,6,1,5,3,,0,0,
 static,36,Other,,0,0,0,0,0,0,0,0,0,0,0,0,1,3,3,1,0,8,1,3,1,,0,0,
 Elli,46,male,"User: I’m okay. It’s a bit hot outside and I have hard time to progress with my job.  I also have some worrying thoughts about my future.

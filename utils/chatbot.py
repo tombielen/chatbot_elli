@@ -1,13 +1,18 @@
+# utils/chatbot.py
+
 import os
+import re
 import sys
 from datetime import datetime
-import streamlit as st
-from openai import OpenAI
+from typing import Optional, List, Dict, Any
 
-client = OpenAI(api_key=st.secrets["openai"]["api_key"])
+# ---- Make repo root importable for gpt_prompts (same intent as your prior sys.path.append) ----
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, ".."))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
+# These prompts are your own; we keep your import path
 from gpt_prompts import (
     PHQ9_SUMMARY_PROMPT,
     GAD7_SUMMARY_PROMPT,
@@ -15,128 +20,317 @@ from gpt_prompts import (
     SAFETY_CHECK_PROMPT,
     SYSTEM_INSTRUCTION,
     MOOD_RESPONSE_PROMPT,
-    DEMOGRAPHIC_EXTRACTION_PROMPT
+    DEMOGRAPHIC_EXTRACTION_PROMPT,  # kept in case you use it elsewhere
 )
 
+LOG_FILE = os.path.join(ROOT, "chat_log.txt")
+
+# ------------------------------------------------------------------------------------------
+# OpenAI client helpers (lazy; never read secrets at import-time to avoid Streamlit errors)
+# ------------------------------------------------------------------------------------------
+
+def _get_openai_api_key() -> Optional[str]:
+    # 1) environment variable
+    key = os.getenv("OPENAI_API_KEY")
+    if key:
+        return key
+
+    # 2) streamlit secrets (various layouts)
+    try:
+        import streamlit as st  # local import to avoid hard dependency during import
+        s = st.secrets
+        for path in [
+            ("openai_api_key",),
+            ("OPENAI_API_KEY",),
+            ("openai", "api_key"),
+        ]:
+            try:
+                v = s
+                for p in path:
+                    v = v[p]
+                if v:
+                    return str(v)
+            except Exception:
+                pass
+    except Exception:
+        pass
+
+    return None
 
 
-
-LOG_FILE = "chat_log.txt"
-
-NAME_VALIDATION_PROMPT = """
-A user was asked for their name or nickname and replied with:
-"{user_input}"
-
-Is this likely a name/nickname? Respond only with "YES" or "NO".
-"""
-
-def extract_name_from_input(user_input):
-    prompt = f"""
-    You are a helpful assistant. Extract a human name from the following message.
-    If no name is clearly mentioned, reply only with "None".
-
-    Message: "{user_input}"
-    Name:
+def _get_openai_client():
     """
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.2
-    )
-    name = response.choices[0].message.content.strip()
-    return name if name.lower() != "none" else None
+    Returns a client object or None.
+    Supports:
+      - New SDK: from openai import OpenAI → client.chat.completions.create(...)
+      - Legacy SDK: import openai → openai.ChatCompletion.create(...)
+    """
+    api_key = _get_openai_api_key()
+    if not api_key:
+        return None
 
-def log_to_file(content):
-    timestamp = datetime.now().strftime("[%Y-%m-%d %H:%M:%S]")
-    with open(LOG_FILE, "a") as f:
-        f.write(f"{timestamp} {content}\n")
+    # Try new SDK first
+    try:
+        from openai import OpenAI  # type: ignore
+        return OpenAI(api_key=api_key)
+    except Exception:
+        pass
 
-def get_chat_response(user_prompt, messages=None, model="gpt-4"):
+    # Fallback to legacy SDK
+    try:
+        import openai  # type: ignore
+        openai.api_key = api_key
+        return openai
+    except Exception:
+        return None
+
+
+def _chat_completion(messages: List[Dict[str, Any]], model: str = "gpt-4o-mini", temperature: float = 0.5) -> Optional[str]:
+    """
+    Calls Chat Completions API if available, else returns None.
+    Works with both new and legacy SDKs.
+    """
+    client = _get_openai_client()
+    if client is None:
+        return None
+
+    # Prefer new SDK style
+    try:
+        # duck-typing: new client has .chat.completions.create
+        chat = getattr(client, "chat", None)
+        if chat and hasattr(chat, "completions") and hasattr(chat.completions, "create"):
+            resp = client.chat.completions.create(
+                model=model,
+                messages=messages,
+                temperature=temperature,
+            )
+            return resp.choices[0].message.content.strip()
+    except Exception:
+        pass
+
+    # Legacy SDK style
+    try:
+        if hasattr(client, "ChatCompletion"):
+            resp = client.ChatCompletion.create(
+                model=model,
+                messages=messages,
+                temperature=temperature,
+            )
+            return resp["choices"][0]["message"]["content"].strip()
+    except Exception:
+        pass
+
+    return None
+
+
+# -----------------------
+# Utility: file logging
+# -----------------------
+
+def log_to_file(content: str) -> None:
+    try:
+        timestamp = datetime.now().strftime("[%Y-%m-%d %H:%M:%S]")
+        with open(LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(f"{timestamp} {content}\n")
+    except Exception:
+        # Never crash the app for logging issues
+        pass
+
+
+# -----------------------
+# Public API (kept names)
+# -----------------------
+
+def get_chat_response(user_prompt: str, messages: Optional[List[Dict[str, str]]] = None, model: str = "gpt-4o-mini") -> str:
+    """
+    Wrapper around Chat Completions. If no API key is configured,
+    returns a simple, safe fallback string.
+    """
     chat_messages = [{"role": "system", "content": SYSTEM_INSTRUCTION}]
-    
     if messages:
         chat_messages.extend(messages)
     else:
         chat_messages.append({"role": "user", "content": user_prompt})
 
-    response = client.chat.completions.create(
-        model=model,
-        messages=chat_messages,
-        temperature=0.7
+    out = _chat_completion(chat_messages, model=model, temperature=0.7)
+    if out is not None:
+        log_to_file(f"User prompt: {user_prompt[:80]}... | Reply: {out[:120]}...")
+        return out
+
+    # Fallback when GPT is unavailable
+    return (
+        "Thanks for sharing. I’m here to reflect and support you. "
+        "While I can’t access AI generation right now, we can still walk through this together."
     )
-    reply = response.choices[0].message.content.strip()
-    log_to_file(f"User prompt: {user_prompt[:50]}... | Reply: {reply}")
-    return reply
+
+
+# ------- Extractors (GPT if available, otherwise rule-based) -------
+
+# Simple heuristics for name, age, gender
+_NAME_RE = re.compile(r"\b(?:i'?m|i am|my name is|call me)\s+([A-Za-z][A-Za-z\-\']{1,30})\b", re.I)
+
+def extract_name_from_input(user_input: str) -> Optional[str]:
+    if not user_input:
+        return None
+
+    # Try GPT
+    prompt = f"""
+You are a helpful assistant. Extract a human name from the following message.
+If no name is clearly mentioned, reply only with "None".
+
+Message: "{user_input}"
+Name:
+"""
+    gpt = _chat_completion([{"role": "user", "content": prompt}], model="gpt-4o-mini", temperature=0.2)
+    if gpt:
+        name = gpt.strip()
+        return name if name.lower() != "none" else None
+
+    # Fallback regex
+    m = _NAME_RE.search(user_input.strip())
+    if m:
+        return m.group(1).strip().title()
+    toks = re.findall(r"[A-Za-z][A-Za-z\-\']{1,30}", user_input)
+    if len(toks) == 1:
+        return toks[0].title()
+    return None
+
+
+def extract_age(user_input: str) -> Optional[int]:
+    if not user_input:
+        return None
+    if user_input.isdigit():
+        age = int(user_input)
+        return age if 5 <= age <= 110 else None
+
+    # GPT attempt
+    prompt = f'Extract an age (as a number) from this message: "{user_input}". If none, respond "none".'
+    gpt = _chat_completion([{"role": "user", "content": prompt}], model="gpt-4o-mini", temperature=0.2)
+    if gpt:
+        val = gpt.strip().lower()
+        if val.isdigit():
+            n = int(val)
+            return n if 5 <= n <= 110 else None
+
+    # Fallback parse
+    nums = re.findall(r"\b(\d{1,3})\b", user_input)
+    for n in nums:
+        try:
+            v = int(n)
+            if 5 <= v <= 110:
+                return v
+        except ValueError:
+            pass
+    return None
+
+
+_GENDER_MAP = {
+    "male": "male",
+    "man": "male",
+    "m": "male",
+    "female": "female",
+    "woman": "female",
+    "f": "female",
+    "non-binary": "other",
+    "nonbinary": "other",
+    "enby": "other",
+    "nb": "other",
+    "agender": "other",
+    "genderqueer": "other",
+    "genderfluid": "other",
+    "gender fluid": "other",
+    "trans": "other",
+    "transgender": "other",
+    "other": "other",
+    "prefer not to say": "other",
+}
+
+def extract_gender(user_input: str) -> Optional[str]:
+    if not user_input:
+        return None
+
+    # GPT attempt
+    prompt = f'Extract gender from this message: "{user_input}". Reply with "male", "female", "other", or "none".'
+    gpt = _chat_completion([{"role": "user", "content": prompt}], model="gpt-4o-mini", temperature=0.2)
+    if gpt:
+        val = gpt.strip().lower()
+        if val in ["male", "female", "other"]:
+            return val
+        return None
+
+    # Fallback mapping
+    t = user_input.strip().lower()
+    for k, v in _GENDER_MAP.items():
+        if k in t or t == k:
+            return v
+    # very short single token like 'm'/'f'
+    toks = re.findall(r"[A-Za-z\-]+", t)
+    if len(toks) == 1:
+        return _GENDER_MAP.get(toks[0])
+    return None
+
+
+# ------- Screening summaries -------
 
 def summarize_phq9(phq_scores):
     total = sum(phq_scores)
     prompt = PHQ9_SUMMARY_PROMPT.format(phq_total=total, phq_scores=phq_scores)
-    response = get_chat_response(prompt)
-    return total, response
+    out = get_chat_response(prompt)
+    return total, out
+
 
 def summarize_gad7(gad_scores):
     total = sum(gad_scores)
     prompt = GAD7_SUMMARY_PROMPT.format(gad_total=total, gad_scores=gad_scores)
-    response = get_chat_response(prompt)
-    return total, response
+    out = get_chat_response(prompt)
+    return total, out
 
-def summarize_results(phq_total, phq_level, gad_total, gad_level, mood_text=""):
+
+def summarize_results(phq_total: int, phq_level: str, gad_total: int, gad_level: str, mood_text: str = "") -> str:
+    # Prefer your FINAL_SUMMARY_PROMPT if you want; keeping your original logic w/ inline prompt:
     prompt = (
         "The user completed a PHQ-9 and GAD-7 mental health screening.\n\n"
         "Mood Reflection:\n"
         f"{mood_text.strip()}\n\n"
-        "PHQ-9 score: {phq_total} ({phq_level})\n"
-        "GAD-7 score: {gad_total} ({gad_level})\n\n"
+        f"PHQ-9 score: {phq_total} ({phq_level})\n"
+        f"GAD-7 score: {gad_total} ({gad_level})\n\n"
         "Please write a warm, supportive, and human-sounding summary (2–3 sentences) that:\n"
         "- Acknowledges their mood reflection\n"
         "- Gently names the depression and anxiety levels\n"
         "- Encourages care without sounding clinical or alarmist"
-    ).format(
-        phq_total=phq_total,
-        phq_level=phq_level,
-        gad_total=gad_total,
-        gad_level=gad_level
     )
     return get_chat_response(prompt)
 
 
-def safety_check(user_input):
-    prompt = SAFETY_CHECK_PROMPT.format(user_input=user_input)
-    response = get_chat_response(prompt)
-    return response.strip().upper() == "CRISIS"
+# ------- Safety + Mood -------
 
-def respond_to_feelings(user_input, name):
-    prompt = MOOD_RESPONSE_PROMPT.format(user_input=user_input, name=name)
+def safety_check(user_input: str) -> bool:
+    # quick conservative local check first
+    t = (user_input or "").lower()
+    red_flags = [
+        "suicide", "suicidal", "end my life", "kill myself", "die", "want to die",
+        "self-harm", "self harm", "hurt myself", "overdose", "jump off", "hang myself",
+    ]
+    if any(p in t for p in red_flags):
+        return True
+
+    # your prompt-based check
+    try:
+        prompt = SAFETY_CHECK_PROMPT.format(user_input=user_input)
+    except Exception:
+        prompt = f"Classify if this indicates imminent self-harm risk. Reply 'CRISIS' or 'SAFE'.\n\n{user_input}"
+
+    resp = get_chat_response(prompt)
+    return resp.strip().upper().startswith("CRISIS")
+
+
+def respond_to_feelings(user_input: str, name: str) -> str:
+    try:
+        prompt = MOOD_RESPONSE_PROMPT.format(user_input=user_input, name=name or "there")
+    except Exception:
+        prompt = (
+            f"You are Elli, a warm, concise, supportive assistant. "
+            f"User ({name or 'there'}) wrote:\n{user_input}\n\n"
+            f"Write 2–3 sentences reflecting one or two specifics and end with a gentle, open question."
+        )
     return get_chat_response(prompt)
-
-def extract_age(user_input):
-    if user_input.isdigit():
-        return int(user_input)
-
-    prompt = f"""
-    Extract an age (as a number) from this message: "{user_input}"
-    If there's no age, respond with "none".
-    """
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.2
-    )
-    value = response.choices[0].message.content.strip().lower()
-    return int(value) if value.isdigit() else None
-
-def extract_gender(user_input):
-    prompt = f"""
-    Extract gender from this message: "{user_input}"
-    Reply with "male", "female", "other", or "none".
-    """
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.2
-    )
-    value = response.choices[0].message.content.strip().lower()
-    if value in ["male", "female", "other"]:
-        return value
-    return None
-
